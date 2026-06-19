@@ -22,6 +22,7 @@
         </div>
 
         <button
+          ref="burgerBtn"
           class="nav__burger"
           :aria-expanded="mobileOpen"
           aria-controls="mobile-menu"
@@ -40,7 +41,7 @@
         class="nav__mobile"
         :class="{ 'nav__mobile--open': mobileOpen }"
         role="dialog"
-        aria-modal="true"
+        @keydown.esc="closeMobileMenu"
       >
         <a href="#features" class="nav__mobile-link" @click="mobileOpen = false">Features</a>
         <a href="#how" class="nav__mobile-link" @click="mobileOpen = false">How it works</a>
@@ -578,6 +579,12 @@ import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 const root = ref<HTMLElement | null>(null)
 const isScrolled = ref(false)
 const mobileOpen = ref(false)
+const burgerBtn = ref<HTMLButtonElement | null>(null)
+
+function closeMobileMenu() {
+  mobileOpen.value = false
+  burgerBtn.value?.focus()
+}
 
 // ── Task 6: ROI calculator reactive state ────────────────────────
 const covers = ref(80)
@@ -611,10 +618,12 @@ onMounted(async () => {
   cleanup.push(() => document.removeEventListener('click', onOutside))
 
   // ── GSAP + plugins (dynamic, client-only) ────────────────────────
+  // Registration is handled once in plugins/gsap.client.ts (runs before mount).
+  // These imports resolve the same singleton via the Vite alias, so plugins
+  // registered there are already active here — no re-registration needed.
   const { gsap } = await import('gsap')
   const { ScrollTrigger } = await import('gsap/ScrollTrigger')
   const { SplitText } = await import('gsap/SplitText')
-  gsap.registerPlugin(ScrollTrigger, SplitText)
 
   // ── Task 4: Hero phone 3D expand + SplitText title ──────────────
   const mm4 = gsap.matchMedia()
@@ -2234,20 +2243,6 @@ onUnmounted(async () => {
   display: flex;
   align-items: center;
   gap: 0.875rem;
-}
-
-.testimonial__avatar {
-  width: 40px;
-  height: 40px;
-  min-width: 40px;
-  border-radius: 50%;
-  background: color-mix(in srgb, var(--terracotta) 15%, var(--bg-vanilla));
-  color: var(--terracotta);
-  font-weight: 700;
-  font-size: 0.9375rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .testimonial__name {
