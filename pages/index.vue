@@ -923,7 +923,7 @@ onMounted(async () => {
           ease: 'power2.out',
           scrollTrigger: {
             trigger: '.foot',
-            start: 'top 82%',
+            start: 'top 78%',
             once: true,
           },
         })
@@ -2456,9 +2456,9 @@ onUnmounted(async () => {
 
 .foot__cta-btn {
   /* Override primary btn: use cream bg on dark footer for inversion */
-  background: color-mix(in srgb, var(--bg-warm) 96%, white);
+  background: color-mix(in srgb, var(--bg-warm) 96%, white); /* white: specular mix */
   color: var(--brown-deep);
-  border-color: color-mix(in srgb, var(--bg-warm) 96%, white);
+  border-color: color-mix(in srgb, var(--bg-warm) 96%, white); /* white: specular mix */
   box-shadow: 0 4px 20px color-mix(in srgb, var(--brown-deep) 30%, transparent);
 }
 
@@ -2475,7 +2475,7 @@ onUnmounted(async () => {
 
 .foot__cta-sub {
   font-size: 0.8125rem;
-  color: color-mix(in srgb, var(--bg-warm) 55%, transparent);
+  color: color-mix(in srgb, var(--bg-warm) 70%, transparent);
   letter-spacing: 0.02em;
 }
 
@@ -2511,7 +2511,7 @@ onUnmounted(async () => {
 
 .foot__link {
   font-size: 0.9375rem;
-  color: color-mix(in srgb, var(--bg-warm) 60%, transparent);
+  color: color-mix(in srgb, var(--bg-warm) 78%, transparent);
   text-decoration: none;
   transition: color 0.18s var(--ease-organic);
   /* Keyboard-accessible: visible focus ring on dark bg */
@@ -2552,7 +2552,7 @@ onUnmounted(async () => {
 
 .foot__copy {
   font-size: 0.8125rem;
-  color: color-mix(in srgb, var(--bg-warm) 40%, transparent);
+  color: color-mix(in srgb, var(--bg-warm) 58%, transparent);
   margin-inline-start: auto;
 }
 
