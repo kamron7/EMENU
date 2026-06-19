@@ -79,6 +79,7 @@
         </div>
 
         <div class="hero__visual" aria-hidden="true">
+          <!-- floating menu cards (keep for ambient depth) -->
           <div class="hero__card hero__card--back">
             <div class="hero__card-inner">
               <div class="hero__card-label">Today's special</div>
@@ -95,6 +96,48 @@
             </div>
           </div>
           <div class="hero__glow" aria-hidden="true" />
+
+          <!-- CSS phone mockup -->
+          <div class="hero__phone-wrap">
+            <div class="hero__phone">
+              <div class="hero__phone-notch"></div>
+              <div class="hero__phone-screen">
+                <!-- food hero image -->
+                <div class="hero__phone-img-wrap">
+                  <!-- swap Unsplash URL below for your food photo -->
+                  <img
+                    src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=600&q=80"
+                    alt=""
+                    class="hero__phone-img"
+                    loading="lazy"
+                    width="300"
+                    height="200"
+                  />
+                  <div class="hero__phone-img-overlay"></div>
+                </div>
+                <!-- menu UI rows -->
+                <div class="hero__phone-menu">
+                  <p class="hero__phone-menu-label">Today's menu</p>
+                  <div class="hero__phone-row">
+                    <span class="hero__phone-dish">Saffron Risotto</span>
+                    <span class="hero__phone-chip">€ 18</span>
+                  </div>
+                  <div class="hero__phone-row">
+                    <span class="hero__phone-dish">Slow Lamb Shoulder</span>
+                    <span class="hero__phone-chip hero__phone-chip--accent">€ 24</span>
+                  </div>
+                  <div class="hero__phone-row">
+                    <span class="hero__phone-dish">Burrata &amp; Tomato</span>
+                    <span class="hero__phone-chip">€ 14</span>
+                  </div>
+                  <div class="hero__phone-row">
+                    <span class="hero__phone-dish">Chocolate Fondant</span>
+                    <span class="hero__phone-chip">€ 9</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -291,10 +334,64 @@ onMounted(async () => {
   const { SplitText } = await import('gsap/SplitText')
   gsap.registerPlugin(ScrollTrigger, SplitText)
 
-  // Section animation stubs — later tasks add initHero / initFeatures etc.
-  // They push their own cleanup fns to `cleanup`.
-  // Example slot (Task 4):
-  // initHero(gsap, ScrollTrigger, SplitText, cleanup)
+  // ── Task 4: Hero phone 3D expand + SplitText title ──────────────
+  const mm4 = gsap.matchMedia()
+  mm4.add(
+    {
+      motion:       '(prefers-reduced-motion: no-preference)',
+      reduceMotion: '(prefers-reduced-motion: reduce)',
+    },
+    (ctx) => {
+      const { reduceMotion } = ctx.conditions as { motion: boolean; reduceMotion: boolean }
+
+      // ── SplitText char-stagger reveal on hero headline ────────────
+      const split = new SplitText('.hero__headline', {
+        type: 'chars,words',
+        mask: 'chars',
+        charsClass: 'hero__headline-char',
+      })
+      cleanup.push(() => split.revert())
+
+      if (!reduceMotion) {
+        gsap.from(split.chars, {
+          yPercent: 120,
+          opacity: 0,
+          stagger: 0.028,
+          duration: 0.72,
+          ease: 'power3.out',
+          delay: 0.1,
+        })
+
+        // ── 3D phone scroll-expand (scrub) ────────────────────────
+        gsap.fromTo(
+          '.hero__phone',
+          { scale: 0.6, rotateX: 18, y: 60, transformPerspective: 900 },
+          {
+            scale: 1,
+            rotateX: 0,
+            y: 0,
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '.hero',
+              start: 'top top',
+              end: '+=80%',
+              scrub: 1.2,
+              pin: '.hero__phone-wrap',
+              pinSpacing: false,
+            },
+          }
+        )
+      } else {
+        // reduced-motion: just show phone at final state immediately
+        gsap.set('.hero__phone', { scale: 1, rotateX: 0, y: 0 })
+      }
+
+      return () => {
+        // inner cleanup handled by mm4.revert() in onUnmounted
+      }
+    }
+  )
+  cleanup.push(() => mm4.revert())
 
   // Reduced-motion guard: skip all motion if user prefers it
   const mm = gsap.matchMedia()
@@ -1201,6 +1298,178 @@ onUnmounted(async () => {
 
 .site-footer__links a:hover {
   color: var(--brown-deep);
+}
+
+/* ───────────────────────────────────────────────────────────────
+   HERO — PHONE MOCKUP
+   ─────────────────────────────────────────────────────────────── */
+
+/* Wrap: pinned by ScrollTrigger; sits inside .hero__visual */
+.hero__phone-wrap {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* The phone frame shell — gradient border via padding + background-clip */
+.hero__phone {
+  position: relative;
+  width: 210px;
+  height: 430px;
+  border-radius: 2.75rem;
+  /* Glistening gradient border: warm gold → terracotta → ivory sheen */
+  background:
+    linear-gradient(
+      145deg,
+      color-mix(in srgb, var(--accent-orange) 60%, #fff8e7) 0%,
+      var(--terracotta) 35%,
+      color-mix(in srgb, var(--brown-deep) 80%, var(--terracotta)) 60%,
+      color-mix(in srgb, var(--accent-orange) 40%, #fff) 100%
+    );
+  padding: 2px; /* border thickness */
+  box-shadow:
+    0 8px 32px color-mix(in srgb, var(--terracotta) 28%, transparent),
+    0 32px 80px color-mix(in srgb, var(--brown-deep) 18%, transparent),
+    0 2px 8px  color-mix(in srgb, var(--accent-orange) 20%, transparent),
+    inset 0 1px 0 color-mix(in srgb, #fff 30%, transparent);
+  will-change: transform;
+  transform-origin: center bottom;
+  /* glossy specular sheen overlay */
+  isolation: isolate;
+}
+
+/* Top specular gloss reflection */
+.hero__phone::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: calc(2.75rem - 2px);
+  background: linear-gradient(
+    160deg,
+    color-mix(in srgb, #fff 22%, transparent) 0%,
+    transparent 42%
+  );
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Notch */
+.hero__phone-notch {
+  position: absolute;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 64px;
+  height: 18px;
+  background: color-mix(in srgb, var(--brown-deep) 92%, transparent);
+  border-radius: 0 0 1rem 1rem;
+  z-index: 4;
+}
+
+/* Inner screen surface */
+.hero__phone-screen {
+  width: 100%;
+  height: 100%;
+  border-radius: calc(2.75rem - 2px);
+  background: var(--bg-cream);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Food hero image inside screen */
+.hero__phone-img-wrap {
+  position: relative;
+  width: 100%;
+  height: 195px;
+  flex-shrink: 0;
+  overflow: hidden;
+}
+
+.hero__phone-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Warm gradient fade at bottom of image into the menu list */
+.hero__phone-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 50%,
+    color-mix(in srgb, var(--bg-cream) 90%, transparent) 100%
+  );
+}
+
+/* Menu list area */
+.hero__phone-menu {
+  flex: 1;
+  padding: 0.75rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+  overflow: hidden;
+}
+
+.hero__phone-menu-label {
+  font-size: 0.5625rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  margin-block-end: 0.25rem;
+}
+
+/* Each dish row: name on left, price chip on right */
+.hero__phone-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.25rem;
+  padding: 0.3125rem 0.5rem;
+  background: color-mix(in srgb, var(--bg-vanilla) 80%, transparent);
+  border-radius: 0.5rem;
+  border: 1px solid color-mix(in srgb, var(--terracotta) 8%, transparent);
+}
+
+.hero__phone-dish {
+  font-size: 0.5625rem;
+  font-weight: 600;
+  color: var(--brown-deep);
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Price chip */
+.hero__phone-chip {
+  flex-shrink: 0;
+  font-size: 0.5rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  padding: 0.125rem 0.375rem;
+  border-radius: 2rem;
+  background: color-mix(in srgb, var(--accent-orange) 12%, transparent);
+  color: var(--terracotta);
+}
+
+.hero__phone-chip--accent {
+  background: var(--accent-orange);
+  color: var(--bg-cream);
+}
+
+/* SplitText mask: clip chars from below */
+.hero__headline-char {
+  display: inline-block;
 }
 
 /* ───────────────────────────────────────────────────────────────
