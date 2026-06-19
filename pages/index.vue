@@ -252,7 +252,7 @@
     </section>
 
     <!-- ═══════════════════════════════════════════════
-         HOW IT WORKS — numbered process, warm tone
+         HOW IT WORKS — numbered process + media reveal
          ════════════════════════════════════════════ -->
     <section class="how" id="how" aria-labelledby="how-heading">
       <div class="container">
@@ -261,29 +261,126 @@
           <h2 id="how-heading" class="section-heading">Up and running in under ten minutes</h2>
         </header>
 
-        <ol class="how__steps" role="list">
-          <li class="how__step">
-            <div class="how__step-num" aria-hidden="true">01</div>
-            <div class="how__step-content">
-              <h3 class="how__step-title">Create your menu</h3>
-              <p class="how__step-body">Add dishes, photos, descriptions, and prices using our visual editor. No design skills required — eMenu handles the typography.</p>
+        <div class="how__layout">
+          <ol class="how__steps" role="list">
+            <li class="how__step">
+              <div class="how__step-num" aria-hidden="true">01</div>
+              <div class="how__step-content">
+                <h3 class="how__step-title">Create your menu</h3>
+                <p class="how__step-body">Add dishes, photos, descriptions, and prices using our visual editor. No design skills required — eMenu handles the typography.</p>
+              </div>
+            </li>
+            <li class="how__step">
+              <div class="how__step-num" aria-hidden="true">02</div>
+              <div class="how__step-content">
+                <h3 class="how__step-title">Print your QR code</h3>
+                <p class="how__step-body">Download your QR table cards. They link directly to your live menu — always up to date, no reprinting.</p>
+              </div>
+            </li>
+            <li class="how__step">
+              <div class="how__step-num" aria-hidden="true">03</div>
+              <div class="how__step-content">
+                <h3 class="how__step-title">Delight your guests</h3>
+                <p class="how__step-body">Guests scan, browse, and decide. You focus on what matters: great food and great service.</p>
+              </div>
+            </li>
+          </ol>
+
+          <!-- Media reveal: clip-path morphs open on scroll -->
+          <div class="how__media" aria-hidden="true">
+            <!-- swap: replace with your own food/product photo -->
+            <img
+              class="how__media-img"
+              src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=900&q=80"
+              alt=""
+              loading="lazy"
+              width="900"
+              height="640"
+            />
+            <div class="how__media-overlay" aria-hidden="true"></div>
+            <!-- Decorative badge over image -->
+            <div class="how__media-badge" aria-hidden="true">
+              <span class="how__media-badge-num">10<sup>min</sup></span>
+              <span class="how__media-badge-label">to go live</span>
             </div>
-          </li>
-          <li class="how__step">
-            <div class="how__step-num" aria-hidden="true">02</div>
-            <div class="how__step-content">
-              <h3 class="how__step-title">Print your QR code</h3>
-              <p class="how__step-body">Download your QR table cards. They link directly to your live menu — always up to date, no reprinting.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════
+         ROI CALCULATOR — interactive revenue estimator
+         ════════════════════════════════════════════ -->
+    <section class="roi" id="roi" aria-labelledby="roi-heading">
+      <div class="container roi__inner">
+        <header class="roi__header">
+          <p class="section-eyebrow">Your potential uplift</p>
+          <h2 id="roi-heading" class="section-heading roi__heading">See what eMenu could add to your monthly revenue</h2>
+          <p class="roi__sub">Guests who browse a beautiful digital menu spend 15% more on average. Slide the controls to see your restaurant's numbers.</p>
+        </header>
+
+        <div class="roi__widget">
+          <!-- Sliders -->
+          <div class="roi__controls">
+            <div class="roi__slider-group">
+              <div class="roi__slider-label-row">
+                <label class="roi__label" for="slider-covers">Covers per day</label>
+                <span class="roi__value" aria-live="polite">{{ covers }}</span>
+              </div>
+              <input
+                id="slider-covers"
+                class="roi__range"
+                type="range"
+                min="10"
+                max="300"
+                step="5"
+                :value="covers"
+                :style="{ '--range-pct': `${((covers - 10) / (300 - 10)) * 100}%` }"
+                @input="covers = Number(($event.target as any).value)"
+                aria-label="Covers per day"
+              />
+              <div class="roi__slider-ticks" aria-hidden="true">
+                <span>10</span><span>150</span><span>300</span>
+              </div>
             </div>
-          </li>
-          <li class="how__step">
-            <div class="how__step-num" aria-hidden="true">03</div>
-            <div class="how__step-content">
-              <h3 class="how__step-title">Delight your guests</h3>
-              <p class="how__step-body">Guests scan, browse, and decide. You focus on what matters: great food and great service.</p>
+
+            <div class="roi__slider-group">
+              <div class="roi__slider-label-row">
+                <label class="roi__label" for="slider-bill">Average bill (€)</label>
+                <span class="roi__value" aria-live="polite">€ {{ avgBill }}</span>
+              </div>
+              <input
+                id="slider-bill"
+                class="roi__range"
+                type="range"
+                min="5"
+                max="120"
+                step="1"
+                :value="avgBill"
+                :style="{ '--range-pct': `${((avgBill - 5) / (120 - 5)) * 100}%` }"
+                @input="avgBill = Number(($event.target as any).value)"
+                aria-label="Average bill in euros"
+              />
+              <div class="roi__slider-ticks" aria-hidden="true">
+                <span>€ 5</span><span>€ 60</span><span>€ 120</span>
+              </div>
             </div>
-          </li>
-        </ol>
+          </div>
+
+          <!-- Result board -->
+          <div class="roi__board" aria-live="polite" aria-atomic="true">
+            <div class="roi__board-glow" aria-hidden="true"></div>
+            <p class="roi__board-eyebrow">Extra monthly revenue</p>
+            <div class="roi__board-amount">
+              <span class="roi__board-currency">€</span>
+              <span class="roi__board-num">{{ displayRevenue.toLocaleString('en-EU') }}</span>
+            </div>
+            <p class="roi__board-formula">
+              {{ covers }} covers × €{{ avgBill }} avg bill × 15% uplift × 30 days
+            </p>
+            <a href="#" class="btn btn--primary roi__board-cta">Start your free trial</a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -358,11 +455,20 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
 
 const root = ref<HTMLElement | null>(null)
 const isScrolled = ref(false)
 const mobileOpen = ref(false)
+
+// ── Task 6: ROI calculator reactive state ────────────────────────
+const covers = ref(80)
+const avgBill = ref(35)
+const UPLIFT = 0.15
+const DAYS = 30
+const extraRevenue = computed(() => Math.round(covers.value * avgBill.value * UPLIFT * DAYS))
+// displayRevenue is tweened client-side; server renders the computed value directly
+const displayRevenue = ref(extraRevenue.value)
 
 let cleanup: Array<() => void> = []
 
@@ -482,22 +588,8 @@ onMounted(async () => {
         delay: 0.4,
       })
 
-      // ── How steps reveal ─────────────────────────────────────────
-      // NOTE: Task 3's .feature-card batch reveal removed here (Task 5).
-      // Feature cards now enter via horizontal scroll, not vertical reveal.
-      ScrollTrigger.batch('.how__step', {
-        onEnter: (batch) =>
-          gsap.from(batch, {
-            opacity: 0,
-            x: -24,
-            duration: 0.55,
-            ease: 'power2.out',
-            stagger: 0.12,
-            overwrite: true,
-          }),
-        start: 'top 85%',
-        once: true,
-      })
+      // ── How steps: Task 3 batch REMOVED — Task 6 owns the how-section reveal ──
+      // (SplitText word reveal + clip-path morph in mm6 below replaces this block)
 
       // ── Testimonials stagger reveal ───────────────────────────────
       ScrollTrigger.batch('.testimonial', {
@@ -520,6 +612,109 @@ onMounted(async () => {
     }
   )
   cleanup.push(() => mm.revert())
+
+  // ── Task 6: How-it-works SplitText + clip-path + ROI counter ───
+  const mm6 = gsap.matchMedia()
+  mm6.add(
+    {
+      motion:       '(prefers-reduced-motion: no-preference)',
+      reduceMotion: '(prefers-reduced-motion: reduce)',
+    },
+    (ctx) => {
+      const { reduceMotion } = ctx.conditions as { motion: boolean; reduceMotion: boolean }
+
+      if (!reduceMotion) {
+        // ── SplitText word-by-word reveal for each step title ────────
+        const stepTitles = gsap.utils.toArray('.how__step-title') as HTMLElement[]
+        stepTitles.forEach((titleEl: HTMLElement) => {
+          const split = new SplitText(titleEl, { type: 'words', wordsClass: 'how__word' })
+          // Exponential-backoff stagger (motiondesign skill)
+          gsap.from(split.words, {
+            opacity: 0,
+            y: 22,
+            duration: 0.52,
+            ease: 'power3.out',
+            stagger: {
+              each: 0.07,
+              ease: 'power1.out',
+            },
+            scrollTrigger: {
+              trigger: titleEl.closest('.how__step') as Element,
+              start: 'top 82%',
+              once: true,
+            },
+          })
+          cleanup.push(() => split.revert())
+        })
+
+        // ── Step number + body fade-slide in ─────────────────────────
+        ;(gsap.utils.toArray('.how__step') as HTMLElement[]).forEach((step: HTMLElement) => {
+          gsap.from([step.querySelector('.how__step-num'), step.querySelector('.how__step-body')], {
+            opacity: 0,
+            x: -18,
+            duration: 0.5,
+            ease: 'power2.out',
+            stagger: 0.08,
+            scrollTrigger: {
+              trigger: step,
+              start: 'top 84%',
+              once: true,
+            },
+          })
+        })
+
+        // ── Media clip-path morph: inset rectangle opens on scroll ───
+        // Emil-design-eng: clip-path is GPU-accelerated, reveals with intent
+        gsap.fromTo(
+          '.how__media',
+          { clipPath: 'inset(14% 18% 14% 18% round 2rem)' },
+          {
+            clipPath: 'inset(0% 0% 0% 0% round 1.5rem)',
+            ease: 'none',
+            scrollTrigger: {
+              trigger: '.how',
+              start: 'top 65%',
+              end: 'center 45%',
+              scrub: 1.2,
+            },
+          }
+        )
+      } else {
+        // Reduced-motion: instantly show steps and media at final state
+        gsap.set('.how__media', { clipPath: 'inset(0% 0% 0% 0% round 1.5rem)' })
+        // Step titles visible immediately — no SplitText so no split.revert needed
+      }
+
+      return () => {
+        // per-split reverts already pushed to cleanup above;
+        // mm6.revert() (in cleanup) handles the rest
+      }
+    }
+  )
+  cleanup.push(() => mm6.revert())
+
+  // ── ROI counter watch: tween displayRevenue on extraRevenue change ─
+  // watch fires client-side only (inside onMounted); no SSR risk.
+  // immediate:true initialises displayRevenue on mount.
+  watch(
+    extraRevenue,
+    (v) => {
+      const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+      if (prefersReduced) {
+        displayRevenue.value = v
+        return
+      }
+      gsap.to(displayRevenue, {
+        value: v,
+        duration: 0.65,
+        ease: 'power2.out',
+        onUpdate() {
+          displayRevenue.value = Math.round(displayRevenue.value)
+        },
+      })
+    },
+    { immediate: true }
+  )
 
   // ── Task 5: Pinned horizontal feature carousel + blob parallax ──
   const mm5 = gsap.matchMedia()
@@ -670,7 +865,7 @@ onUnmounted(async () => {
     display: none;
   }
 }
-
+ 
 .nav__link {
   position: relative;
   padding: 0.5rem 0.75rem;
@@ -1371,13 +1566,26 @@ onUnmounted(async () => {
   padding-block: 7rem;
 }
 
+/* Two-column layout: steps left, media right */
+.how__layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+}
+
+@media (max-width: 900px) {
+  .how__layout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+}
+
 .how__steps {
   list-style: none;
   display: flex;
   flex-direction: column;
   gap: 0;
-  max-width: 680px;
-  margin-inline: auto;
   position: relative;
 }
 
@@ -1439,6 +1647,381 @@ onUnmounted(async () => {
   font-size: 0.9375rem;
   line-height: 1.65;
   color: var(--text-soft);
+}
+
+/* SplitText word wrappers — needed for mask/reveal */
+.how__word {
+  display: inline-block;
+}
+
+/* ── Media column ────────────────────────────────────────────── */
+.how__media {
+  position: relative;
+  border-radius: 1.5rem;
+  overflow: hidden;
+  /* GSAP will animate clip-path; set initial state via JS to avoid flash */
+  will-change: clip-path;
+  box-shadow:
+    0 8px 40px color-mix(in srgb, var(--terracotta) 18%, transparent),
+    0 2px 8px  color-mix(in srgb, var(--brown-deep) 10%, transparent);
+}
+
+.how__media-img {
+  display: block;
+  width: 100%;
+  height: 420px;
+  object-fit: cover;
+  object-position: center;
+}
+
+@media (max-width: 900px) {
+  .how__media-img {
+    height: 260px;
+  }
+}
+
+/* Warm gradient overlay — top-to-bottom fade from transparent to cream tint */
+.how__media-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    to bottom,
+    transparent 40%,
+    color-mix(in srgb, var(--brown-deep) 22%, transparent) 100%
+  );
+  pointer-events: none;
+}
+
+/* Decorative badge — "10 min to go live" */
+.how__media-badge {
+  position: absolute;
+  bottom: 1.5rem;
+  left: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.1rem;
+  background: color-mix(in srgb, var(--bg-cream) 92%, transparent);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1.5px solid color-mix(in srgb, var(--accent-orange) 20%, transparent);
+  border-radius: 0.875rem;
+  padding: 0.875rem 1.125rem;
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--terracotta) 16%, transparent);
+}
+
+.how__media-badge-num {
+  font-size: 2rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--accent-orange);
+  line-height: 1;
+}
+
+.how__media-badge-num sup {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  vertical-align: super;
+  color: var(--terracotta);
+}
+
+.how__media-badge-label {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-soft);
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   ROI CALCULATOR
+   ─────────────────────────────────────────────────────────────── */
+.roi {
+  background: var(--bg-vanilla);
+  padding-block: 7rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Soft warm radial bloom behind the whole section */
+.roi::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 70% 60% at 80% 30%, color-mix(in srgb, var(--accent-orange) 6%, transparent) 0%, transparent 70%),
+    radial-gradient(ellipse 50% 40% at 15% 70%, color-mix(in srgb, var(--terracotta) 5%, transparent) 0%, transparent 65%);
+  pointer-events: none;
+}
+
+.roi__inner {
+  position: relative;
+  z-index: 1;
+}
+
+.roi__header {
+  text-align: center;
+  margin-block-end: 4rem;
+}
+
+.roi__heading {
+  /* inherits .section-heading; override max-width for readability */
+  max-width: 22ch;
+  margin-inline: auto;
+}
+
+.roi__sub {
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  color: var(--text-soft);
+  max-width: 52ch;
+  margin-inline: auto;
+  margin-block-start: 1rem;
+}
+
+/* Widget: two-column on desktop (controls | board) */
+.roi__widget {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+
+@media (max-width: 860px) {
+  .roi__widget {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+/* ── Slider controls ────────────────────────────────────────── */
+.roi__controls {
+  display: flex;
+  flex-direction: column;
+  gap: 2.5rem;
+}
+
+.roi__slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.roi__slider-label-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.roi__label {
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--brown-deep);
+  letter-spacing: -0.01em;
+}
+
+.roi__value {
+  font-size: 1.125rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--accent-orange);
+  font-variant-numeric: tabular-nums;
+  min-width: 3.5ch;
+  text-align: right;
+}
+
+/* ── Custom range input ─────────────────────────────────────── */
+/* Reset native appearance entirely */
+.roi__range {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  background: linear-gradient(
+    to right,
+    var(--accent-orange) 0%,
+    var(--accent-orange) calc(
+      (var(--range-pct, 50%))
+    ),
+    color-mix(in srgb, var(--terracotta) 20%, var(--bg-cream)) calc(
+      (var(--range-pct, 50%))
+    ),
+    color-mix(in srgb, var(--terracotta) 20%, var(--bg-cream)) 100%
+  );
+  cursor: pointer;
+  outline: none;
+  transition: box-shadow 0.18s var(--ease-organic);
+}
+
+/* Use JS to update --range-pct for the fill gradient */
+.roi__range:focus-visible {
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-orange) 30%, transparent);
+}
+
+/* Webkit thumb */
+.roi__range::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent-orange);
+  border: 3px solid var(--bg-cream);
+  box-shadow:
+    0 2px 8px color-mix(in srgb, var(--accent-orange) 40%, transparent),
+    0 0 0 1.5px color-mix(in srgb, var(--accent-orange) 60%, transparent);
+  cursor: pointer;
+  transition:
+    transform 0.14s var(--ease-organic),
+    box-shadow 0.14s var(--ease-organic);
+}
+
+.roi__range::-webkit-slider-thumb:hover {
+  transform: scale(1.18);
+  box-shadow:
+    0 4px 14px color-mix(in srgb, var(--accent-orange) 50%, transparent),
+    0 0 0 2px color-mix(in srgb, var(--accent-orange) 70%, transparent);
+}
+
+.roi__range:active::-webkit-slider-thumb {
+  transform: scale(1.08);
+}
+
+/* Moz thumb */
+.roi__range::-moz-range-thumb {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent-orange);
+  border: 3px solid var(--bg-cream);
+  box-shadow: 0 2px 8px color-mix(in srgb, var(--accent-orange) 40%, transparent);
+  cursor: pointer;
+  transition:
+    transform 0.14s var(--ease-organic),
+    box-shadow 0.14s var(--ease-organic);
+}
+
+.roi__range::-moz-range-thumb:hover {
+  transform: scale(1.18);
+}
+
+/* Moz track (provides background for filled portion) */
+.roi__range::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: color-mix(in srgb, var(--terracotta) 20%, var(--bg-cream));
+}
+
+.roi__range::-moz-range-progress {
+  height: 6px;
+  border-radius: 3px;
+  background: var(--accent-orange);
+}
+
+/* Tick marks below slider */
+.roi__slider-ticks {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.75rem;
+  color: var(--text-soft);
+  letter-spacing: 0.02em;
+  padding-inline: 0.125rem;
+}
+
+/* ── Result board ───────────────────────────────────────────── */
+/* Emil philosophy: premium, celebratory, feels earned */
+.roi__board {
+  position: relative;
+  background: var(--bg-cream);
+  border: 1.5px solid color-mix(in srgb, var(--accent-orange) 22%, transparent);
+  border-radius: 1.5rem;
+  padding: 2.5rem 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  overflow: hidden;
+  box-shadow:
+    0 8px 40px color-mix(in srgb, var(--accent-orange) 10%, transparent),
+    0 2px 8px  color-mix(in srgb, var(--terracotta) 8%, transparent);
+}
+
+/* Ambient glow orb behind the number */
+.roi__board-glow {
+  position: absolute;
+  top: -30%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 280px;
+  height: 200px;
+  border-radius: 50%;
+  background: radial-gradient(
+    ellipse,
+    color-mix(in srgb, var(--accent-orange) 18%, transparent) 0%,
+    transparent 70%
+  );
+  filter: blur(28px);
+  pointer-events: none;
+}
+
+.roi__board-eyebrow {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+  position: relative;
+  z-index: 1;
+}
+
+.roi__board-amount {
+  display: flex;
+  align-items: baseline;
+  gap: 0.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.roi__board-currency {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--accent-orange);
+  letter-spacing: -0.03em;
+}
+
+.roi__board-num {
+  font-size: clamp(3rem, 8vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.05em;
+  color: var(--brown-deep);
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.roi__board-formula {
+  font-size: 0.8125rem;
+  color: var(--text-soft);
+  line-height: 1.5;
+  max-width: 28ch;
+  position: relative;
+  z-index: 1;
+}
+
+.roi__board-cta {
+  margin-block-start: 0.5rem;
+  position: relative;
+  z-index: 1;
+}
+
+/* Reduced-motion: no clip-path animation on .how__media */
+@media (prefers-reduced-motion: reduce) {
+  .how__media {
+    clip-path: inset(0% 0% 0% 0% round 1.5rem) !important;
+  }
 }
 
 /* ───────────────────────────────────────────────────────────────
