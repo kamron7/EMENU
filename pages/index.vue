@@ -373,7 +373,7 @@
             <p class="roi__board-eyebrow">Extra monthly revenue</p>
             <div class="roi__board-amount">
               <span class="roi__board-currency">€</span>
-              <span class="roi__board-num">{{ displayRevenue.toLocaleString('en-EU') }}</span>
+              <span class="roi__board-num">{{ displayRevenue.toLocaleString('de-DE') }}</span>
             </div>
             <p class="roi__board-formula">
               {{ covers }} covers × €{{ avgBill }} avg bill × 15% uplift × 30 days
@@ -865,7 +865,7 @@ onUnmounted(async () => {
     display: none;
   }
 }
- 
+
 .nav__link {
   position: relative;
   padding: 0.5rem 0.75rem;
@@ -1660,6 +1660,7 @@ onUnmounted(async () => {
   border-radius: 1.5rem;
   overflow: hidden;
   /* GSAP will animate clip-path; set initial state via JS to avoid flash */
+  clip-path: inset(14% 18% 14% 18% round 2rem);
   will-change: clip-path;
   box-shadow:
     0 8px 40px color-mix(in srgb, var(--terracotta) 18%, transparent),
