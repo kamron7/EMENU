@@ -350,17 +350,20 @@ onMounted(async () => {
         mask: 'chars',
         charsClass: 'hero__headline-char',
       })
-      cleanup.push(() => split.revert())
 
       if (!reduceMotion) {
-        gsap.from(split.chars, {
-          yPercent: 120,
-          opacity: 0,
-          stagger: 0.028,
-          duration: 0.72,
-          ease: 'power3.out',
-          delay: 0.1,
-        })
+        gsap.fromTo(
+          split.chars,
+          { yPercent: 120, opacity: 0 },
+          {
+            yPercent: 0,
+            opacity: 1,
+            stagger: 0.028,
+            duration: 0.72,
+            ease: 'power3.out',
+            delay: 0.1,
+          }
+        )
 
         // ── 3D phone scroll-expand (scrub) ────────────────────────
         gsap.fromTo(
@@ -386,9 +389,9 @@ onMounted(async () => {
         gsap.set('.hero__phone', { scale: 1, rotateX: 0, y: 0 })
       }
 
-      return () => {
-        // inner cleanup handled by mm4.revert() in onUnmounted
-      }
+      // Single-source teardown: mm4.revert() (pushed to cleanup) calls this
+      // returned function, which reverts the SplitText exactly once.
+      return () => split.revert()
     }
   )
   cleanup.push(() => mm4.revert())
@@ -812,6 +815,10 @@ onUnmounted(async () => {
   flex-direction: column;
   justify-content: center;
   position: relative;
+  /* overflow: hidden clips children incl. ScrollTrigger pin spacer.
+     The phone pin therefore uses pinSpacing: false. If pinSpacing is ever
+     re-enabled, this overflow MUST be removed or changed to overflow: clip
+     with contain: layout, otherwise the spacer will be clipped invisibly. */
   overflow: hidden;
 }
 
@@ -1325,10 +1332,10 @@ onUnmounted(async () => {
   background:
     linear-gradient(
       145deg,
-      color-mix(in srgb, var(--accent-orange) 60%, #fff8e7) 0%,
+      color-mix(in srgb, var(--accent-orange) 60%, var(--bg-cream)) 0%,
       var(--terracotta) 35%,
       color-mix(in srgb, var(--brown-deep) 80%, var(--terracotta)) 60%,
-      color-mix(in srgb, var(--accent-orange) 40%, #fff) 100%
+      color-mix(in srgb, var(--accent-orange) 40%, white) 100% /* intentional: specular white, no token */
     );
   padding: 2px; /* border thickness */
   box-shadow:
