@@ -1,0 +1,38 @@
+Act as an elite Creative Frontend Developer and Vue/Nuxt Architecture Expert. I need you to generate a premium landing page component for my digital menu platform, "eMenu". 
+
+This must be written as a highly structural Nuxt 3 single-file component (`app.vue` or a dedicated landing index page). 
+
+### CRITICAL REQUIREMENTS (NO EXCEPTIONS):
+1. **NO TAILWIND OR UTILITY FRAMEWORKS:** Do not use Tailwind, UnoCSS, Bootstrap, or any other utility framework. Write raw, structured, scoped CSS or SCSS directly within the `<style scoped>` block of the Vue file.
+2. **NUXT 3 COMPATIBLE:** Ensure the structure utilizes Nuxt 3 semantics, uses `onMounted` for client-side code, and relies on proper Vue 3 composition API hooks (`ref`, `computed`).
+3. **ADVANCED GSAP ANIMATIONS:** You must include a fully mapped script using GSAP, ScrollTrigger, and optionally SplitText logic. Every single section must feature a unique, highly advanced scroll behavior (e.g., pinning, clipping path animation, canvas-like overlays, parallax layers).
+4. **LIGHT & "EATABLE" THEME:** Absolutely no pure dark modes, black backgrounds, or aggressive tech-blue tones. The design system must feel warm, organic, and appetizing. 
+   - Backgrounds: Rich warm creams, soft vanillas, buttery ivory.
+   - Accents: Vibrant premium orange, terracotta, deep warm brown for readable typography.
+5. **VISUAL COMPONENTS & PHONE MODELS:** Incorporate structural layouts for realistic smartphone mockups containing vibrant menu UI elements. Use high-quality online unsplash placeholder URLs for the food, UI items, and device images so I can replace them later. 
+
+### STRUCTURE & ARCHITECTURE TO IMPLEMENT:
+
+#### `<script setup>`
+- Safely import GSAP and ScrollTrigger dynamically or assume they are configured plugins.
+- Use `onMounted()` to initialize the timelines. Make sure to clean up instances on `onUnmounted()` to prevent memory leaks in Nuxt.
+- Build unique animations per section:
+  - **Hero:** A premium phone mockup that starts down-scaled, then expands and slides forward into the center via a 3D perspective scroll clip as you begin to scroll.
+  - **Feature Showcase:** A pinned horizontal-scroll track where individual feature highlights slide in sideways accompanied by parallax background fluid shapes.
+  - **How it Works:** A timeline track where text elements split and morph sequentially as an image container changes its mask shape.
+  - **ROI Calculator:** An interactive interactive reactive widget calculation block.
+
+#### `<template>`
+- **Header Navigation:** Clean, minimal, warm-toned fixed header with smooth link underlines.
+- **Section 1 (Hero):** Bold, warm-toned fluid typographic title with a dual call-to-action layout. Contains the primary smartphone mockup displaying a rich restaurant digital menu.
+- **Section 2 (The Pinned Feature Carousel):** Horizontal movement container showcasing premium features (Instant Price Sync, Allergen Tags, Multi-language support).
+- **Section 3 (Interactive ROI Calculator):** A clean interface containing custom-styled `<input type="range">` sliders tracking restaurant capacity and average bill size, computing and displaying increased revenue on a dynamic board.
+- **Section 4 (Testimonials & Footer):** Layered feedback cards with asymmetric grid alignment closing into an organic, warm background footer block.
+
+#### `<style scoped lang="css">` (or SCSS)
+- Use standard semantic layout patterns (Flexbox, CSS Grid, absolute positioning hacks for custom graphics).
+- Define a beautiful design system using CSS custom properties (`--bg-warm`, `--accent-orange`, `--text-main`).
+- Build custom UI components for the phone shell entirely in CSS (glistening borders, notch, shadow depth) wrapped around the inner imagery.
+- Ensure all hover triggers utilize custom cubic-bezier transitions for organic movement.
+
+Provide the complete, pristine `.vue` component file with all architectural logic ready to drop into a Nuxt 3 project directory.
