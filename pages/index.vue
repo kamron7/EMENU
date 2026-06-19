@@ -385,7 +385,7 @@
     </section>
 
     <!-- ═══════════════════════════════════════════════
-         SOCIAL PROOF — quotes, warm and human
+         SOCIAL PROOF — asymmetric testimonial grid
          ════════════════════════════════════════════ -->
     <section class="social" id="social" aria-labelledby="social-heading">
       <div class="container">
@@ -394,11 +394,22 @@
           <h2 id="social-heading" class="section-heading">Guests notice. Staff notice. Revenue follows.</h2>
         </header>
 
+        <!-- Asymmetric grid — varied margin-top offsets create editorial depth -->
         <div class="social__grid">
-          <blockquote class="testimonial">
+
+          <!-- Card 1: top-left, no offset -->
+          <blockquote class="testimonial testimonial--col-a">
+            <!-- swap: https://images.unsplash.com/photo-1580489944761-15a19d654956?w=96&q=80 -->
+            <img
+              class="testimonial__avatar-img"
+              src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=96&q=80"
+              alt="Maria Kowalczyk"
+              width="48"
+              height="48"
+              loading="lazy"
+            /><!-- swap -->
             <p class="testimonial__quote">"We saw a 22% increase in dessert orders the first week. Guests browse longer when the menu looks this good."</p>
             <footer class="testimonial__author">
-              <div class="testimonial__avatar" aria-hidden="true">M</div>
               <div>
                 <cite class="testimonial__name">Maria Kowalczyk</cite>
                 <span class="testimonial__role">Owner, Bistro Soleil — Warsaw</span>
@@ -406,10 +417,19 @@
             </footer>
           </blockquote>
 
-          <blockquote class="testimonial">
+          <!-- Card 2: right column, pushed down — creates asymmetric rhythm -->
+          <blockquote class="testimonial testimonial--col-b testimonial--push">
+            <!-- swap: https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=96&q=80 -->
+            <img
+              class="testimonial__avatar-img"
+              src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=96&q=80"
+              alt="Reza Ahmadi"
+              width="48"
+              height="48"
+              loading="lazy"
+            /><!-- swap -->
             <p class="testimonial__quote">"Updating the menu used to take an hour and a trip to the printer. Now it's thirty seconds on my phone."</p>
             <footer class="testimonial__author">
-              <div class="testimonial__avatar" aria-hidden="true">R</div>
               <div>
                 <cite class="testimonial__name">Reza Ahmadi</cite>
                 <span class="testimonial__role">Head Chef, Casa Terre — Amsterdam</span>
@@ -417,17 +437,67 @@
             </footer>
           </blockquote>
 
-          <blockquote class="testimonial testimonial--featured">
-            <p class="testimonial__quote">"Our international guests feel at home now. eMenu translated everything in minutes and the photos made the food irresistible."</p>
+          <!-- Card 3: featured — spans full width, centrepiece of the grid -->
+          <blockquote class="testimonial testimonial--featured testimonial--span">
+            <!-- swap: https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&q=80 -->
+            <img
+              class="testimonial__avatar-img testimonial__avatar-img--lg"
+              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&q=80"
+              alt="Lucia Ferraro"
+              width="64"
+              height="64"
+              loading="lazy"
+            /><!-- swap -->
+            <p class="testimonial__quote testimonial__quote--lg">"Our international guests feel at home now. eMenu translated everything in minutes and the photos made the food irresistible."</p>
             <footer class="testimonial__author">
-              <div class="testimonial__avatar" aria-hidden="true">L</div>
               <div>
                 <cite class="testimonial__name">Lucia Ferraro</cite>
                 <span class="testimonial__role">Manager, Trattoria del Porto — Naples</span>
               </div>
             </footer>
           </blockquote>
-        </div>
+
+          <!-- Card 4: bottom-left, lifted slightly relative to card 5 -->
+          <blockquote class="testimonial testimonial--col-a testimonial--lift">
+            <!-- swap: https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=96&q=80 -->
+            <img
+              class="testimonial__avatar-img"
+              src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=96&q=80"
+              alt="Tomasz Wiśniewski"
+              width="48"
+              height="48"
+              loading="lazy"
+            /><!-- swap -->
+            <p class="testimonial__quote">"Our team spends zero time on menu maintenance. That's an hour a day back to the kitchen where it belongs."</p>
+            <footer class="testimonial__author">
+              <div>
+                <cite class="testimonial__name">Tomasz Wiśniewski</cite>
+                <span class="testimonial__role">Head Chef, Kuchnia Rzeki — Kraków</span>
+              </div>
+            </footer>
+          </blockquote>
+
+          <!-- Card 5: bottom-right, natural resting position -->
+          <blockquote class="testimonial testimonial--col-b">
+            <!-- swap: https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=96&q=80 -->
+            <img
+              class="testimonial__avatar-img"
+              src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=96&q=80"
+              alt="Aiko Nakamura"
+              width="48"
+              height="48"
+              loading="lazy"
+            /><!-- swap -->
+            <p class="testimonial__quote">"Scanning a QR code used to feel cold and impersonal. eMenu made it feel like hospitality. Repeat bookings went up."</p>
+            <footer class="testimonial__author">
+              <div>
+                <cite class="testimonial__name">Aiko Nakamura</cite>
+                <span class="testimonial__role">Owner, Umi Dining — Lisbon</span>
+              </div>
+            </footer>
+          </blockquote>
+
+        </div><!-- /.social__grid -->
 
         <div class="social__cta">
           <p class="social__cta-line">Join 2,400+ restaurants already using eMenu.</p>
@@ -437,18 +507,66 @@
     </section>
 
     <!-- ═══════════════════════════════════════════════
-         FOOTER — minimal, warm
+         FOOTER — organic warm, clip-path wave top edge
          ════════════════════════════════════════════ -->
-    <footer class="site-footer">
-      <div class="container site-footer__inner">
-        <span class="site-footer__logo">eMenu</span>
-        <p class="site-footer__copy">© 2026 eMenu. All rights reserved.</p>
-        <nav class="site-footer__links" aria-label="Footer navigation">
-          <a href="#">Privacy</a>
-          <a href="#">Terms</a>
-          <a href="#">Contact</a>
-        </nav>
+    <footer class="foot" aria-label="Site footer">
+
+      <!-- Wave top edge: clip-path polygon creates smooth organic curve -->
+      <div class="foot__wave" aria-hidden="true"></div>
+
+      <div class="foot__body">
+        <div class="container foot__inner">
+
+          <!-- Closing CTA block -->
+          <div class="foot__cta-block foot__reveal-item">
+            <p class="foot__tagline">Your menu is the first impression.<br/>Make it one they remember.</p>
+            <a href="#" class="btn btn--primary btn--lg foot__cta-btn">Start your free trial</a>
+            <p class="foot__cta-sub">No credit card required · Cancel any time</p>
+          </div>
+
+          <!-- Link columns -->
+          <nav class="foot__links-grid" aria-label="Footer navigation">
+
+            <div class="foot__col foot__reveal-item">
+              <p class="foot__col-heading">Product</p>
+              <ul class="foot__col-list" role="list">
+                <li><a href="#features" class="foot__link">Features</a></li>
+                <li><a href="#how" class="foot__link">How it works</a></li>
+                <li><a href="#roi" class="foot__link">ROI calculator</a></li>
+                <li><a href="#" class="foot__link">Pricing</a></li>
+              </ul>
+            </div>
+
+            <div class="foot__col foot__reveal-item">
+              <p class="foot__col-heading">Company</p>
+              <ul class="foot__col-list" role="list">
+                <li><a href="#" class="foot__link">About</a></li>
+                <li><a href="#" class="foot__link">Blog</a></li>
+                <li><a href="#" class="foot__link">Careers</a></li>
+                <li><a href="#" class="foot__link">Contact</a></li>
+              </ul>
+            </div>
+
+            <div class="foot__col foot__reveal-item">
+              <p class="foot__col-heading">Legal</p>
+              <ul class="foot__col-list" role="list">
+                <li><a href="#" class="foot__link">Privacy</a></li>
+                <li><a href="#" class="foot__link">Terms</a></li>
+                <li><a href="#" class="foot__link">Cookies</a></li>
+                <li><a href="#" class="foot__link">GDPR</a></li>
+              </ul>
+            </div>
+
+          </nav>
+        </div>
+
+        <!-- Footer base bar -->
+        <div class="container foot__base">
+          <span class="foot__logo"><em class="foot__logo-mark">e</em>Menu</span>
+          <p class="foot__copy">© 2026 eMenu. Crafted with care for restaurants everywhere.</p>
+        </div>
       </div>
+
     </footer>
 
   </div>
@@ -769,6 +887,54 @@ onMounted(async () => {
     }
   )
   cleanup.push(() => mm5.revert())
+
+  // ── Task 7: Footer reveal (mm7 — own instance, own cleanup) ────
+  const mm7 = gsap.matchMedia()
+  mm7.add(
+    {
+      motion:       '(prefers-reduced-motion: no-preference)',
+      reduceMotion: '(prefers-reduced-motion: reduce)',
+    },
+    (ctx: { conditions: Record<string, boolean> }) => {
+      const { reduceMotion } = ctx.conditions
+
+      if (!reduceMotion) {
+        // Stagger-reveal each .foot__reveal-item (CTA block + 3 link columns)
+        gsap.from('.foot__reveal-item', {
+          opacity: 0,
+          y: 48,
+          duration: 0.72,
+          ease: 'power3.out',
+          stagger: {
+            each: 0.11,
+            ease: 'power1.out',
+          },
+          scrollTrigger: {
+            trigger: '.foot',
+            start: 'top 82%',
+            once: true,
+          },
+        })
+
+        // Subtle tagline scale-in for emphasis (Emil: unseen detail compounds)
+        gsap.from('.foot__tagline', {
+          scale: 0.97,
+          duration: 0.6,
+          ease: 'power2.out',
+          scrollTrigger: {
+            trigger: '.foot',
+            start: 'top 82%',
+            once: true,
+          },
+        })
+      }
+
+      return () => {
+        // mm7.revert() (pushed to cleanup) handles ScrollTrigger cleanup
+      }
+    }
+  )
+  cleanup.push(() => mm7.revert())
 })
 
 onUnmounted(async () => {
@@ -2113,50 +2279,289 @@ onUnmounted(async () => {
   color: var(--text-soft);
 }
 
-/* ───────────────────────────────────────────────────────────────
-   FOOTER
+/* ─────────────────────────────────────────────────────────────────
+   TESTIMONIALS — asymmetric grid restructure (Task 7)
    ─────────────────────────────────────────────────────────────── */
-.site-footer {
-  background: var(--bg-vanilla);
-  border-block-start: 1.5px solid color-mix(in srgb, var(--terracotta) 10%, transparent);
-  padding-block: 2.25rem;
-  margin-block-start: auto;
+
+/*
+  Two-column grid with deliberate row-height auto sizing.
+  Asymmetry is achieved by:
+    1. .testimonial--push  → margin-block-start offset on column B cards
+    2. .testimonial--lift  → negative margin pulls card up against the flow
+    3. .testimonial--span  → column-span: all for the featured centrepiece
+  The .testimonial class is kept exactly so Task 3's ScrollTrigger.batch
+  entrance reveal fires without modification.
+*/
+.social__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-block-end: 4rem;
+  align-items: start;  /* critical: auto-height rows, no stretch */
 }
 
-.site-footer__inner {
+@media (max-width: 680px) {
+  .social__grid {
+    grid-template-columns: 1fr;
+  }
+  /* reset all offsets on single-column layout */
+  .testimonial--push,
+  .testimonial--lift {
+    margin-block-start: 0 !important;
+  }
+}
+
+/* Column placement helpers */
+.testimonial--col-a { grid-column: 1; }
+.testimonial--col-b { grid-column: 2; }
+
+/* Offset: push card B row-1 down, creating visual breathing room */
+.testimonial--push { margin-block-start: 2.5rem; }
+
+/* Lift: pull card A row-2 upward, overlapping the gap slightly */
+.testimonial--lift { margin-block-start: -0.75rem; }
+
+/* Featured: spans both columns; centrepiece with horizontal layout */
+.testimonial--span {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto auto;
+  gap: 0 1.5rem;
+  align-items: center;
+}
+
+.testimonial--span .testimonial__avatar-img--lg {
+  grid-row: 1 / 3;
+  align-self: center;
+}
+
+.testimonial--span .testimonial__quote--lg {
+  grid-column: 2;
+}
+
+.testimonial--span .testimonial__author {
+  grid-column: 2;
+}
+
+/* Avatar: real photo, circular crop */
+.testimonial__avatar-img {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid color-mix(in srgb, var(--terracotta) 20%, transparent);
+  display: block;
+  margin-block-end: 1rem;
+  /* Emil: tiny detail — warm ring makes avatar feel part of the brand palette */
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-orange) 10%, transparent);
+}
+
+.testimonial__avatar-img--lg {
+  width: 64px;
+  height: 64px;
+  margin-block-end: 0;
+}
+
+/* Featured quote: slightly larger type for hierarchy */
+.testimonial__quote--lg {
+  font-size: 1.125rem;
+  line-height: 1.65;
+}
+
+/* ─────────────────────────────────────────────────────────────────
+   FOOTER — organic warm, clip-path wave top (Task 7)
+   ─────────────────────────────────────────────────────────────── */
+
+/*
+  .foot uses a deep warm terracotta-brown tint — NOT black.
+  The wave is a separate ::before-backed div (.foot__wave) with a
+  clip-path polygon that creates an organic, hand-drawn curve feel:
+  the peak is asymmetric (sits at ~38% across) and the trough is
+  wider, giving a gestural quality vs a mechanical sine wave.
+
+  Design token note: --foot-bg is mixed inline (no pure hex) so the
+  colour stays within the warm token system.
+*/
+.foot {
+  position: relative;
+  /* Deep warm terracotta-brown — darker than --bg-vanilla, NOT black */
+  background: color-mix(in srgb, var(--brown-deep) 88%, var(--terracotta));
+  margin-block-start: 0;
+}
+
+/* Wave separator: a thin SVG-free clip-path shape above the footer body */
+.foot__wave {
+  position: relative;
+  width: 100%;
+  /* Height governs how tall the wave notch is */
+  height: 64px;
+  /*
+    Organic clip-path wave (polygon — 6 control points):
+      0%,100%  → bottom-left corner
+      0%,0%    → top-left corner
+      38%,100% → the asymmetric peak (rises fully at 38% width)
+      62%,8%   → the right trough (dips back slightly)
+      100%,60% → right shoulder before corner
+      100%,100%→ bottom-right corner
+    The polygon clips the *wave element* itself — the revealed
+    background above is var(--bg-cream) from .social above it.
+  */
+  background: var(--bg-cream);
+  clip-path: polygon(
+    0% 100%,
+    0% 0%,
+    38% 100%,
+    62% 8%,
+    100% 60%,
+    100% 100%
+  );
+}
+
+.foot__body {
+  padding-block: 4rem 2.5rem;
+}
+
+.foot__inner {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4rem;
+  align-items: start;
+  margin-block-end: 3.5rem;
+}
+
+@media (max-width: 860px) {
+  .foot__inner {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+/* Closing CTA block */
+.foot__cta-block {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+
+.foot__tagline {
+  font-size: clamp(1.375rem, 3vw, 1.875rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.25;
+  /* Warm ivory — NOT white, NOT cream — a step lighter than the bg */
+  color: color-mix(in srgb, var(--bg-warm) 92%, white);
+}
+
+.foot__cta-btn {
+  /* Override primary btn: use cream bg on dark footer for inversion */
+  background: color-mix(in srgb, var(--bg-warm) 96%, white);
+  color: var(--brown-deep);
+  border-color: color-mix(in srgb, var(--bg-warm) 96%, white);
+  box-shadow: 0 4px 20px color-mix(in srgb, var(--brown-deep) 30%, transparent);
+}
+
+.foot__cta-btn:hover {
+  background: white; /* intentional: specular highlight on hover */
+  border-color: white;
+  box-shadow: 0 6px 28px color-mix(in srgb, var(--brown-deep) 40%, transparent);
+}
+
+.foot__cta-btn:focus-visible {
+  outline: 2.5px solid color-mix(in srgb, var(--accent-orange) 80%, white);
+  outline-offset: 3px;
+}
+
+.foot__cta-sub {
+  font-size: 0.8125rem;
+  color: color-mix(in srgb, var(--bg-warm) 55%, transparent);
+  letter-spacing: 0.02em;
+}
+
+/* Link column grid */
+.foot__links-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  min-width: min(380px, 100%);
+}
+
+@media (max-width: 580px) {
+  .foot__links-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.foot__col-heading {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent-orange) 75%, white);
+  margin-block-end: 1rem;
+}
+
+.foot__col-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+}
+
+.foot__link {
+  font-size: 0.9375rem;
+  color: color-mix(in srgb, var(--bg-warm) 60%, transparent);
+  text-decoration: none;
+  transition: color 0.18s var(--ease-organic);
+  /* Keyboard-accessible: visible focus ring on dark bg */
+}
+
+.foot__link:hover {
+  color: color-mix(in srgb, var(--bg-warm) 92%, white);
+}
+
+.foot__link:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--accent-orange) 80%, white);
+  outline-offset: 2px;
+  border-radius: 2px;
+  color: color-mix(in srgb, var(--bg-warm) 92%, white);
+}
+
+/* Base bar */
+.foot__base {
   display: flex;
   align-items: center;
   gap: 1.5rem;
   flex-wrap: wrap;
+  padding-block-start: 1.75rem;
+  border-block-start: 1px solid color-mix(in srgb, var(--bg-warm) 12%, transparent);
 }
 
-.site-footer__logo {
-  font-size: 1.0625rem;
+.foot__logo {
+  font-size: 1.125rem;
   font-weight: 700;
   letter-spacing: -0.02em;
-  color: var(--brown-deep);
+  color: color-mix(in srgb, var(--bg-warm) 80%, white);
 }
 
-.site-footer__copy {
-  font-size: 0.875rem;
-  color: var(--text-soft);
+.foot__logo-mark {
+  font-style: italic;
+  color: var(--accent-orange);
+}
+
+.foot__copy {
+  font-size: 0.8125rem;
+  color: color-mix(in srgb, var(--bg-warm) 40%, transparent);
   margin-inline-start: auto;
 }
 
-.site-footer__links {
-  display: flex;
-  gap: 1.25rem;
-}
-
-.site-footer__links a {
-  font-size: 0.875rem;
-  color: var(--text-soft);
-  text-decoration: none;
-  transition: color 0.18s var(--ease-organic);
-}
-
-.site-footer__links a:hover {
-  color: var(--brown-deep);
+/* Reduced-motion: skip GSAP reveals; items visible immediately */
+@media (prefers-reduced-motion: reduce) {
+  .foot__reveal-item {
+    opacity: 1 !important;
+    transform: none !important;
+  }
 }
 
 /* ───────────────────────────────────────────────────────────────
