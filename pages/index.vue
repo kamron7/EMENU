@@ -534,18 +534,18 @@ onMounted(async () => {
       if (reduceMotion) {
         // Reduced-motion: stack cards vertically, no pin, just show them.
         gsap.set('.features__track', { display: 'flex', flexWrap: 'wrap' })
-        gsap.set('.feature-card', { opacity: 1 })
         return
       }
 
       // ── Horizontal scrub: pin .features, drive .features__track x ──
       // ease: 'none' is required so scroll position and horizontal position
       // remain 1:1 (see gsap-scrolltrigger skill).
+      // Fix: use pixel-based x (not xPercent) equal to the actual overflow
+      // distance so translation and pin distance match exactly.
       const track = document.querySelector('.features__track') as HTMLElement
-      const cards = gsap.utils.toArray('.feature-card') as HTMLElement[]
 
       gsap.to(track, {
-        xPercent: -100 * (cards.length - 1),
+        x: () => -(track.scrollWidth - window.innerWidth),
         ease: 'none',
         scrollTrigger: {
           trigger: '.features',
@@ -553,11 +553,14 @@ onMounted(async () => {
           // overflow: visible is set on .features in CSS so the pin spacer
           // is not clipped. See source comment on .features below.
           scrub: 1,
-          end: () => '+=' + track.scrollWidth,
+          invalidateOnRefresh: true,
+          end: () => '+=' + (track.scrollWidth - window.innerWidth),
         },
       })
 
       // ── Blob parallax — slower scrub (2) than the track (1) ──────
+      // Fix: span the same pinned distance as the track so blobs parallax
+      // across the full horizontal scroll, not just the unpinned section height.
       gsap.to('.blob', {
         xPercent: -40,
         ease: 'none',
@@ -565,7 +568,7 @@ onMounted(async () => {
           trigger: '.features',
           scrub: 2,
           start: 'top top',
-          end: 'bottom top',
+          end: () => '+=' + (track.scrollWidth - window.innerWidth),
         },
       })
     }
