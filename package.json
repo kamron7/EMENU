@@ -8,7 +8,11 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview"
   },
+  "dependencies": {
+    "three": "^0.169.0"
+  },
   "devDependencies": {
+    "@types/three": "^0.169.0",
     "nuxt": "^3.13.0",
     "vue": "^3.4.0"
   }

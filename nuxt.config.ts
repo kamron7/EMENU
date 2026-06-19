@@ -6,7 +6,7 @@ export default defineNuxtConfig({
   compatibilityDate: '2025-01-01',
   devtools: { enabled: true },
   css: ['~/assets/css/tokens.css'],
-  build: { transpile: ['gsap'] },
+  build: { transpile: ['gsap', 'three'] },
   vite: {
     resolve: {
       alias: {
