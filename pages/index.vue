@@ -147,50 +147,108 @@
     </section>
 
     <!-- ═══════════════════════════════════════════════
-         FEATURES — four capabilities, card grid
+         FEATURES — pinned horizontal carousel (Task 5)
          ════════════════════════════════════════════ -->
     <section class="features" id="features" aria-labelledby="features-heading">
-      <div class="container">
-        <header class="section-header">
+      <!-- Decorative blobs — positioned behind track, parallax at slower scrub -->
+      <div class="blob blob--a" aria-hidden="true"></div>
+      <div class="blob blob--b" aria-hidden="true"></div>
+      <div class="blob blob--c" aria-hidden="true"></div>
+
+      <div class="features__viewport">
+        <header class="section-header features__header">
           <p class="section-eyebrow">What eMenu does</p>
           <h2 id="features-heading" class="section-heading">Everything your menu needs to perform</h2>
           <p class="section-sub">From QR scan to order, every step is crafted to feel effortless — for your guests and your team.</p>
         </header>
 
-        <div class="features__grid">
+        <!-- Horizontal scroll track: flex row, each card ~80vw -->
+        <div class="features__track">
+
           <article class="feature-card">
-            <div class="feature-card__icon" aria-hidden="true">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect x="4" y="4" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="16" y="4" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="16" width="8" height="8" rx="1.5" stroke="currentColor" stroke-width="1.6"/><path d="M16 20h8M20 16v8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            <div class="feature-card__visual feature-card__visual--sync" aria-hidden="true">
+              <!-- Price sync illustration: two price tags in sync -->
+              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+                <rect x="6" y="16" width="24" height="32" rx="4" fill="color-mix(in srgb, var(--accent-orange) 12%, transparent)" stroke="var(--accent-orange)" stroke-width="1.8"/>
+                <path d="M14 28h8M14 34h5" stroke="var(--accent-orange)" stroke-width="1.6" stroke-linecap="round"/>
+                <path d="M10 24h6" stroke="var(--terracotta)" stroke-width="1.4" stroke-linecap="round"/>
+                <rect x="34" y="16" width="24" height="32" rx="4" fill="color-mix(in srgb, var(--terracotta) 10%, transparent)" stroke="var(--terracotta)" stroke-width="1.8"/>
+                <path d="M42 28h8M42 34h5" stroke="var(--terracotta)" stroke-width="1.6" stroke-linecap="round"/>
+                <path d="M38 24h6" stroke="var(--accent-orange)" stroke-width="1.4" stroke-linecap="round"/>
+                <!-- Sync arrow -->
+                <path d="M30 32h4M31 30l-2 2 2 2" stroke="var(--brown-deep)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </div>
-            <h3 class="feature-card__title">Instant QR menus</h3>
-            <p class="feature-card__body">Generate a scannable QR code in seconds. Guests are at your menu before the water arrives.</p>
+            <div class="feature-card__icon" aria-hidden="true">
+              <!-- Lightning bolt: instant price sync -->
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path d="M16 4L8 16h7l-3 8 11-13h-7l3-7z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Instant Price Sync</h3>
+            <p class="feature-card__body">Change a price in your dashboard and it's live on every guest's phone within seconds — no reprinting, no confusion, no revenue left on the table.</p>
+            <div class="feature-card__stat">
+              <span class="feature-card__stat-num">2 s</span>
+              <span class="feature-card__stat-label">average update time</span>
+            </div>
           </article>
 
           <article class="feature-card">
-            <div class="feature-card__icon" aria-hidden="true">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M14 4v20M4 14h20" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><circle cx="14" cy="14" r="9" stroke="currentColor" stroke-width="1.6"/></svg>
+            <div class="feature-card__visual feature-card__visual--allergen" aria-hidden="true">
+              <!-- Allergen tag illustration: shield with leaf -->
+              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+                <path d="M32 8L14 18v14c0 10 8 19 18 22 10-3 18-12 18-22V18L32 8z" fill="color-mix(in srgb, var(--accent-orange) 10%, transparent)" stroke="var(--accent-orange)" stroke-width="1.8"/>
+                <path d="M24 32c4-8 12-10 16-6" stroke="var(--terracotta)" stroke-width="1.6" stroke-linecap="round"/>
+                <circle cx="32" cy="30" r="5" fill="color-mix(in srgb, var(--accent-orange) 20%, transparent)" stroke="var(--accent-orange)" stroke-width="1.6"/>
+                <path d="M29 30l2 2 4-4" stroke="var(--terracotta)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
             </div>
-            <h3 class="feature-card__title">Live menu updates</h3>
-            <p class="feature-card__body">Sold out of the risotto? Update in one tap. Every scan reflects the change immediately.</p>
+            <div class="feature-card__icon" aria-hidden="true">
+              <!-- Shield check: allergen safety -->
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <path d="M14 4L5 9v7c0 5.5 4 10.5 9 12 5-1.5 9-6.5 9-12V9L14 4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
+                <path d="M10 14l3 3 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Allergen Tags</h3>
+            <p class="feature-card__body">Mark every dish with the allergens it contains. Guests with dietary needs browse confidently, your staff answer fewer questions, and you meet compliance requirements effortlessly.</p>
+            <div class="feature-card__stat">
+              <span class="feature-card__stat-num">14</span>
+              <span class="feature-card__stat-label">EU allergens supported</span>
+            </div>
           </article>
 
           <article class="feature-card">
-            <div class="feature-card__icon" aria-hidden="true">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M6 21l4-8 4 5 3-4 5 7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><rect x="4" y="4" width="20" height="20" rx="3" stroke="currentColor" stroke-width="1.6"/></svg>
+            <div class="feature-card__visual feature-card__visual--lang" aria-hidden="true">
+              <!-- Language illustration: speech bubbles with flags -->
+              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
+                <rect x="8" y="12" width="28" height="20" rx="4" fill="color-mix(in srgb, var(--accent-orange) 10%, transparent)" stroke="var(--accent-orange)" stroke-width="1.8"/>
+                <path d="M36 32l-4 5h4V32z" fill="var(--accent-orange)"/>
+                <path d="M14 20h16M14 26h10" stroke="var(--accent-orange)" stroke-width="1.4" stroke-linecap="round"/>
+                <rect x="28" y="32" width="28" height="20" rx="4" fill="color-mix(in srgb, var(--terracotta) 10%, transparent)" stroke="var(--terracotta)" stroke-width="1.8"/>
+                <path d="M28 37l4-5v5h-4z" fill="var(--terracotta)"/>
+                <path d="M34 40h16M34 46h10" stroke="var(--terracotta)" stroke-width="1.4" stroke-linecap="round"/>
+              </svg>
             </div>
-            <h3 class="feature-card__title">Rich photography</h3>
-            <p class="feature-card__body">Dishes with photos outsell plain text by 30%. Upload once, display beautifully on every device.</p>
+            <div class="feature-card__icon" aria-hidden="true">
+              <!-- Globe: multi-language -->
+              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+                <circle cx="14" cy="14" r="9" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M14 5c-3 4-3 14 0 18M14 5c3 4 3 14 0 18" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M5 14h18" stroke="currentColor" stroke-width="1.6"/>
+                <path d="M6.5 9.5h15M6.5 18.5h15" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 2"/>
+              </svg>
+            </div>
+            <h3 class="feature-card__title">Multi-language Support</h3>
+            <p class="feature-card__body">One menu, every language. eMenu translates your dishes and descriptions automatically so international guests feel at home the moment they scan — no bilingual staff required.</p>
+            <div class="feature-card__stat">
+              <span class="feature-card__stat-num">40+</span>
+              <span class="feature-card__stat-label">languages available</span>
+            </div>
           </article>
 
-          <article class="feature-card">
-            <div class="feature-card__icon" aria-hidden="true">
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><path d="M8 10h12M8 14h8M8 18h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/><rect x="4" y="4" width="20" height="20" rx="3" stroke="currentColor" stroke-width="1.6"/></svg>
-            </div>
-            <h3 class="feature-card__title">Multi-language</h3>
-            <p class="feature-card__body">Serve international guests in their own language. eMenu translates your menu automatically.</p>
-          </article>
-        </div>
-      </div>
+        </div><!-- /.features__track -->
+      </div><!-- /.features__viewport -->
     </section>
 
     <!-- ═══════════════════════════════════════════════
@@ -424,22 +482,9 @@ onMounted(async () => {
         delay: 0.4,
       })
 
-      // ── Feature cards stagger reveal ─────────────────────────────
-      ScrollTrigger.batch('.feature-card', {
-        onEnter: (batch) =>
-          gsap.from(batch, {
-            opacity: 0,
-            y: 32,
-            duration: 0.6,
-            ease: 'power2.out',
-            stagger: 0.1,
-            overwrite: true,
-          }),
-        start: 'top 88%',
-        once: true,
-      })
-
       // ── How steps reveal ─────────────────────────────────────────
+      // NOTE: Task 3's .feature-card batch reveal removed here (Task 5).
+      // Feature cards now enter via horizontal scroll, not vertical reveal.
       ScrollTrigger.batch('.how__step', {
         onEnter: (batch) =>
           gsap.from(batch, {
@@ -475,6 +520,57 @@ onMounted(async () => {
     }
   )
   cleanup.push(() => mm.revert())
+
+  // ── Task 5: Pinned horizontal feature carousel + blob parallax ──
+  const mm5 = gsap.matchMedia()
+  mm5.add(
+    {
+      motion:       '(prefers-reduced-motion: no-preference)',
+      reduceMotion: '(prefers-reduced-motion: reduce)',
+    },
+    (ctx: { conditions: Record<string, boolean> }) => {
+      const { reduceMotion } = ctx.conditions
+
+      if (reduceMotion) {
+        // Reduced-motion: stack cards vertically, no pin, just show them.
+        gsap.set('.features__track', { display: 'flex', flexWrap: 'wrap' })
+        gsap.set('.feature-card', { opacity: 1 })
+        return
+      }
+
+      // ── Horizontal scrub: pin .features, drive .features__track x ──
+      // ease: 'none' is required so scroll position and horizontal position
+      // remain 1:1 (see gsap-scrolltrigger skill).
+      const track = document.querySelector('.features__track') as HTMLElement
+      const cards = gsap.utils.toArray('.feature-card') as HTMLElement[]
+
+      gsap.to(track, {
+        xPercent: -100 * (cards.length - 1),
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.features',
+          pin: true,
+          // overflow: visible is set on .features in CSS so the pin spacer
+          // is not clipped. See source comment on .features below.
+          scrub: 1,
+          end: () => '+=' + track.scrollWidth,
+        },
+      })
+
+      // ── Blob parallax — slower scrub (2) than the track (1) ──────
+      gsap.to('.blob', {
+        xPercent: -40,
+        ease: 'none',
+        scrollTrigger: {
+          trigger: '.features',
+          scrub: 2,
+          start: 'top top',
+          end: 'bottom top',
+        },
+      })
+    }
+  )
+  cleanup.push(() => mm5.revert())
 })
 
 onUnmounted(async () => {
@@ -1028,45 +1124,115 @@ onUnmounted(async () => {
 }
 
 /* ───────────────────────────────────────────────────────────────
-   FEATURES
+   FEATURES — pinned horizontal carousel (Task 5)
    ─────────────────────────────────────────────────────────────── */
+
+/*
+  overflow: visible (not hidden) is intentional here.
+  ScrollTrigger's pin spacer is inserted as a sibling AFTER .features.
+  If an ancestor has overflow:hidden it clips the spacer and the pin
+  breaks silently. By keeping overflow default (visible) the spacer
+  renders correctly. Do NOT add overflow:hidden to .features or its
+  ancestors (.page-root) without also removing/adjusting the pin.
+*/
 .features {
-  min-height: 70vh;
   background: var(--bg-vanilla);
-  padding-block: 7rem;
+  position: relative;          /* stacking context for blobs */
+  /* height is determined by pin spacer; don't set min-height */
 }
 
-.features__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  gap: 1.5rem;
-}
-
-.feature-card {
-  background: var(--bg-cream);
-  border: 1.5px solid color-mix(in srgb, var(--terracotta) 10%, transparent);
-  border-radius: 1rem;
-  padding: 2rem;
+/* Viewport wrapper: full-screen viewport for the pinned section */
+.features__viewport {
+  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  justify-content: center;
+  overflow: hidden;            /* clip cards peeking out sideways */
+  position: relative;
+}
+
+/* Section header inside pinned viewport */
+.features__header {
+  margin-block-end: 3rem;
+  padding-block-start: 5rem;
+  position: relative;
+  z-index: 2;
+}
+
+/* Horizontal track: flex row, each card ~80vw */
+.features__track {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 2rem;
+  padding-inline: max(2rem, calc((100vw - 80vw) / 2));
+  padding-block-end: 4rem;
+  will-change: transform;
+  position: relative;
+  z-index: 2;
+}
+
+/* ── Feature cards ─────────────────────────────────────────────── */
+.feature-card {
+  flex: 0 0 80vw;
+  max-width: 640px;
+  background: var(--bg-cream);
+  border: 1.5px solid color-mix(in srgb, var(--terracotta) 10%, transparent);
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  /* Tactile lift on hover — the card is ~80vw so users hover over it */
   transition:
-    box-shadow 0.25s var(--ease-organic),
-    border-color 0.25s var(--ease-organic),
-    transform 0.25s var(--ease-organic);
+    box-shadow 0.28s var(--ease-organic),
+    border-color 0.28s var(--ease-organic),
+    transform 0.28s var(--ease-organic);
+  /* Subtle depth: warm shadow at rest */
+  box-shadow: 0 2px 16px color-mix(in srgb, var(--terracotta) 6%, transparent);
 }
 
-.feature-card:hover {
-  box-shadow: var(--shadow-warm);
-  border-color: color-mix(in srgb, var(--terracotta) 30%, transparent);
-  transform: translateY(-3px);
-}
-
-@media (hover: none) {
+@media (hover: hover) and (pointer: fine) {
   .feature-card:hover {
-    transform: none;
-    box-shadow: none;
+    box-shadow: var(--shadow-warm);
+    border-color: color-mix(in srgb, var(--terracotta) 28%, transparent);
+    transform: translateY(-4px);
   }
+}
+
+/* Large decorative illustration area */
+.feature-card__visual {
+  width: 100%;
+  height: 120px;
+  border-radius: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.feature-card__visual--sync {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--accent-orange) 8%, var(--bg-vanilla)),
+    color-mix(in srgb, var(--terracotta) 6%, var(--bg-cream))
+  );
+}
+
+.feature-card__visual--allergen {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--terracotta) 8%, var(--bg-vanilla)),
+    color-mix(in srgb, var(--accent-orange) 5%, var(--bg-cream))
+  );
+}
+
+.feature-card__visual--lang {
+  background: linear-gradient(
+    135deg,
+    color-mix(in srgb, var(--brown-deep) 5%, var(--bg-vanilla)),
+    color-mix(in srgb, var(--accent-orange) 7%, var(--bg-cream))
+  );
 }
 
 .feature-card__icon {
@@ -1076,22 +1242,121 @@ onUnmounted(async () => {
   align-items: center;
   justify-content: center;
   background: color-mix(in srgb, var(--accent-orange) 10%, transparent);
-  border-radius: 0.75rem;
+  border-radius: 0.875rem;
   color: var(--accent-orange);
   flex-shrink: 0;
 }
 
 .feature-card__title {
-  font-size: 1.125rem;
+  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
   font-weight: 700;
-  letter-spacing: -0.02em;
+  letter-spacing: -0.025em;
   color: var(--brown-deep);
+  line-height: 1.2;
 }
 
 .feature-card__body {
-  font-size: 0.9375rem;
-  line-height: 1.65;
+  font-size: 1rem;
+  line-height: 1.7;
   color: var(--text-soft);
+  flex: 1;
+}
+
+/* Stat callout at card bottom — appetizing proof point */
+.feature-card__stat {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  padding-block-start: 0.75rem;
+  border-block-start: 1px solid color-mix(in srgb, var(--terracotta) 10%, transparent);
+  margin-block-start: auto;
+}
+
+.feature-card__stat-num {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--accent-orange);
+  font-variant-numeric: tabular-nums;
+}
+
+.feature-card__stat-label {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--text-soft);
+  letter-spacing: 0.02em;
+}
+
+/* ── Decorative blobs ─────────────────────────────────────────── */
+/*
+  Blobs use organic border-radius and warm gradients (token-based).
+  They are absolutely positioned behind the track (z-index 0) and
+  parallax at scrub:2 (slower than the track's scrub:1) giving depth.
+*/
+.blob {
+  position: absolute;
+  border-radius: 60% 40% 70% 30% / 50% 60% 40% 70%;
+  pointer-events: none;
+  will-change: transform;
+  z-index: 0;
+}
+
+.blob--a {
+  width: clamp(280px, 35vw, 520px);
+  height: clamp(200px, 28vw, 400px);
+  top: 5%;
+  left: -8%;
+  background: radial-gradient(
+    ellipse at 40% 50%,
+    color-mix(in srgb, var(--accent-orange) 14%, transparent),
+    color-mix(in srgb, var(--terracotta) 6%, transparent) 60%,
+    transparent 100%
+  );
+  border-radius: 67% 33% 58% 42% / 43% 67% 33% 57%;
+}
+
+.blob--b {
+  width: clamp(200px, 28vw, 420px);
+  height: clamp(180px, 24vw, 360px);
+  top: 45%;
+  left: 45%;
+  background: radial-gradient(
+    ellipse at 55% 45%,
+    color-mix(in srgb, var(--terracotta) 10%, transparent),
+    color-mix(in srgb, var(--accent-orange) 5%, transparent) 55%,
+    transparent 100%
+  );
+  border-radius: 42% 58% 35% 65% / 55% 38% 62% 45%;
+}
+
+.blob--c {
+  width: clamp(160px, 22vw, 340px);
+  height: clamp(140px, 18vw, 280px);
+  bottom: 8%;
+  right: 5%;
+  background: radial-gradient(
+    ellipse at 50% 55%,
+    color-mix(in srgb, var(--bg-warm) 40%, color-mix(in srgb, var(--accent-orange) 8%, transparent)),
+    transparent 70%
+  );
+  border-radius: 55% 45% 40% 60% / 60% 40% 65% 35%;
+}
+
+/* ── Reduced-motion: stacked cards, no pin ──────────────────────
+   GSAP's mm5 sets flexWrap:wrap on the track; these CSS rules
+   make the stacked layout look intentional and readable.         */
+@media (prefers-reduced-motion: reduce) {
+  .features__track {
+    flex-wrap: wrap;
+    padding-inline: 0;
+  }
+  .feature-card {
+    flex: 1 1 280px;
+    max-width: 100%;
+  }
+  .blob {
+    display: none; /* blobs rely on scroll parallax — hide when motion off */
+  }
 }
 
 /* ───────────────────────────────────────────────────────────────
