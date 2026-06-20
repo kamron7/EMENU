@@ -521,7 +521,7 @@ let engine: {
   init(c: HTMLCanvasElement): Promise<void>
   resize(): void
   dispose(): void
-  crossfadeScreen(key: ScreenKey): void
+  setScreen(key: ScreenKey): void
   setIdle(enabled: boolean): void
   setPose(p: { x: number; y: number; rotX: number; rotY: number; scale: number }): void
   setRenderActive(active: boolean): void
@@ -691,32 +691,52 @@ onMounted(async () => {
         return
       }
 
-      // Shared pose object — tweened by the timeline; applied via onUpdate
-      const pose = { x: 2.2, y: 0, rotX: 0, rotY: -0.5, scale: 0.7 }
-      const apply = () => engine?.setPose(pose)
+      // ── Task 4: Park-per-section poses + 360° spin transitions ──────
+      type Pose = { x: number; y: number; rotX: number; rotY: number; scale: number }
+      const NEUTRAL = { y: 0, rotX: 0, rotY: 0 }
+      const POSES: Pose[] = [
+        { x: 1.7,  ...NEUTRAL, scale: 1.0 },   // 0 hero    RIGHT
+        { x: -1.7, ...NEUTRAL, scale: 1.0 },   // 1 features LEFT
+        { x: 1.7,  ...NEUTRAL, scale: 1.0 },   // 2 how     RIGHT
+        { x: -1.7, ...NEUTRAL, scale: 1.0 },   // 3 roi     LEFT
+        { x: 0,    ...NEUTRAL, scale: 1.15 },  // 4 social  CENTER
+      ]
+      const SECT = ['#hero', '.features', '.how', '.roi', '.social']
+      const SCREEN: ScreenKey[] = ['menu', 'priceSync', 'qrSteps', 'allergen', 'review']
 
-      // Master scrubbed timeline: hero(right) → features(left) → how(right) → roi(left) → testimonials(center) → exit
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: '#hero',
-          start: 'top top',
-          endTrigger: '.social',
-          end: 'bottom bottom',
-          scrub: 1,
-        },
-        onUpdate: apply,
-        defaults: { ease: 'none' },
+      // Park at hero pose immediately; set initial screen
+      engine.setPose(POSES[0])
+      engine.setScreen('menu')
+      engine.setIdle(true)
+
+      // Linear interpolation helper
+      const lerp = (a: number, b: number, t: number) => a + (b - a) * t
+
+      // One scrubbed transition per gap (N-1 = 4 transitions)
+      const transitions = SECT.slice(1).map((sel, i) => {
+        const from = POSES[i], to = POSES[i + 1]
+        let swapped = false
+        return ScrollTrigger.create({
+          trigger: sel,
+          start: 'top bottom',
+          end: 'top center',
+          scrub: true,
+          onUpdate: (self: { progress: number }) => {
+            const p = self.progress
+            engine?.setPose({
+              x: lerp(from.x, to.x, p),
+              y: lerp(from.y, to.y, p),
+              rotX: lerp(from.rotX, to.rotX, p),
+              rotY: lerp(from.rotY, to.rotY, p) + Math.PI * 2 * p, // full barrel roll
+              scale: lerp(from.scale, to.scale, p),
+            })
+            // swap screen while back faces camera (~half spin)
+            if (p >= 0.5 && !swapped) { engine?.setScreen(SCREEN[i + 1]); swapped = true }
+            if (p < 0.5 && swapped)   { engine?.setScreen(SCREEN[i]);     swapped = false }
+          },
+        })
       })
-
-      tl.to(pose, { x: 2.2, y: 0, rotY: 0, scale: 1 })                    // hero settle (right)
-        .to(pose, { x: -2.2, rotY: 0.5, scale: 0.95 })                     // → features (left)
-        .to(pose, { rotY: 0.5 + Math.PI * 0.5 })                           // features sub-step rotate
-        .to(pose, { x: 2.2, rotY: 0, scale: 1 })                           // → how (right)
-        .to(pose, { x: -2.2, rotY: 0.4 })                                  // → roi (left)
-        .to(pose, { x: 0, y: 0, rotY: 0, scale: 1.05 })                   // → testimonials (center)
-        .to(pose, { y: 1.5, scale: 0.6, rotX: 0.3 })                       // exit up
-
-      engine?.setIdle(true)
+      cleanup.push(() => transitions.forEach((t) => t.kill()))
 
       // Footer render pause: skip rendering when phone is offscreen at footer
       const footerTrigger = ScrollTrigger.create({
@@ -726,10 +746,7 @@ onMounted(async () => {
         onLeaveBack: () => engine?.setRenderActive(true),
       })
 
-      // ── Task 5: Per-section screen crossfade triggers ─────────────
-      // Helper: returns a callback that crossfades the phone screen to `key`
-      const fade = (key: ScreenKey) => () => engine?.crossfadeScreen(key)
-
+      // ── Per-feature sub-step screen swaps (phone is parked in features) ──
       // Helper: activate a feature-step (full opacity + is-active) and dim all others
       const activateStep = (index: number) => () => {
         const steps = document.querySelectorAll<HTMLElement>('.feature-step')
@@ -748,8 +765,8 @@ onMounted(async () => {
       const st1 = ScrollTrigger.create({
         trigger: '#hero',
         start: 'top center',
-        onEnter: fade('menu'),
-        onEnterBack: () => { fade('menu')(); deactivateSteps() },
+        onEnter: () => engine?.setScreen('menu'),
+        onEnterBack: () => { engine?.setScreen('menu'); deactivateSteps() },
       })
 
       // Iterate actual .feature-step elements so DOM position (sibling header) is irrelevant
@@ -759,27 +776,26 @@ onMounted(async () => {
         ScrollTrigger.create({
           trigger: el,
           start: 'top 60%',
-          onEnter: () => { engine?.crossfadeScreen(stepKeys[i]); activateStep(i)() },
-          onEnterBack: () => { engine?.crossfadeScreen(stepKeys[i]); activateStep(i)() },
+          onEnter: () => { engine?.setScreen(stepKeys[i]); activateStep(i)() },
+          onEnterBack: () => { engine?.setScreen(stepKeys[i]); activateStep(i)() },
         })
       )
 
       const st5 = ScrollTrigger.create({
         trigger: '.how',
         start: 'top center',
-        onEnter: fade('qrSteps'),
-        onEnterBack: fade('qrSteps'),
+        onEnter: () => engine?.setScreen('qrSteps'),
+        onEnterBack: () => engine?.setScreen('qrSteps'),
       })
 
       const st6 = ScrollTrigger.create({
         trigger: '.social',
         start: 'top center',
-        onEnter: fade('review'),
-        onEnterBack: fade('review'),
+        onEnter: () => engine?.setScreen('review'),
+        onEnterBack: () => engine?.setScreen('review'),
       })
 
       return () => {
-        tl.scrollTrigger?.kill()
         footerTrigger.kill()
         st1.kill(); stepTriggers.forEach(t => t.kill()); st5.kill(); st6.kill()
       }
