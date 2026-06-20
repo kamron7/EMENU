@@ -158,59 +158,46 @@
     </section>
 
     <!-- ═══════════════════════════════════════════════
-         HOW IT WORKS — numbered process + media reveal
+         HOW IT WORKS — numbered process + phone slot right
          ════════════════════════════════════════════ -->
     <section class="how" id="how" aria-labelledby="how-heading">
-      <div class="container">
-        <header class="section-header">
-          <p class="section-eyebrow">Simple from day one</p>
-          <h2 id="how-heading" class="section-heading">Up and running in under ten minutes</h2>
-        </header>
+      <div class="container how__outer">
+        <!-- Left column: section header + steps (content side) -->
+        <div class="how__content-col">
+          <header class="how__section-header">
+            <p class="section-eyebrow">Simple from day one</p>
+            <h2 id="how-heading" class="section-heading">Up and running in under ten minutes</h2>
+          </header>
 
-        <div class="how__layout">
-          <ol class="how__steps" role="list">
-            <li class="how__step">
-              <div class="how__step-num" aria-hidden="true">01</div>
-              <div class="how__step-content">
-                <h3 class="how__step-title">Create your menu</h3>
-                <p class="how__step-body">Add dishes, photos, descriptions, and prices using our visual editor. No design skills required — eMenu handles the typography.</p>
-              </div>
-            </li>
-            <li class="how__step">
-              <div class="how__step-num" aria-hidden="true">02</div>
-              <div class="how__step-content">
-                <h3 class="how__step-title">Print your QR code</h3>
-                <p class="how__step-body">Download your QR table cards. They link directly to your live menu — always up to date, no reprinting.</p>
-              </div>
-            </li>
-            <li class="how__step">
-              <div class="how__step-num" aria-hidden="true">03</div>
-              <div class="how__step-content">
-                <h3 class="how__step-title">Delight your guests</h3>
-                <p class="how__step-body">Guests scan, browse, and decide. You focus on what matters: great food and great service.</p>
-              </div>
-            </li>
-          </ol>
-
-          <!-- Media reveal: clip-path morphs open on scroll -->
-          <div class="how__media" aria-hidden="true">
-            <!-- swap: replace with your own food/product photo -->
-            <img
-              class="how__media-img"
-              src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=900&q=80"
-              alt=""
-              loading="lazy"
-              width="900"
-              height="640"
-            />
-            <div class="how__media-overlay" aria-hidden="true"></div>
-            <!-- Decorative badge over image -->
-            <div class="how__media-badge" aria-hidden="true">
-              <span class="how__media-badge-num">10<sup>min</sup></span>
-              <span class="how__media-badge-label">to go live</span>
-            </div>
+          <div class="how__layout">
+            <ol class="how__steps" role="list">
+              <li class="how__step">
+                <div class="how__step-num" aria-hidden="true">01</div>
+                <div class="how__step-content">
+                  <h3 class="how__step-title">Create your menu</h3>
+                  <p class="how__step-body">Add dishes, photos, descriptions, and prices using our visual editor. No design skills required — eMenu handles the typography.</p>
+                </div>
+              </li>
+              <li class="how__step">
+                <div class="how__step-num" aria-hidden="true">02</div>
+                <div class="how__step-content">
+                  <h3 class="how__step-title">Print your QR code</h3>
+                  <p class="how__step-body">Download your QR table cards. They link directly to your live menu — always up to date, no reprinting.</p>
+                </div>
+              </li>
+              <li class="how__step">
+                <div class="how__step-num" aria-hidden="true">03</div>
+                <div class="how__step-content">
+                  <h3 class="how__step-title">Delight your guests</h3>
+                  <p class="how__step-body">Guests scan, browse, and decide. You focus on what matters: great food and great service.</p>
+                </div>
+              </li>
+            </ol>
           </div>
         </div>
+
+        <!-- Right column: empty phone slot — 3D canvas shows through -->
+        <div class="how__phone-slot" aria-hidden="true"></div>
       </div>
     </section>
 
@@ -218,76 +205,82 @@
          ROI CALCULATOR — interactive revenue estimator
          ════════════════════════════════════════════ -->
     <section class="roi" id="roi" aria-labelledby="roi-heading">
-      <div class="container roi__inner">
-        <header class="roi__header">
-          <p class="section-eyebrow">Your potential uplift</p>
-          <h2 id="roi-heading" class="section-heading roi__heading">See what eMenu could add to your monthly revenue</h2>
-          <p class="roi__sub">Guests who browse a beautiful digital menu spend 15% more on average. Slide the controls to see your restaurant's numbers.</p>
-        </header>
+      <div class="container roi__outer">
+        <!-- Left column: empty phone slot — 3D canvas shows through -->
+        <div class="roi__phone-slot" aria-hidden="true"></div>
 
-        <div class="roi__widget">
-          <!-- Sliders -->
-          <div class="roi__controls">
-            <div class="roi__slider-group">
-              <div class="roi__slider-label-row">
-                <label class="roi__label" for="slider-covers">Covers per day</label>
-                <span class="roi__value" aria-live="polite">{{ covers }}</span>
+        <!-- Right column: header + calculator (content side) -->
+        <div class="roi__inner">
+          <header class="roi__header">
+            <p class="section-eyebrow">Your potential uplift</p>
+            <h2 id="roi-heading" class="section-heading roi__heading">See what eMenu could add to your monthly revenue</h2>
+            <p class="roi__sub">Guests who browse a beautiful digital menu spend 15% more on average. Slide the controls to see your restaurant's numbers.</p>
+          </header>
+
+          <div class="roi__widget">
+            <!-- Sliders -->
+            <div class="roi__controls">
+              <div class="roi__slider-group">
+                <div class="roi__slider-label-row">
+                  <label class="roi__label" for="slider-covers">Covers per day</label>
+                  <span class="roi__value" aria-live="polite">{{ covers }}</span>
+                </div>
+                <input
+                  id="slider-covers"
+                  class="roi__range"
+                  type="range"
+                  min="10"
+                  max="300"
+                  step="5"
+                  :value="covers"
+                  :style="{ '--range-pct': `${((covers - 10) / (300 - 10)) * 100}%` }"
+                  @input="covers = Number(($event.target as any).value)"
+                  aria-label="Covers per day"
+                />
+                <div class="roi__slider-ticks" aria-hidden="true">
+                  <span>10</span><span>150</span><span>300</span>
+                </div>
               </div>
-              <input
-                id="slider-covers"
-                class="roi__range"
-                type="range"
-                min="10"
-                max="300"
-                step="5"
-                :value="covers"
-                :style="{ '--range-pct': `${((covers - 10) / (300 - 10)) * 100}%` }"
-                @input="covers = Number(($event.target as any).value)"
-                aria-label="Covers per day"
-              />
-              <div class="roi__slider-ticks" aria-hidden="true">
-                <span>10</span><span>150</span><span>300</span>
+
+              <div class="roi__slider-group">
+                <div class="roi__slider-label-row">
+                  <label class="roi__label" for="slider-bill">Average bill (€)</label>
+                  <span class="roi__value" aria-live="polite">€ {{ avgBill }}</span>
+                </div>
+                <input
+                  id="slider-bill"
+                  class="roi__range"
+                  type="range"
+                  min="5"
+                  max="120"
+                  step="1"
+                  :value="avgBill"
+                  :style="{ '--range-pct': `${((avgBill - 5) / (120 - 5)) * 100}%` }"
+                  @input="avgBill = Number(($event.target as any).value)"
+                  aria-label="Average bill in euros"
+                />
+                <div class="roi__slider-ticks" aria-hidden="true">
+                  <span>€ 5</span><span>€ 60</span><span>€ 120</span>
+                </div>
               </div>
             </div>
 
-            <div class="roi__slider-group">
-              <div class="roi__slider-label-row">
-                <label class="roi__label" for="slider-bill">Average bill (€)</label>
-                <span class="roi__value" aria-live="polite">€ {{ avgBill }}</span>
+            <!-- Result board -->
+            <div class="roi__board" aria-live="polite" aria-atomic="true">
+              <div class="roi__board-glow" aria-hidden="true"></div>
+              <p class="roi__board-eyebrow">Extra monthly revenue</p>
+              <div class="roi__board-amount">
+                <span class="roi__board-currency">€</span>
+                <span class="roi__board-num">{{ displayRevenue.toLocaleString('de-DE') }}</span>
               </div>
-              <input
-                id="slider-bill"
-                class="roi__range"
-                type="range"
-                min="5"
-                max="120"
-                step="1"
-                :value="avgBill"
-                :style="{ '--range-pct': `${((avgBill - 5) / (120 - 5)) * 100}%` }"
-                @input="avgBill = Number(($event.target as any).value)"
-                aria-label="Average bill in euros"
-              />
-              <div class="roi__slider-ticks" aria-hidden="true">
-                <span>€ 5</span><span>€ 60</span><span>€ 120</span>
-              </div>
+              <p class="roi__board-formula">
+                {{ covers }} covers × €{{ avgBill }} avg bill × 15% uplift × 30 days
+              </p>
+              <a href="#" class="btn btn--primary roi__board-cta">Start your free trial</a>
             </div>
           </div>
-
-          <!-- Result board -->
-          <div class="roi__board" aria-live="polite" aria-atomic="true">
-            <div class="roi__board-glow" aria-hidden="true"></div>
-            <p class="roi__board-eyebrow">Extra monthly revenue</p>
-            <div class="roi__board-amount">
-              <span class="roi__board-currency">€</span>
-              <span class="roi__board-num">{{ displayRevenue.toLocaleString('de-DE') }}</span>
-            </div>
-            <p class="roi__board-formula">
-              {{ covers }} covers × €{{ avgBill }} avg bill × 15% uplift × 30 days
-            </p>
-            <a href="#" class="btn btn--primary roi__board-cta">Start your free trial</a>
-          </div>
-        </div>
-      </div>
+        </div><!-- /.roi__inner -->
+      </div><!-- /.roi__outer -->
     </section>
 
     <!-- ═══════════════════════════════════════════════
@@ -300,12 +293,16 @@
           <h2 id="social-heading" class="section-heading">Guests notice. Staff notice. Revenue follows.</h2>
         </header>
 
-        <!-- Asymmetric grid — varied margin-top offsets create editorial depth -->
+        <!--
+          3-column surround grid: left cards | center phone slot | right cards.
+          The center column is an empty slot; the fixed canvas shows through it.
+          Cards are explicitly placed into grid areas so the phone reads as
+          surrounded. All .testimonial selectors are PRESERVED for Task 3/5 GSAP.
+        -->
         <div class="social__grid">
 
-          <!-- Card 1: top-left, no offset -->
-          <blockquote class="testimonial testimonial--col-a">
-            <!-- swap: https://images.unsplash.com/photo-1580489944761-15a19d654956?w=96&q=80 -->
+          <!-- TOP ROW: left card (col 1 row 1) -->
+          <blockquote class="testimonial testimonial--tl">
             <img
               class="testimonial__avatar-img"
               src="https://images.unsplash.com/photo-1580489944761-15a19d654956?w=96&q=80"
@@ -313,7 +310,7 @@
               width="48"
               height="48"
               loading="lazy"
-            /><!-- swap -->
+            />
             <p class="testimonial__quote">"We saw a 22% increase in dessert orders the first week. Guests browse longer when the menu looks this good."</p>
             <footer class="testimonial__author">
               <div>
@@ -323,9 +320,11 @@
             </footer>
           </blockquote>
 
-          <!-- Card 2: right column, pushed down — creates asymmetric rhythm -->
-          <blockquote class="testimonial testimonial--col-b testimonial--push">
-            <!-- swap: https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=96&q=80 -->
+          <!-- CENTER column: empty phone slot (spans both rows) -->
+          <div class="social__phone-slot" aria-hidden="true"></div>
+
+          <!-- TOP ROW: right card (col 3 row 1) -->
+          <blockquote class="testimonial testimonial--tr">
             <img
               class="testimonial__avatar-img"
               src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=96&q=80"
@@ -333,7 +332,7 @@
               width="48"
               height="48"
               loading="lazy"
-            /><!-- swap -->
+            />
             <p class="testimonial__quote">"Updating the menu used to take an hour and a trip to the printer. Now it's thirty seconds on my phone."</p>
             <footer class="testimonial__author">
               <div>
@@ -343,29 +342,8 @@
             </footer>
           </blockquote>
 
-          <!-- Card 3: featured — spans full width, centrepiece of the grid -->
-          <blockquote class="testimonial testimonial--featured testimonial--span">
-            <!-- swap: https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&q=80 -->
-            <img
-              class="testimonial__avatar-img testimonial__avatar-img--lg"
-              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&q=80"
-              alt="Lucia Ferraro"
-              width="64"
-              height="64"
-              loading="lazy"
-            /><!-- swap -->
-            <p class="testimonial__quote testimonial__quote--lg">"Our international guests feel at home now. eMenu translated everything in minutes and the photos made the food irresistible."</p>
-            <footer class="testimonial__author">
-              <div>
-                <cite class="testimonial__name">Lucia Ferraro</cite>
-                <span class="testimonial__role">Manager, Trattoria del Porto — Naples</span>
-              </div>
-            </footer>
-          </blockquote>
-
-          <!-- Card 4: bottom-left, lifted slightly relative to card 5 -->
-          <blockquote class="testimonial testimonial--col-a testimonial--lift">
-            <!-- swap: https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=96&q=80 -->
+          <!-- BOTTOM ROW: left card (col 1 row 2) -->
+          <blockquote class="testimonial testimonial--bl">
             <img
               class="testimonial__avatar-img"
               src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=96&q=80"
@@ -373,7 +351,7 @@
               width="48"
               height="48"
               loading="lazy"
-            /><!-- swap -->
+            />
             <p class="testimonial__quote">"Our team spends zero time on menu maintenance. That's an hour a day back to the kitchen where it belongs."</p>
             <footer class="testimonial__author">
               <div>
@@ -383,9 +361,27 @@
             </footer>
           </blockquote>
 
-          <!-- Card 5: bottom-right, natural resting position -->
-          <blockquote class="testimonial testimonial--col-b">
-            <!-- swap: https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=96&q=80 -->
+          <!-- BOTTOM ROW: right card (col 3 row 2) -->
+          <blockquote class="testimonial testimonial--br">
+            <img
+              class="testimonial__avatar-img"
+              src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=96&q=80"
+              alt="Lucia Ferraro"
+              width="64"
+              height="64"
+              loading="lazy"
+            />
+            <p class="testimonial__quote testimonial__quote--lg">"Our international guests feel at home now. eMenu translated everything in minutes and the photos made the food irresistible."</p>
+            <footer class="testimonial__author">
+              <div>
+                <cite class="testimonial__name">Lucia Ferraro</cite>
+                <span class="testimonial__role">Manager, Trattoria del Porto — Naples</span>
+              </div>
+            </footer>
+          </blockquote>
+
+          <!-- BOTTOM ROW: additional right-side card (col 3 row 3 or reuse) -->
+          <blockquote class="testimonial testimonial--extra">
             <img
               class="testimonial__avatar-img"
               src="https://images.unsplash.com/photo-1607746882042-944635dfe10e?w=96&q=80"
@@ -393,7 +389,7 @@
               width="48"
               height="48"
               loading="lazy"
-            /><!-- swap -->
+            />
             <p class="testimonial__quote">"Scanning a QR code used to feel cold and impersonal. eMenu made it feel like hospitality. Repeat bookings went up."</p>
             <footer class="testimonial__author">
               <div>
@@ -1505,24 +1501,54 @@ onUnmounted(async () => {
    HOW IT WORKS
    ─────────────────────────────────────────────────────────────── */
 .how {
-  min-height: 60vh;
+  min-height: 100dvh;
   background: var(--bg-warm);
   padding-block: 7rem;
 }
 
-/* Two-column layout: steps left, media right */
-.how__layout {
+/*
+  Outer two-column: content LEFT, phone slot RIGHT.
+  .how__outer is the container-level grid.
+  .how__content-col holds the header + steps list (z-index:3 so it
+  sits above the fixed .phone-stage canvas).
+  .how__phone-slot is an empty column — the fixed canvas shows through.
+*/
+.how__outer {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 5rem;
-  align-items: center;
+  align-items: start;
 }
 
-@media (max-width: 900px) {
-  .how__layout {
+.how__content-col {
+  position: relative;
+  z-index: 3;
+}
+
+.how__section-header {
+  margin-block-end: 3rem;
+}
+
+.how__phone-slot {
+  min-height: 70vh;
+  position: relative;
+  /* Empty — fixed canvas shows through */
+}
+
+@media (max-width: 820px) {
+  .how__outer {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 0;
   }
+  .how__phone-slot {
+    min-height: 70vh;
+    order: -1; /* phone band above content on mobile */
+  }
+}
+
+/* Inner layout — now just a single-column step list */
+.how__layout {
+  display: block;
 }
 
 .how__steps {
@@ -1598,91 +1624,13 @@ onUnmounted(async () => {
   display: inline-block;
 }
 
-/* ── Media column ────────────────────────────────────────────── */
-.how__media {
-  position: relative;
-  border-radius: 1.5rem;
-  overflow: hidden;
-  /* GSAP will animate clip-path; set initial state via JS to avoid flash */
-  clip-path: inset(14% 18% 14% 18% round 2rem);
-  will-change: clip-path;
-  box-shadow:
-    0 8px 40px color-mix(in srgb, var(--terracotta) 18%, transparent),
-    0 2px 8px  color-mix(in srgb, var(--brown-deep) 10%, transparent);
-}
-
-.how__media-img {
-  display: block;
-  width: 100%;
-  height: 420px;
-  object-fit: cover;
-  object-position: center;
-}
-
-@media (max-width: 900px) {
-  .how__media-img {
-    height: 260px;
-  }
-}
-
-/* Warm gradient overlay — top-to-bottom fade from transparent to cream tint */
-.how__media-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(
-    to bottom,
-    transparent 40%,
-    color-mix(in srgb, var(--brown-deep) 22%, transparent) 100%
-  );
-  pointer-events: none;
-}
-
-/* Decorative badge — "10 min to go live" */
-.how__media-badge {
-  position: absolute;
-  bottom: 1.5rem;
-  left: 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.1rem;
-  background: color-mix(in srgb, var(--bg-cream) 92%, transparent);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 1.5px solid color-mix(in srgb, var(--accent-orange) 20%, transparent);
-  border-radius: 0.875rem;
-  padding: 0.875rem 1.125rem;
-  box-shadow: 0 4px 20px color-mix(in srgb, var(--terracotta) 16%, transparent);
-}
-
-.how__media-badge-num {
-  font-size: 2rem;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--accent-orange);
-  line-height: 1;
-}
-
-.how__media-badge-num sup {
-  font-size: 0.75rem;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  vertical-align: super;
-  color: var(--terracotta);
-}
-
-.how__media-badge-label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--text-soft);
-}
+/* .how__media removed in Task 6 — media column replaced by phone slot */
 
 /* ─────────────────────────────────────────────────────────────────
    ROI CALCULATOR
    ─────────────────────────────────────────────────────────────── */
 .roi {
+  min-height: 100dvh;
   background: var(--bg-vanilla);
   padding-block: 7rem;
   position: relative;
@@ -1700,28 +1648,59 @@ onUnmounted(async () => {
   pointer-events: none;
 }
 
-.roi__inner {
+/*
+  Outer two-column: phone slot LEFT, content RIGHT.
+  .roi__outer is the container-level grid.
+  .roi__phone-slot is empty — fixed canvas shows through.
+  .roi__inner holds the header + widget (content side); z-index:3 so
+  text sits above the fixed .phone-stage canvas.
+*/
+.roi__outer {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
   position: relative;
   z-index: 1;
 }
 
+.roi__phone-slot {
+  min-height: 70vh;
+  position: relative;
+  /* Empty — fixed canvas shows through */
+}
+
+.roi__inner {
+  position: relative;
+  z-index: 3;
+}
+
+@media (max-width: 820px) {
+  .roi__outer {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+  .roi__phone-slot {
+    min-height: 70vh;
+    order: -1; /* phone band above content on mobile */
+  }
+}
+
 .roi__header {
-  text-align: center;
-  margin-block-end: 4rem;
+  text-align: left;
+  margin-block-end: 3rem;
 }
 
 .roi__heading {
   /* inherits .section-heading; override max-width for readability */
   max-width: 22ch;
-  margin-inline: auto;
 }
 
 .roi__sub {
   font-size: 1.0625rem;
   line-height: 1.65;
   color: var(--text-soft);
-  max-width: 52ch;
-  margin-inline: auto;
+  max-width: 44ch;
   margin-block-start: 1rem;
 }
 
@@ -1733,7 +1712,14 @@ onUnmounted(async () => {
   align-items: center;
 }
 
-@media (max-width: 860px) {
+@media (max-width: 1100px) {
+  .roi__widget {
+    grid-template-columns: 1fr;
+    gap: 2.5rem;
+  }
+}
+
+@media (max-width: 820px) {
   .roi__widget {
     grid-template-columns: 1fr;
     gap: 2.5rem;
@@ -2044,68 +2030,82 @@ onUnmounted(async () => {
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   TESTIMONIALS — asymmetric grid restructure (Task 7)
+   TESTIMONIALS — 3-column phone-surround grid (Task 6)
    ─────────────────────────────────────────────────────────────── */
 
 /*
-  Two-column grid with deliberate row-height auto sizing.
-  Asymmetry is achieved by:
-    1. .testimonial--push  → margin-block-start offset on column B cards
-    2. .testimonial--lift  → negative margin pulls card up against the flow
-    3. .testimonial--span  → column-span: all for the featured centrepiece
-  The .testimonial class is kept exactly so Task 3's ScrollTrigger.batch
+  3-column grid: left cards | center phone slot | right cards.
+  Center column (.social__phone-slot) is empty — fixed canvas shows through.
+  Cards are explicitly placed via grid-area so the phone reads as surrounded.
+
+  Grid definition:
+    col 1 (1fr)  = left cards
+    col 2 (1fr)  = center phone slot (spans 3 rows)
+    col 3 (1fr)  = right cards
+
+  Row layout:
+    row 1: top-left card    | phone slot | top-right card
+    row 2: bottom-left card | phone slot | bottom-right card
+    row 3: (empty left)     | phone slot | extra right card
+
+  The .testimonial selector is PRESERVED so Task 3/5 GSAP ScrollTrigger.batch
   entrance reveal fires without modification.
 */
 .social__grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: auto auto auto;
   gap: 1.5rem;
   margin-block-end: 4rem;
-  align-items: start;  /* critical: auto-height rows, no stretch */
+  align-items: start;
 }
 
-@media (max-width: 680px) {
+/* Center column phone slot — spans all 3 rows so phone has vertical room */
+.social__phone-slot {
+  grid-column: 2;
+  grid-row: 1 / 4;
+  min-height: 80vh;
+  position: relative;
+  /* Empty — fixed canvas shows through */
+}
+
+/* Card placement */
+.testimonial--tl   { grid-column: 1; grid-row: 1; position: relative; z-index: 3; }
+.testimonial--tr   { grid-column: 3; grid-row: 1; position: relative; z-index: 3; }
+.testimonial--bl   { grid-column: 1; grid-row: 2; position: relative; z-index: 3; }
+.testimonial--br   { grid-column: 3; grid-row: 2; position: relative; z-index: 3; }
+.testimonial--extra { grid-column: 3; grid-row: 3; position: relative; z-index: 3; }
+
+/* Legacy column helpers — kept so no GSAP selectors break if referenced */
+.testimonial--col-a { grid-column: 1; }
+.testimonial--col-b { grid-column: 3; }
+
+/* Deprecated offset helpers — reset to 0 now card positions are explicit */
+.testimonial--push { margin-block-start: 0; }
+.testimonial--lift { margin-block-start: 0; }
+
+/* Old span variant — no longer used in DOM but kept harmless */
+.testimonial--span { position: relative; z-index: 3; }
+
+@media (max-width: 820px) {
+  /* Stack to single column; phone band rendered above all cards */
   .social__grid {
     grid-template-columns: 1fr;
+    grid-template-rows: none;
   }
-  /* reset all offsets on single-column layout */
-  .testimonial--push,
-  .testimonial--lift {
-    margin-block-start: 0 !important;
+  .social__phone-slot {
+    grid-column: 1;
+    grid-row: auto;
+    min-height: 70vh;
   }
-}
-
-/* Column placement helpers */
-.testimonial--col-a { grid-column: 1; }
-.testimonial--col-b { grid-column: 2; }
-
-/* Offset: push card B row-1 down, creating visual breathing room */
-.testimonial--push { margin-block-start: 2.5rem; }
-
-/* Lift: pull card A row-2 upward, overlapping the gap slightly */
-.testimonial--lift { margin-block-start: -0.75rem; }
-
-/* Featured: spans both columns; centrepiece with horizontal layout */
-.testimonial--span {
-  grid-column: 1 / -1;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  grid-template-rows: auto auto;
-  gap: 0 1.5rem;
-  align-items: center;
-}
-
-.testimonial--span .testimonial__avatar-img--lg {
-  grid-row: 1 / 3;
-  align-self: center;
-}
-
-.testimonial--span .testimonial__quote--lg {
-  grid-column: 2;
-}
-
-.testimonial--span .testimonial__author {
-  grid-column: 2;
+  .testimonial--tl,
+  .testimonial--tr,
+  .testimonial--bl,
+  .testimonial--br,
+  .testimonial--extra {
+    grid-column: 1;
+    grid-row: auto;
+  }
 }
 
 /* Avatar: real photo, circular crop */
