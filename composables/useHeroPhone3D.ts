@@ -122,6 +122,7 @@ export function createHeroPhone3D(): HeroPhone3D {
       transparent: false,
     })
     screenA = new THREE.Mesh(geoA, matA)
+    screenA.renderOrder = 1
 
     // Screen B: transparent overlay for crossfade (slightly in front)
     const geoB = new THREE.PlaneGeometry(planeW, planeH)
@@ -131,7 +132,8 @@ export function createHeroPhone3D(): HeroPhone3D {
       opacity: 0,
     })
     screenB = new THREE.Mesh(geoB, matB)
-    screenB.position.z = 0.001 // coplanar but fractionally in front
+    screenB.renderOrder = 2
+    screenB.position.z = 0.001 // keep tiny z offset as fallback
 
     // Push geometry/material disposal
     disposables.push(() => {
@@ -177,7 +179,7 @@ export function createHeroPhone3D(): HeroPhone3D {
     // Attach screen planes after phone is added
     attachScreenPlanes(phone)
 
-    let lastTime = 0
+    let lastTime = performance.now()
     const loop = (time: number) => {
       raf = requestAnimationFrame(loop)
       const dt = Math.min((time - lastTime) / 1000, 0.1)
@@ -192,7 +194,7 @@ export function createHeroPhone3D(): HeroPhone3D {
 
       if (renderer && scene && camera) renderer.render(scene, camera)
     }
-    loop(0)
+    loop(performance.now())
   }
 
   function crossfadeScreen(key: ScreenKey): void {
@@ -200,6 +202,7 @@ export function createHeroPhone3D(): HeroPhone3D {
     const matB = screenB.material as THREE.MeshBasicMaterial
     matB.map = screens[key]
     matB.needsUpdate = true
+    gsap.killTweensOf(matB)
     gsap.to(matB, {
       opacity: 1,
       duration: 0.5,

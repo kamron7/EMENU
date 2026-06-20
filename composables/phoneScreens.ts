@@ -89,15 +89,9 @@ export function drawPriceSync(): THREE.CanvasTexture {
     y += 100
   }
 
-  // Synced pill
-  ctx.fillStyle = '#e8f5e9'; ctx.font = 'bold 24px system-ui'
-  const pillText = 'synced ✓'
-  const pillW = ctx.measureText(pillText).width + 32
-  ctx.beginPath()
-  ctx.roundRect(W / 2 - pillW / 2, 640, pillW, 44, 22)
-  ctx.fill()
-  ctx.fillStyle = '#2e7d32'; ctx.textAlign = 'center'
-  ctx.fillText(pillText, W / 2, 669)
+  // Synced pill — warm palette only
+  ctx.font = 'bold 24px system-ui'
+  pill(ctx, W / 2 - (ctx.measureText('synced ✓').width + 24) / 2, 669, 'synced ✓', WARM, TERRA)
   return toTexture(c)
 }
 

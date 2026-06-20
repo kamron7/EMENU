@@ -517,6 +517,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted, onUnmounted, ref, watch } from 'vue'
+import type { ScreenKey } from '~/composables/phoneScreens'
 
 const root = ref<HTMLElement | null>(null)
 const stageCanvas = ref<HTMLCanvasElement | null>(null)
@@ -543,7 +544,7 @@ let engine: {
   init(c: HTMLCanvasElement): Promise<void>
   resize(): void
   dispose(): void
-  crossfadeScreen(key: string): void
+  crossfadeScreen(key: ScreenKey): void
   setIdle(enabled: boolean): void
 } | null = null
 
