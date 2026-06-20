@@ -80,8 +80,20 @@
           </div>
         </div>
 
-        <!-- hero right column: empty grid slot — 3D phone canvas occupies this visually via .phone-stage -->
-        <div class="hero__visual-slot" aria-hidden="true"></div>
+        <!-- hero right column: 3D phone canvas occupies this visually via .phone-stage.
+             In no-journey mode (no WebGL / reduced-motion / engine error), the fallback
+             image is shown instead. Default display:none; activated by .no-journey on root. -->
+        <div class="hero__visual-slot" aria-hidden="true">
+          <!-- src: swap this Unsplash placeholder for your final product screenshot -->
+          <img
+            class="hero__phone-fallback"
+            src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=640&q=80"
+            alt="eMenu app shown on a phone"
+            width="640"
+            height="800"
+            loading="eager"
+          />
+        </div>
       </div>
 
       <div class="hero__scroll-hint" aria-hidden="true">
@@ -512,17 +524,99 @@ let engine: {
 onMounted(async () => {
   if (!import.meta.client) return
 
-  // ── Task 2: 3D phone engine (client-only, dynamic import) ────────
+  // ── Task 7: no-journey fallback helpers ────────────────────────
+  // Activates the static fallback: hides canvas, shows hero image,
+  // returns true so the caller can skip the journey setup entirely.
+  const activateFallback = () => {
+    root.value?.classList.add('no-journey')
+  }
+
+  // Simple per-section fade/slide reveals used when the 3D journey
+  // is absent (reduced-motion OR no-WebGL OR engine error).
+  // Called from BOTH the no-WebGL path and the mmPhone reduceMotion
+  // branch. Guard: runs exactly once (noJourneyRevealsDone flag).
+  let noJourneyRevealsDone = false
+  const runStaticReveals = (gsapInstance: typeof import('gsap').gsap, ST: typeof import('gsap/ScrollTrigger').ScrollTrigger) => {
+    if (noJourneyRevealsDone) return
+    noJourneyRevealsDone = true
+
+    const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const dur = prefersReduced ? 0.01 : 0.5
+    const ease = prefersReduced ? 'none' : 'power2.out'
+
+    // Reveal hero text immediately (it's above the fold)
+    gsapInstance.from('.hero__text', { opacity: 0, y: prefersReduced ? 0 : 20, duration: dur, ease, delay: 0.05 })
+
+    // Feature steps — all visible (not dimmed to 0.25) in fallback
+    gsapInstance.set('.feature-step', { opacity: 1 })
+
+    // Stagger-reveal each section's primary content block
+    const revealTargets: string[] = [
+      '.features__steps-col',
+      '.how__content-col',
+      '.roi__inner',
+      '.social__grid',
+    ]
+    revealTargets.forEach((sel) => {
+      gsapInstance.from(sel, {
+        opacity: 0,
+        y: prefersReduced ? 0 : 30,
+        duration: dur,
+        ease,
+        scrollTrigger: {
+          trigger: sel,
+          start: 'top 85%',
+          once: true,
+        },
+      })
+    })
+
+    // Testimonials stagger (mirrors the motion branch reveal)
+    ST.batch('.testimonial', {
+      onEnter: (batch) =>
+        gsapInstance.from(batch, {
+          opacity: 0,
+          y: prefersReduced ? 0 : 24,
+          duration: dur,
+          ease,
+          stagger: prefersReduced ? 0 : 0.1,
+          overwrite: true,
+        }),
+      start: 'top 88%',
+      once: true,
+    })
+  }
+
+  // ── Task 2 + 7: 3D phone engine (client-only, dynamic import) ─────
   const { useWebGLSupport } = await import('~/composables/useWebGLSupport')
   const webgl = useWebGLSupport()
+  let engineReady = false
   if (webgl && stageCanvas.value) {
-    const { createHeroPhone3D } = await import('~/composables/useHeroPhone3D')
-    engine = createHeroPhone3D()
-    await engine.init(stageCanvas.value)
-    const ro = new ResizeObserver(() => engine?.resize())
-    ro.observe(stageCanvas.value)
-    cleanup.push(() => ro.disconnect())
-    cleanup.push(() => { engine?.dispose(); engine = null })
+    try {
+      const { createHeroPhone3D } = await import('~/composables/useHeroPhone3D')
+      engine = createHeroPhone3D()
+      await engine.init(stageCanvas.value)
+      engineReady = true
+      const ro = new ResizeObserver(() => engine?.resize())
+      ro.observe(stageCanvas.value)
+      cleanup.push(() => ro.disconnect())
+      cleanup.push(() => { engine?.dispose(); engine = null })
+    } catch (err) {
+      console.warn('[eMenu] 3D phone engine failed to init — activating fallback.', err)
+      engine?.dispose?.()
+      engine = null
+      engineReady = false
+    }
+  }
+
+  // If WebGL is unavailable OR engine init threw, activate the no-journey fallback.
+  // The mmPhone reduceMotion branch handles its own activation below.
+  if (!webgl || !engineReady) {
+    activateFallback()
+    // runStaticReveals needs gsap + ScrollTrigger — import now (client-only)
+    const { gsap: g } = await import('gsap')
+    const { ScrollTrigger: ST } = await import('gsap/ScrollTrigger')
+    runStaticReveals(g, ST)
   }
 
   // ── Scroll-state for header glass effect ──────────────────────────
@@ -562,8 +656,10 @@ onMounted(async () => {
       const { reduceMotion } = ctx.conditions as { motion: boolean; reduceMotion: boolean }
 
       if (reduceMotion) {
-        // Reduced-motion: static hero pose, no ScrollTrigger
-        engine?.setPose({ x: 2.2, y: 0, rotX: 0, rotY: -0.5, scale: 0.7 })
+        // Reduced-motion: activate no-journey fallback (hides canvas, shows static image)
+        // then run simple scroll reveals so all content is accessible.
+        activateFallback()
+        runStaticReveals(gsap, ScrollTrigger)
         return
       }
 
@@ -906,6 +1002,29 @@ onUnmounted(async () => {
   height: 100vh;
   pointer-events: none;
   z-index: 2;
+}
+
+/* ── Task 7: no-journey fallback ───────────────────────────────
+   .no-journey is added to .page-root when WebGL is absent,
+   engine init throws, or prefers-reduced-motion: reduce is active.
+   Hides the fixed canvas; shows the static phone image in the hero slot. */
+.no-journey .phone-stage {
+  display: none;
+}
+
+.hero__phone-fallback {
+  display: none; /* hidden by default; revealed only under .no-journey */
+  width: 100%;
+  max-width: 320px;
+  border-radius: 2rem;
+  box-shadow: var(--shadow-warm);
+  /* z-index: 3 — sits within the hero grid, above section bg (z:2 canvas is hidden anyway) */
+  position: relative;
+  z-index: 3;
+}
+
+.no-journey .hero__phone-fallback {
+  display: block;
 }
 
 /* ───────────────────────────────────────────────────────────────
