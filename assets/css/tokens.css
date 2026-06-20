@@ -9,13 +9,16 @@
   --text-soft: #6b5444;
   --shadow-warm: 0 20px 60px rgba(199, 91, 57, .18);
   --ease-organic: cubic-bezier(.22, 1, .36, 1);
+  --font: 'Poppins', system-ui, -apple-system, sans-serif;
+  --maxw: 1240px;
+  --gutter: clamp(1.25rem, 4vw, 3rem);
 }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
   background: var(--bg-warm);
   color: var(--text-main);
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: var(--font);
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
 }
