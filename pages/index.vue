@@ -645,7 +645,7 @@ onMounted(async () => {
   const { SplitText } = await import('gsap/SplitText')
 
   // ── Task 4: master scrubbed phone-pose timeline + footer render pause ──
-  // Own matchMedia instance (mmPhone) — does not disturb mm/mm5/mm6/mm7.
+  // Own matchMedia instance (mmPhone) — does not disturb mm/mm6/mm7.
   const mmPhone = gsap.matchMedia()
   mmPhone.add(
     {
@@ -655,9 +655,14 @@ onMounted(async () => {
     (ctx) => {
       const { reduceMotion } = ctx.conditions as { motion: boolean; reduceMotion: boolean }
 
-      if (reduceMotion) {
-        // Reduced-motion: activate no-journey fallback (hides canvas, shows static image)
-        // then run simple scroll reveals so all content is accessible.
+      // Skip the journey when motion is reduced OR the 3D engine never came up
+      // (no WebGL / init failed). Without this !engine guard the journey's
+      // ScrollTriggers would still run and dim the feature copy to 25% opacity
+      // over a hidden canvas — breaking the fallback's "content fully usable".
+      if (reduceMotion || !engine) {
+        // Activate no-journey fallback (hides canvas, shows static image) then run
+        // simple scroll reveals so all content is accessible. Both are idempotent
+        // / once-guarded, so it is safe if the no-WebGL path already called them.
         activateFallback()
         runStaticReveals(gsap, ScrollTrigger)
         return
@@ -677,7 +682,7 @@ onMounted(async () => {
           scrub: 1,
         },
         onUpdate: apply,
-        defaults: { ease: 'none', onUpdate: apply },
+        defaults: { ease: 'none' },
       })
 
       tl.to(pose, { x: 2.2, y: 0, rotY: 0, scale: 1 })                    // hero settle (right)
