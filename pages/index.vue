@@ -90,90 +90,53 @@
     </section>
 
     <!-- ═══════════════════════════════════════════════
-         FEATURES — pinned horizontal carousel (Task 5)
+         FEATURES — phone waypoint with stacked feature steps (Task 5)
          ════════════════════════════════════════════ -->
     <section class="features" id="features" aria-labelledby="features-heading">
-      <!-- Decorative blobs — positioned behind track, parallax at slower scrub -->
-      <div class="blob blob--a" aria-hidden="true"></div>
-      <div class="blob blob--b" aria-hidden="true"></div>
-      <div class="blob blob--c" aria-hidden="true"></div>
+      <div class="container features__layout">
+        <!-- Left column: empty phone slot (3D phone canvas sits here via .phone-stage) -->
+        <div class="features__phone-slot" aria-hidden="true"></div>
 
-      <div class="features__viewport">
-        <header class="section-header features__header">
-          <p class="section-eyebrow">What eMenu does</p>
-          <h2 id="features-heading" class="section-heading">Everything your menu needs to perform</h2>
-          <p class="section-sub">From QR scan to order, every step is crafted to feel effortless — for your guests and your team.</p>
-        </header>
+        <!-- Right column: stacked feature steps -->
+        <div class="features__steps-col">
+          <header class="features__steps-header">
+            <p class="section-eyebrow">What eMenu does</p>
+            <h2 id="features-heading" class="section-heading">Everything your menu needs to perform</h2>
+          </header>
 
-        <!-- Horizontal scroll track: flex row, each card ~80vw -->
-        <div class="features__track">
-
-          <article class="feature-card">
-            <div class="feature-card__visual feature-card__visual--sync" aria-hidden="true">
-              <!-- Price sync illustration: two price tags in sync -->
-              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-                <rect x="6" y="16" width="24" height="32" rx="4" fill="color-mix(in srgb, var(--accent-orange) 12%, transparent)" stroke="var(--accent-orange)" stroke-width="1.8"/>
-                <path d="M14 28h8M14 34h5" stroke="var(--accent-orange)" stroke-width="1.6" stroke-linecap="round"/>
-                <path d="M10 24h6" stroke="var(--terracotta)" stroke-width="1.4" stroke-linecap="round"/>
-                <rect x="34" y="16" width="24" height="32" rx="4" fill="color-mix(in srgb, var(--terracotta) 10%, transparent)" stroke="var(--terracotta)" stroke-width="1.8"/>
-                <path d="M42 28h8M42 34h5" stroke="var(--terracotta)" stroke-width="1.6" stroke-linecap="round"/>
-                <path d="M38 24h6" stroke="var(--accent-orange)" stroke-width="1.4" stroke-linecap="round"/>
-                <!-- Sync arrow -->
-                <path d="M30 32h4M31 30l-2 2 2 2" stroke="var(--brown-deep)" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div class="feature-card__icon" aria-hidden="true">
+          <div class="feature-step">
+            <div class="feature-step__icon" aria-hidden="true">
               <!-- Lightning bolt: instant price sync -->
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
                 <path d="M16 4L8 16h7l-3 8 11-13h-7l3-7z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
-            <h3 class="feature-card__title">Instant Price Sync</h3>
-            <p class="feature-card__body">Change a price in your dashboard and it's live on every guest's phone within seconds — no reprinting, no confusion, no revenue left on the table.</p>
-            <div class="feature-card__stat">
-              <span class="feature-card__stat-num">2 s</span>
-              <span class="feature-card__stat-label">average update time</span>
+            <h3 class="feature-step__title">Instant Price Sync</h3>
+            <p class="feature-step__body">Change a price in your dashboard and it's live on every guest's phone within seconds — no reprinting, no confusion, no revenue left on the table.</p>
+            <div class="feature-step__stat">
+              <span class="feature-step__stat-num">2 s</span>
+              <span class="feature-step__stat-label">average update time</span>
             </div>
-          </article>
+          </div>
 
-          <article class="feature-card">
-            <div class="feature-card__visual feature-card__visual--allergen" aria-hidden="true">
-              <!-- Allergen tag illustration: shield with leaf -->
-              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-                <path d="M32 8L14 18v14c0 10 8 19 18 22 10-3 18-12 18-22V18L32 8z" fill="color-mix(in srgb, var(--accent-orange) 10%, transparent)" stroke="var(--accent-orange)" stroke-width="1.8"/>
-                <path d="M24 32c4-8 12-10 16-6" stroke="var(--terracotta)" stroke-width="1.6" stroke-linecap="round"/>
-                <circle cx="32" cy="30" r="5" fill="color-mix(in srgb, var(--accent-orange) 20%, transparent)" stroke="var(--accent-orange)" stroke-width="1.6"/>
-                <path d="M29 30l2 2 4-4" stroke="var(--terracotta)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <div class="feature-card__icon" aria-hidden="true">
+          <div class="feature-step">
+            <div class="feature-step__icon" aria-hidden="true">
               <!-- Shield check: allergen safety -->
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
                 <path d="M14 4L5 9v7c0 5.5 4 10.5 9 12 5-1.5 9-6.5 9-12V9L14 4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
                 <path d="M10 14l3 3 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </div>
-            <h3 class="feature-card__title">Allergen Tags</h3>
-            <p class="feature-card__body">Mark every dish with the allergens it contains. Guests with dietary needs browse confidently, your staff answer fewer questions, and you meet compliance requirements effortlessly.</p>
-            <div class="feature-card__stat">
-              <span class="feature-card__stat-num">14</span>
-              <span class="feature-card__stat-label">EU allergens supported</span>
+            <h3 class="feature-step__title">Allergen Tags</h3>
+            <p class="feature-step__body">Mark every dish with the allergens it contains. Guests with dietary needs browse confidently, your staff answer fewer questions, and you meet compliance requirements effortlessly.</p>
+            <div class="feature-step__stat">
+              <span class="feature-step__stat-num">14</span>
+              <span class="feature-step__stat-label">EU allergens supported</span>
             </div>
-          </article>
+          </div>
 
-          <article class="feature-card">
-            <div class="feature-card__visual feature-card__visual--lang" aria-hidden="true">
-              <!-- Language illustration: speech bubbles with flags -->
-              <svg width="64" height="64" viewBox="0 0 64 64" fill="none" aria-hidden="true">
-                <rect x="8" y="12" width="28" height="20" rx="4" fill="color-mix(in srgb, var(--accent-orange) 10%, transparent)" stroke="var(--accent-orange)" stroke-width="1.8"/>
-                <path d="M36 32l-4 5h4V32z" fill="var(--accent-orange)"/>
-                <path d="M14 20h16M14 26h10" stroke="var(--accent-orange)" stroke-width="1.4" stroke-linecap="round"/>
-                <rect x="28" y="32" width="28" height="20" rx="4" fill="color-mix(in srgb, var(--terracotta) 10%, transparent)" stroke="var(--terracotta)" stroke-width="1.8"/>
-                <path d="M28 37l4-5v5h-4z" fill="var(--terracotta)"/>
-                <path d="M34 40h16M34 46h10" stroke="var(--terracotta)" stroke-width="1.4" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div class="feature-card__icon" aria-hidden="true">
+          <div class="feature-step">
+            <div class="feature-step__icon" aria-hidden="true">
               <!-- Globe: multi-language -->
               <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
                 <circle cx="14" cy="14" r="9" stroke="currentColor" stroke-width="1.6"/>
@@ -182,16 +145,16 @@
                 <path d="M6.5 9.5h15M6.5 18.5h15" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 2"/>
               </svg>
             </div>
-            <h3 class="feature-card__title">Multi-language Support</h3>
-            <p class="feature-card__body">One menu, every language. eMenu translates your dishes and descriptions automatically so international guests feel at home the moment they scan — no bilingual staff required.</p>
-            <div class="feature-card__stat">
-              <span class="feature-card__stat-num">40+</span>
-              <span class="feature-card__stat-label">languages available</span>
+            <h3 class="feature-step__title">Multi-language Support</h3>
+            <p class="feature-step__body">One menu, every language. eMenu translates your dishes and descriptions automatically so international guests feel at home the moment they scan — no bilingual staff required.</p>
+            <div class="feature-step__stat">
+              <span class="feature-step__stat-num">40+</span>
+              <span class="feature-step__stat-label">languages available</span>
             </div>
-          </article>
+          </div>
 
-        </div><!-- /.features__track -->
-      </div><!-- /.features__viewport -->
+        </div><!-- /.features__steps-col -->
+      </div><!-- /.features__layout -->
     </section>
 
     <!-- ═══════════════════════════════════════════════
@@ -643,9 +606,70 @@ onMounted(async () => {
         onLeaveBack: () => engine?.setRenderActive(true),
       })
 
+      // ── Task 5: Per-section screen crossfade triggers ─────────────
+      // Helper: returns a callback that crossfades the phone screen to `key`
+      const fade = (key: ScreenKey) => () => engine?.crossfadeScreen(key)
+
+      // Helper: activate a feature-step (full opacity) and dim all others
+      const activateStep = (index: number) => () => {
+        const steps = document.querySelectorAll<HTMLElement>('.feature-step')
+        steps.forEach((el, i) => {
+          gsap.to(el, { opacity: i === index ? 1 : 0.25, duration: 0.4, ease: 'power2.out', overwrite: true })
+        })
+      }
+      const deactivateSteps = () => {
+        const steps = document.querySelectorAll<HTMLElement>('.feature-step')
+        steps.forEach((el) => {
+          gsap.to(el, { opacity: 0.25, duration: 0.4, ease: 'power2.out', overwrite: true })
+        })
+      }
+
+      const st1 = ScrollTrigger.create({
+        trigger: '#hero',
+        start: 'top center',
+        onEnter: fade('menu'),
+        onEnterBack: () => { fade('menu')(); deactivateSteps() },
+      })
+
+      const st2 = ScrollTrigger.create({
+        trigger: '.feature-step:nth-child(1)',
+        start: 'top 60%',
+        onEnter: () => { fade('priceSync')(); activateStep(0)() },
+        onEnterBack: () => { fade('priceSync')(); activateStep(0)() },
+      })
+
+      const st3 = ScrollTrigger.create({
+        trigger: '.feature-step:nth-child(2)',
+        start: 'top 60%',
+        onEnter: () => { fade('allergen')(); activateStep(1)() },
+        onEnterBack: () => { fade('allergen')(); activateStep(1)() },
+      })
+
+      const st4 = ScrollTrigger.create({
+        trigger: '.feature-step:nth-child(3)',
+        start: 'top 60%',
+        onEnter: () => { fade('multilang')(); activateStep(2)() },
+        onEnterBack: () => { fade('multilang')(); activateStep(2)() },
+      })
+
+      const st5 = ScrollTrigger.create({
+        trigger: '.how',
+        start: 'top center',
+        onEnter: fade('qrSteps'),
+        onEnterBack: fade('qrSteps'),
+      })
+
+      const st6 = ScrollTrigger.create({
+        trigger: '.social',
+        start: 'top center',
+        onEnter: fade('review'),
+        onEnterBack: fade('review'),
+      })
+
       return () => {
         tl.scrollTrigger?.kill()
         footerTrigger.kill()
+        st1.kill(); st2.kill(); st3.kill(); st4.kill(); st5.kill(); st6.kill()
       }
     }
   )
@@ -828,60 +852,6 @@ onMounted(async () => {
     },
     { immediate: true }
   )
-
-  // ── Task 5: Pinned horizontal feature carousel + blob parallax ──
-  const mm5 = gsap.matchMedia()
-  mm5.add(
-    {
-      motion:       '(prefers-reduced-motion: no-preference)',
-      reduceMotion: '(prefers-reduced-motion: reduce)',
-    },
-    (ctx: { conditions: Record<string, boolean> }) => {
-      const { reduceMotion } = ctx.conditions
-
-      if (reduceMotion) {
-        // Reduced-motion: stack cards vertically, no pin, just show them.
-        gsap.set('.features__track', { display: 'flex', flexWrap: 'wrap' })
-        return
-      }
-
-      // ── Horizontal scrub: pin .features, drive .features__track x ──
-      // ease: 'none' is required so scroll position and horizontal position
-      // remain 1:1 (see gsap-scrolltrigger skill).
-      // Fix: use pixel-based x (not xPercent) equal to the actual overflow
-      // distance so translation and pin distance match exactly.
-      const track = document.querySelector('.features__track') as HTMLElement
-
-      gsap.to(track, {
-        x: () => -(track.scrollWidth - window.innerWidth),
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '.features',
-          pin: true,
-          // overflow: visible is set on .features in CSS so the pin spacer
-          // is not clipped. See source comment on .features below.
-          scrub: 1,
-          invalidateOnRefresh: true,
-          end: () => '+=' + (track.scrollWidth - window.innerWidth),
-        },
-      })
-
-      // ── Blob parallax — slower scrub (2) than the track (1) ──────
-      // Fix: span the same pinned distance as the track so blobs parallax
-      // across the full horizontal scroll, not just the unpinned section height.
-      gsap.to('.blob', {
-        xPercent: -40,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: '.features',
-          scrub: 2,
-          start: 'top top',
-          end: () => '+=' + (track.scrollWidth - window.innerWidth),
-        },
-      })
-    }
-  )
-  cleanup.push(() => mm5.revert())
 
   // ── Task 7: Footer reveal (mm7 — own instance, own cleanup) ────
   const mm7 = gsap.matchMedia()
@@ -1413,120 +1383,78 @@ onUnmounted(async () => {
 }
 
 /* ───────────────────────────────────────────────────────────────
-   FEATURES — pinned horizontal carousel (Task 5)
+   FEATURES — phone waypoint layout (Task 5)
+   Two-column: left = empty phone slot; right = stacked feature steps.
    ─────────────────────────────────────────────────────────────── */
-
-/*
-  overflow: visible (not hidden) is intentional here.
-  ScrollTrigger's pin spacer is inserted as a sibling AFTER .features.
-  If an ancestor has overflow:hidden it clips the spacer and the pin
-  breaks silently. By keeping overflow default (visible) the spacer
-  renders correctly. Do NOT add overflow:hidden to .features or its
-  ancestors (.page-root) without also removing/adjusting the pin.
-*/
 .features {
   background: var(--bg-vanilla);
-  position: relative;          /* stacking context for blobs */
-  /* height is determined by pin spacer; don't set min-height */
-}
-
-/* Viewport wrapper: full-screen viewport for the pinned section */
-.features__viewport {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  overflow: hidden;            /* clip cards peeking out sideways */
+  padding-block: 7rem;
   position: relative;
 }
 
-/* Section header inside pinned viewport */
-.features__header {
-  margin-block-end: 3rem;
-  padding-block-start: 5rem;
-  position: relative;
-  z-index: 2;
+/* Two-column: left phone slot + right content */
+.features__layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: start;
 }
 
-/* Horizontal track: flex row, each card ~80vw */
-.features__track {
-  display: flex;
-  flex-direction: row;
-  align-items: stretch;
-  gap: 2rem;
-  padding-inline: max(2rem, calc((100vw - 80vw) / 2));
-  padding-block-end: 4rem;
-  will-change: transform;
-  position: relative;
-  z-index: 2;
-}
-
-/* ── Feature cards ─────────────────────────────────────────────── */
-.feature-card {
-  flex: 0 0 80vw;
-  max-width: 640px;
-  background: var(--bg-cream);
-  border: 1.5px solid color-mix(in srgb, var(--terracotta) 10%, transparent);
-  border-radius: 1.5rem;
-  padding: 2.5rem;
-  display: flex;
-  flex-direction: column;
-  gap: 1.25rem;
-  /* Tactile lift on hover — the card is ~80vw so users hover over it */
-  transition:
-    box-shadow 0.28s var(--ease-organic),
-    border-color 0.28s var(--ease-organic),
-    transform 0.28s var(--ease-organic);
-  /* Subtle depth: warm shadow at rest */
-  box-shadow: 0 2px 16px color-mix(in srgb, var(--terracotta) 6%, transparent);
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .feature-card:hover {
-    box-shadow: var(--shadow-warm);
-    border-color: color-mix(in srgb, var(--terracotta) 28%, transparent);
-    transform: translateY(-4px);
+@media (max-width: 900px) {
+  .features__layout {
+    grid-template-columns: 1fr;
+    gap: 3rem;
+  }
+  .features__phone-slot {
+    display: none;
   }
 }
 
-/* Large decorative illustration area */
-.feature-card__visual {
-  width: 100%;
-  height: 120px;
-  border-radius: 1rem;
+/* Left column: empty slot — 3D phone canvas occupies this visually */
+.features__phone-slot {
+  min-height: 60vh;
+  position: relative;
+}
+
+/* Right column: steps + header */
+.features__steps-col {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+  flex-direction: column;
+  gap: 0;
 }
 
-.feature-card__visual--sync {
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--accent-orange) 8%, var(--bg-vanilla)),
-    color-mix(in srgb, var(--terracotta) 6%, var(--bg-cream))
-  );
+.features__steps-header {
+  margin-block-end: 3rem;
 }
 
-.feature-card__visual--allergen {
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--terracotta) 8%, var(--bg-vanilla)),
-    color-mix(in srgb, var(--accent-orange) 5%, var(--bg-cream))
-  );
+/* ── Feature steps ───────────────────────────────────────────── */
+/*
+  Each step starts dimmed (opacity: 0.25) and brightens to 1 when
+  the matching ScrollTrigger fires (via GSAP in mmPhone MOTION branch).
+  Transition provides a smooth CSS fallback for reduced-motion users.
+*/
+.feature-step {
+  opacity: 0.25;
+  padding-block: 2.5rem;
+  border-block-start: 1px solid color-mix(in srgb, var(--terracotta) 12%, transparent);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: opacity 0.4s var(--ease-organic);
 }
 
-.feature-card__visual--lang {
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--brown-deep) 5%, var(--bg-vanilla)),
-    color-mix(in srgb, var(--accent-orange) 7%, var(--bg-cream))
-  );
+.feature-step:last-child {
+  border-block-end: 1px solid color-mix(in srgb, var(--terracotta) 12%, transparent);
 }
 
-.feature-card__icon {
-  width: 52px;
-  height: 52px;
+/* When active (set by GSAP or .is-active class) */
+.feature-step.is-active {
+  opacity: 1;
+}
+
+.feature-step__icon {
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1536,32 +1464,29 @@ onUnmounted(async () => {
   flex-shrink: 0;
 }
 
-.feature-card__title {
-  font-size: clamp(1.25rem, 2.5vw, 1.5rem);
+.feature-step__title {
+  font-size: clamp(1.125rem, 2vw, 1.375rem);
   font-weight: 700;
   letter-spacing: -0.025em;
   color: var(--brown-deep);
   line-height: 1.2;
 }
 
-.feature-card__body {
+.feature-step__body {
   font-size: 1rem;
   line-height: 1.7;
   color: var(--text-soft);
-  flex: 1;
 }
 
-/* Stat callout at card bottom — appetizing proof point */
-.feature-card__stat {
+/* Stat callout */
+.feature-step__stat {
   display: flex;
   align-items: baseline;
   gap: 0.5rem;
-  padding-block-start: 0.75rem;
-  border-block-start: 1px solid color-mix(in srgb, var(--terracotta) 10%, transparent);
-  margin-block-start: auto;
+  margin-block-start: 0.5rem;
 }
 
-.feature-card__stat-num {
+.feature-step__stat-num {
   font-size: 1.75rem;
   font-weight: 800;
   letter-spacing: -0.04em;
@@ -1569,82 +1494,18 @@ onUnmounted(async () => {
   font-variant-numeric: tabular-nums;
 }
 
-.feature-card__stat-label {
+.feature-step__stat-label {
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--text-soft);
   letter-spacing: 0.02em;
 }
 
-/* ── Decorative blobs ─────────────────────────────────────────── */
-/*
-  Blobs use organic border-radius and warm gradients (token-based).
-  They are absolutely positioned behind the track (z-index 0) and
-  parallax at scrub:2 (slower than the track's scrub:1) giving depth.
-*/
-.blob {
-  position: absolute;
-  border-radius: 60% 40% 70% 30% / 50% 60% 40% 70%;
-  pointer-events: none;
-  will-change: transform;
-  z-index: 0;
-}
-
-.blob--a {
-  width: clamp(280px, 35vw, 520px);
-  height: clamp(200px, 28vw, 400px);
-  top: 5%;
-  left: -8%;
-  background: radial-gradient(
-    ellipse at 40% 50%,
-    color-mix(in srgb, var(--accent-orange) 14%, transparent),
-    color-mix(in srgb, var(--terracotta) 6%, transparent) 60%,
-    transparent 100%
-  );
-  border-radius: 67% 33% 58% 42% / 43% 67% 33% 57%;
-}
-
-.blob--b {
-  width: clamp(200px, 28vw, 420px);
-  height: clamp(180px, 24vw, 360px);
-  top: 45%;
-  left: 45%;
-  background: radial-gradient(
-    ellipse at 55% 45%,
-    color-mix(in srgb, var(--terracotta) 10%, transparent),
-    color-mix(in srgb, var(--accent-orange) 5%, transparent) 55%,
-    transparent 100%
-  );
-  border-radius: 42% 58% 35% 65% / 55% 38% 62% 45%;
-}
-
-.blob--c {
-  width: clamp(160px, 22vw, 340px);
-  height: clamp(140px, 18vw, 280px);
-  bottom: 8%;
-  right: 5%;
-  background: radial-gradient(
-    ellipse at 50% 55%,
-    color-mix(in srgb, var(--bg-warm) 40%, color-mix(in srgb, var(--accent-orange) 8%, transparent)),
-    transparent 70%
-  );
-  border-radius: 55% 45% 40% 60% / 60% 40% 65% 35%;
-}
-
-/* ── Reduced-motion: stacked cards, no pin ──────────────────────
-   GSAP's mm5 sets flexWrap:wrap on the track; these CSS rules
-   make the stacked layout look intentional and readable.         */
+/* Reduced-motion: show all steps at full opacity immediately */
 @media (prefers-reduced-motion: reduce) {
-  .features__track {
-    flex-wrap: wrap;
-    padding-inline: 0;
-  }
-  .feature-card {
-    flex: 1 1 280px;
-    max-width: 100%;
-  }
-  .blob {
-    display: none; /* blobs rely on scroll parallax — hide when motion off */
+  .feature-step {
+    opacity: 1;
+    transition: none;
   }
 }
 
@@ -2490,10 +2351,10 @@ onUnmounted(async () => {
   }
   .btn,
   .nav__link,
-  .feature-card,
   .nav,
   .nav__link-text::after {
     transition-duration: 0.01ms;
   }
 }
 </style>
+
