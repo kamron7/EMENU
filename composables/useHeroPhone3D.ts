@@ -18,6 +18,8 @@ export interface HeroPhone3D {
   dispose(): void
   crossfadeScreen(key: ScreenKey): void
   setIdle(enabled: boolean): void
+  setPose(p: PhonePose): void
+  setRenderActive(active: boolean): void
 }
 
 export function createHeroPhone3D(): HeroPhone3D {
@@ -38,6 +40,10 @@ export function createHeroPhone3D(): HeroPhone3D {
   // Idle float state
   let idle = false
   let idleT = 0
+
+  // Base pose (set by setPose; idle adds a small offset on top in the loop)
+  let basePose: PhonePose = { x: 0, y: 0, rotX: 0, rotY: 0, scale: 1 }
+  let renderActive = true
 
   function buildProceduralPhone(): THREE.Group {
     const g = new THREE.Group()
@@ -185,14 +191,22 @@ export function createHeroPhone3D(): HeroPhone3D {
       const dt = Math.min((time - lastTime) / 1000, 0.1)
       lastTime = time
 
-      // Idle float
-      if (idle && phone) {
-        idleT += dt
-        phone.position.y = Math.sin(idleT * 1.2) * 0.03
-        phone.rotation.y = Math.sin(idleT * 0.7) * 0.04
+      // Apply base pose from setPose, then add idle float offset on top
+      if (phone) {
+        phone.position.x = basePose.x
+        phone.position.y = basePose.y
+        phone.rotation.x = basePose.rotX
+        phone.rotation.y = basePose.rotY
+        phone.scale.setScalar(basePose.scale)
+
+        if (idle) {
+          idleT += dt
+          phone.position.y += Math.sin(idleT * 1.2) * 0.03
+          phone.rotation.y += Math.sin(idleT * 0.7) * 0.04
+        }
       }
 
-      if (renderer && scene && camera) renderer.render(scene, camera)
+      if (renderActive && renderer && scene && camera) renderer.render(scene, camera)
     }
     loop(performance.now())
   }
@@ -219,11 +233,22 @@ export function createHeroPhone3D(): HeroPhone3D {
     currentKey = key
   }
 
+  function setPose(p: PhonePose): void {
+    if (!phone) return
+    basePose.x = p.x
+    basePose.y = p.y
+    basePose.rotX = p.rotX
+    basePose.rotY = p.rotY
+    basePose.scale = p.scale
+  }
+
+  function setRenderActive(active: boolean): void {
+    renderActive = active
+  }
+
   function setIdle(enabled: boolean): void {
     idle = enabled
-    if (!enabled && phone) {
-      phone.position.y = 0
-      phone.rotation.y = 0
+    if (!enabled) {
       idleT = 0
     }
   }
@@ -258,5 +283,5 @@ export function createHeroPhone3D(): HeroPhone3D {
     canvasEl = null
   }
 
-  return { init, resize, dispose, crossfadeScreen, setIdle }
+  return { init, resize, dispose, crossfadeScreen, setIdle, setPose, setRenderActive }
 }

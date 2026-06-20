@@ -546,6 +546,8 @@ let engine: {
   dispose(): void
   crossfadeScreen(key: ScreenKey): void
   setIdle(enabled: boolean): void
+  setPose(p: { x: number; y: number; rotX: number; rotY: number; scale: number }): void
+  setRenderActive(active: boolean): void
 } | null = null
 
 onMounted(async () => {
@@ -588,6 +590,66 @@ onMounted(async () => {
   const { gsap } = await import('gsap')
   const { ScrollTrigger } = await import('gsap/ScrollTrigger')
   const { SplitText } = await import('gsap/SplitText')
+
+  // ── Task 4: master scrubbed phone-pose timeline + footer render pause ──
+  // Own matchMedia instance (mmPhone) — does not disturb mm/mm5/mm6/mm7.
+  const mmPhone = gsap.matchMedia()
+  mmPhone.add(
+    {
+      motion:      '(prefers-reduced-motion: no-preference)',
+      reduceMotion: '(prefers-reduced-motion: reduce)',
+    },
+    (ctx) => {
+      const { reduceMotion } = ctx.conditions as { motion: boolean; reduceMotion: boolean }
+
+      if (reduceMotion) {
+        // Reduced-motion: static hero pose, no ScrollTrigger
+        engine?.setPose({ x: 2.2, y: 0, rotX: 0, rotY: -0.5, scale: 0.7 })
+        return
+      }
+
+      // Shared pose object — tweened by the timeline; applied via onUpdate
+      const pose = { x: 2.2, y: 0, rotX: 0, rotY: -0.5, scale: 0.7 }
+      const apply = () => engine?.setPose(pose)
+
+      // Master scrubbed timeline: hero(right) → features(left) → how(right) → roi(left) → testimonials(center) → exit
+      const tl = gsap.timeline({
+        scrollTrigger: {
+          trigger: '#hero',
+          start: 'top top',
+          endTrigger: '.social',
+          end: 'bottom bottom',
+          scrub: 1,
+        },
+        onUpdate: apply,
+        defaults: { ease: 'none', onUpdate: apply },
+      })
+
+      tl.to(pose, { x: 2.2, y: 0, rotY: 0, scale: 1 })                    // hero settle (right)
+        .to(pose, { x: -2.2, rotY: 0.5, scale: 0.95 })                     // → features (left)
+        .to(pose, { rotY: 0.5 + Math.PI * 0.5 })                           // features sub-step rotate
+        .to(pose, { x: 2.2, rotY: 0, scale: 1 })                           // → how (right)
+        .to(pose, { x: -2.2, rotY: 0.4 })                                  // → roi (left)
+        .to(pose, { x: 0, y: 0, rotY: 0, scale: 1.05 })                   // → testimonials (center)
+        .to(pose, { y: 1.5, scale: 0.6, rotX: 0.3 })                       // exit up
+
+      engine?.setIdle(true)
+
+      // Footer render pause: skip rendering when phone is offscreen at footer
+      const footerTrigger = ScrollTrigger.create({
+        trigger: '.foot',
+        start: 'top center',
+        onEnter: () => engine?.setRenderActive(false),
+        onLeaveBack: () => engine?.setRenderActive(true),
+      })
+
+      return () => {
+        tl.scrollTrigger?.kill()
+        footerTrigger.kill()
+      }
+    }
+  )
+  cleanup.push(() => mmPhone.revert())
 
   // ── Task 4: Hero phone 3D expand + SplitText title ──────────────
   const mm4 = gsap.matchMedia()
