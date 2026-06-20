@@ -539,9 +539,23 @@ const extraRevenue = computed(() => Math.round(covers.value * avgBill.value * UP
 const displayRevenue = ref(extraRevenue.value)
 
 let cleanup: Array<() => void> = []
+let engine: { init: (c: HTMLCanvasElement) => Promise<void>; resize: () => void; dispose: () => void } | null = null
 
 onMounted(async () => {
   if (!import.meta.client) return
+
+  // ── Task 2: 3D phone engine (client-only, dynamic import) ────────
+  const { useWebGLSupport } = await import('~/composables/useWebGLSupport')
+  const webgl = useWebGLSupport()
+  if (webgl && stageCanvas.value) {
+    const { createHeroPhone3D } = await import('~/composables/useHeroPhone3D')
+    engine = createHeroPhone3D()
+    await engine.init(stageCanvas.value)
+    const ro = new ResizeObserver(() => engine?.resize())
+    ro.observe(stageCanvas.value)
+    cleanup.push(() => ro.disconnect())
+    cleanup.push(() => { engine?.dispose(); engine = null })
+  }
 
   // ── Scroll-state for header glass effect ──────────────────────────
   const onScroll = () => {
