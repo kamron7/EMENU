@@ -610,11 +610,12 @@ onMounted(async () => {
       // Helper: returns a callback that crossfades the phone screen to `key`
       const fade = (key: ScreenKey) => () => engine?.crossfadeScreen(key)
 
-      // Helper: activate a feature-step (full opacity) and dim all others
+      // Helper: activate a feature-step (full opacity + is-active) and dim all others
       const activateStep = (index: number) => () => {
         const steps = document.querySelectorAll<HTMLElement>('.feature-step')
         steps.forEach((el, i) => {
           gsap.to(el, { opacity: i === index ? 1 : 0.25, duration: 0.4, ease: 'power2.out', overwrite: true })
+          el.classList.toggle('is-active', i === index)
         })
       }
       const deactivateSteps = () => {
@@ -631,26 +632,17 @@ onMounted(async () => {
         onEnterBack: () => { fade('menu')(); deactivateSteps() },
       })
 
-      const st2 = ScrollTrigger.create({
-        trigger: '.feature-step:nth-child(1)',
-        start: 'top 60%',
-        onEnter: () => { fade('priceSync')(); activateStep(0)() },
-        onEnterBack: () => { fade('priceSync')(); activateStep(0)() },
-      })
-
-      const st3 = ScrollTrigger.create({
-        trigger: '.feature-step:nth-child(2)',
-        start: 'top 60%',
-        onEnter: () => { fade('allergen')(); activateStep(1)() },
-        onEnterBack: () => { fade('allergen')(); activateStep(1)() },
-      })
-
-      const st4 = ScrollTrigger.create({
-        trigger: '.feature-step:nth-child(3)',
-        start: 'top 60%',
-        onEnter: () => { fade('multilang')(); activateStep(2)() },
-        onEnterBack: () => { fade('multilang')(); activateStep(2)() },
-      })
+      // Iterate actual .feature-step elements so DOM position (sibling header) is irrelevant
+      const stepKeys: ScreenKey[] = ['priceSync', 'allergen', 'multilang']
+      const stepEls = gsap.utils.toArray('.feature-step') as HTMLElement[]
+      const stepTriggers = stepEls.map((el, i) =>
+        ScrollTrigger.create({
+          trigger: el,
+          start: 'top 60%',
+          onEnter: () => { engine?.crossfadeScreen(stepKeys[i]); activateStep(i)() },
+          onEnterBack: () => { engine?.crossfadeScreen(stepKeys[i]); activateStep(i)() },
+        })
+      )
 
       const st5 = ScrollTrigger.create({
         trigger: '.how',
@@ -669,7 +661,7 @@ onMounted(async () => {
       return () => {
         tl.scrollTrigger?.kill()
         footerTrigger.kill()
-        st1.kill(); st2.kill(); st3.kill(); st4.kill(); st5.kill(); st6.kill()
+        st1.kill(); stepTriggers.forEach(t => t.kill()); st5.kill(); st6.kill()
       }
     }
   )
