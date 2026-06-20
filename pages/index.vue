@@ -539,7 +539,13 @@ const extraRevenue = computed(() => Math.round(covers.value * avgBill.value * UP
 const displayRevenue = ref(extraRevenue.value)
 
 let cleanup: Array<() => void> = []
-let engine: { init: (c: HTMLCanvasElement) => Promise<void>; resize: () => void; dispose: () => void } | null = null
+let engine: {
+  init(c: HTMLCanvasElement): Promise<void>
+  resize(): void
+  dispose(): void
+  crossfadeScreen(key: string): void
+  setIdle(enabled: boolean): void
+} | null = null
 
 onMounted(async () => {
   if (!import.meta.client) return

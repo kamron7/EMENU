@@ -1,5 +1,8 @@
 import * as THREE from 'three'
+import { gsap } from 'gsap'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { buildAllScreens } from './phoneScreens'
+import type { ScreenKey } from './phoneScreens'
 
 export interface PhonePose {
   x: number
@@ -13,6 +16,8 @@ export interface HeroPhone3D {
   init(canvas: HTMLCanvasElement): Promise<void>
   resize(): void
   dispose(): void
+  crossfadeScreen(key: ScreenKey): void
+  setIdle(enabled: boolean): void
 }
 
 export function createHeroPhone3D(): HeroPhone3D {
@@ -23,6 +28,16 @@ export function createHeroPhone3D(): HeroPhone3D {
   let raf = 0
   let canvasEl: HTMLCanvasElement | null = null
   const disposables: Array<() => void> = []
+
+  // Screen planes
+  let screenA: THREE.Mesh | null = null
+  let screenB: THREE.Mesh | null = null
+  let screens: ReturnType<typeof buildAllScreens> | null = null
+  let currentKey: ScreenKey = 'menu'
+
+  // Idle float state
+  let idle = false
+  let idleT = 0
 
   function buildProceduralPhone(): THREE.Group {
     const g = new THREE.Group()
@@ -63,6 +78,79 @@ export function createHeroPhone3D(): HeroPhone3D {
     }
   }
 
+  function attachScreenPlanes(phoneGroup: THREE.Group): void {
+    // Find existing screen mesh or create one
+    let screenMesh = phoneGroup.getObjectByName('screen') as THREE.Mesh | undefined
+
+    // Determine plane dimensions from the screen mesh geometry or default
+    let planeW = 0.9
+    let planeH = 1.92
+    let planeZ = 0.062 // slightly in front of the body
+
+    if (screenMesh) {
+      // Use the screen mesh's geometry to size our planes
+      const geo = screenMesh.geometry
+      geo.computeBoundingBox()
+      const bb = geo.boundingBox!
+      planeW = bb.max.x - bb.min.x
+      planeH = bb.max.y - bb.min.y
+      planeZ = 0 // we'll be a child of the screen mesh, so local z = 0
+
+      // Replace the screen mesh material with a transparent one (our planes will show the content)
+      const mat = screenMesh.material as THREE.MeshBasicMaterial
+      mat.transparent = true
+      mat.opacity = 0
+      mat.needsUpdate = true
+    }
+
+    // Build cached textures
+    screens = buildAllScreens()
+    // Push texture disposal to disposables
+    disposables.push(() => {
+      if (screens) {
+        for (const key of Object.keys(screens) as ScreenKey[]) {
+          screens[key].dispose()
+        }
+        screens = null
+      }
+    })
+
+    // Screen A: opaque, shows current
+    const geoA = new THREE.PlaneGeometry(planeW, planeH)
+    const matA = new THREE.MeshBasicMaterial({
+      map: screens.menu,
+      transparent: false,
+    })
+    screenA = new THREE.Mesh(geoA, matA)
+
+    // Screen B: transparent overlay for crossfade (slightly in front)
+    const geoB = new THREE.PlaneGeometry(planeW, planeH)
+    const matB = new THREE.MeshBasicMaterial({
+      map: null,
+      transparent: true,
+      opacity: 0,
+    })
+    screenB = new THREE.Mesh(geoB, matB)
+    screenB.position.z = 0.001 // coplanar but fractionally in front
+
+    // Push geometry/material disposal
+    disposables.push(() => {
+      geoA.dispose(); matA.dispose()
+      geoB.dispose(); matB.dispose()
+    })
+
+    if (screenMesh) {
+      // Attach as children of the screen mesh
+      screenA.position.set(0, 0, 0.001)
+      screenMesh.add(screenA, screenB)
+    } else {
+      // No screen mesh found: attach to the phone group at the right Z
+      screenA.position.set(0, 0, planeZ)
+      screenB.position.set(0, 0, planeZ + 0.001)
+      phoneGroup.add(screenA, screenB)
+    }
+  }
+
   async function init(canvas: HTMLCanvasElement): Promise<void> {
     canvasEl = canvas
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
@@ -86,11 +174,55 @@ export function createHeroPhone3D(): HeroPhone3D {
     phone = await loadPhone()
     scene.add(phone)
 
-    const loop = () => {
+    // Attach screen planes after phone is added
+    attachScreenPlanes(phone)
+
+    let lastTime = 0
+    const loop = (time: number) => {
       raf = requestAnimationFrame(loop)
+      const dt = Math.min((time - lastTime) / 1000, 0.1)
+      lastTime = time
+
+      // Idle float
+      if (idle && phone) {
+        idleT += dt
+        phone.position.y = Math.sin(idleT * 1.2) * 0.03
+        phone.rotation.y = Math.sin(idleT * 0.7) * 0.04
+      }
+
       if (renderer && scene && camera) renderer.render(scene, camera)
     }
-    loop()
+    loop(0)
+  }
+
+  function crossfadeScreen(key: ScreenKey): void {
+    if (!screenA || !screenB || !screens || key === currentKey) return
+    const matB = screenB.material as THREE.MeshBasicMaterial
+    matB.map = screens[key]
+    matB.needsUpdate = true
+    gsap.to(matB, {
+      opacity: 1,
+      duration: 0.5,
+      ease: 'power2.out',
+      onComplete: () => {
+        const matA = screenA!.material as THREE.MeshBasicMaterial
+        matA.map = screens![key]
+        matA.needsUpdate = true
+        matB.opacity = 0
+        matB.map = null
+        matB.needsUpdate = true
+      },
+    })
+    currentKey = key
+  }
+
+  function setIdle(enabled: boolean): void {
+    idle = enabled
+    if (!enabled && phone) {
+      phone.position.y = 0
+      phone.rotation.y = 0
+      idleT = 0
+    }
   }
 
   function resize(): void {
@@ -118,8 +250,10 @@ export function createHeroPhone3D(): HeroPhone3D {
     scene = null
     camera = null
     phone = null
+    screenA = null
+    screenB = null
     canvasEl = null
   }
 
-  return { init, resize, dispose }
+  return { init, resize, dispose, crossfadeScreen, setIdle }
 }
