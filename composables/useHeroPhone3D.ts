@@ -136,18 +136,8 @@ export function createHeroPhone3D(): HeroPhone3D {
     const mesh = (phoneGroup.getObjectByName('screen') as THREE.Mesh | undefined) ?? findScreenMesh(phoneGroup)
     if (!mesh) return
 
-    // Apply horizontal mirror fix for the 180° GLB flip (the mesh UVs are now
-    // viewed from the "correct" direction after the flip, but Three.js texture
-    // coords go left-to-right and our canvas was drawn left-to-right for a
-    // forward-facing phone — flipping repeat.x makes the texture read correctly).
-    for (const k of Object.keys(screens) as ScreenKey[]) {
-      const tex = screens[k]
-      tex.wrapS = THREE.RepeatWrapping
-      tex.repeat.x = -1
-      tex.offset.x = 1
-      tex.needsUpdate = true
-    }
-
+    // The menu textures use the screen mesh's own UVs, which already read
+    // correctly with the 180° model flip — no horizontal mirror needed.
     const mat = mesh.material as THREE.MeshStandardMaterial
     screenMat = mat
     mat.map = screens.menu
