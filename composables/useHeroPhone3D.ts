@@ -18,6 +18,8 @@ export interface HeroPhone3D {
   init(canvas: HTMLCanvasElement): Promise<void>
   resize(): void
   dispose(): void
+  setScreen(key: ScreenKey): void
+  /** @deprecated Task 4 will remove this alias — use setScreen */
   crossfadeScreen(key: ScreenKey): void
   setIdle(enabled: boolean): void
   setPose(p: PhonePose): void
@@ -34,9 +36,8 @@ export function createHeroPhone3D(): HeroPhone3D {
   let dracoLoader: DRACOLoader | null = null
   const disposables: Array<() => void> = []
 
-  // Screen planes
-  let screenA: THREE.Mesh | null = null
-  let screenB: THREE.Mesh | null = null
+  // Screen mesh material + cached textures
+  let screenMat: THREE.MeshStandardMaterial | null = null
   let screens: ReturnType<typeof buildAllScreens> | null = null
   let currentKey: ScreenKey = 'menu'
 
@@ -123,79 +124,45 @@ export function createHeroPhone3D(): HeroPhone3D {
     return best
   }
 
-  function attachScreenPlanes(phoneGroup: THREE.Group): void {
-    // Build cached textures
+  function bindScreen(phoneGroup: THREE.Group): void {
     screens = buildAllScreens()
     disposables.push(() => {
       if (screens) {
-        for (const key of Object.keys(screens) as ScreenKey[]) screens[key].dispose()
+        for (const k of Object.keys(screens) as ScreenKey[]) screens[k].dispose()
         screens = null
       }
     })
 
-    // The named 'screen' mesh exists on the procedural phone; on the real GLB we
-    // detect the emissive screen mesh and parent the planes to IT so they inherit
-    // its exact world orientation/position automatically.
-    const namedScreen = phoneGroup.getObjectByName('screen') as THREE.Mesh | undefined
-    const screenMesh = namedScreen ?? findScreenMesh(phoneGroup)
-    // The real model is flipped 180° about Y so its screen faces the camera;
-    // that makes us view the overlay plane from behind, so mirror it back.
-    const mirror = phoneGroup.userData.isRealModel === true
+    const mesh = (phoneGroup.getObjectByName('screen') as THREE.Mesh | undefined) ?? findScreenMesh(phoneGroup)
+    if (!mesh) return
 
-    let planeW = 0.9
-    let planeH = 1.92
-    let normalAxis: 'x' | 'y' | 'z' = 'z'
-    let center = new THREE.Vector3(0, 0, 0)
-    let offset = 0.01
-
-    if (screenMesh) {
-      const geo = screenMesh.geometry
-      geo.computeBoundingBox()
-      const bb = geo.boundingBox!
-      const sx = bb.max.x - bb.min.x, sy = bb.max.y - bb.min.y, sz = bb.max.z - bb.min.z
-      bb.getCenter(center)
-      // Normal axis = the smallest extent (screen is a thin slab); the two larger
-      // extents are the screen width/height.
-      const minDim = Math.min(sx, sy, sz)
-      if (minDim === sx) { normalAxis = 'x'; planeW = sz; planeH = sy; offset = sx }
-      else if (minDim === sy) { normalAxis = 'y'; planeW = sx; planeH = sz; offset = sy }
-      else { normalAxis = 'z'; planeW = sx; planeH = sy; offset = sz }
-      offset = offset * 0.5 + Math.max(sx, sy, sz) * 0.002
+    // Apply horizontal mirror fix for the 180° GLB flip (the mesh UVs are now
+    // viewed from the "correct" direction after the flip, but Three.js texture
+    // coords go left-to-right and our canvas was drawn left-to-right for a
+    // forward-facing phone — flipping repeat.x makes the texture read correctly).
+    for (const k of Object.keys(screens) as ScreenKey[]) {
+      const tex = screens[k]
+      tex.wrapS = THREE.RepeatWrapping
+      tex.repeat.x = -1
+      tex.offset.x = 1
+      tex.needsUpdate = true
     }
 
-    const makePlane = (map: THREE.Texture | null, opacity: number, transparent: boolean, order: number) => {
-      const geo = new THREE.PlaneGeometry(planeW, planeH)
-      const mat = new THREE.MeshBasicMaterial({
-        map,
-        transparent,
-        opacity,
-        side: THREE.DoubleSide,   // visible regardless of which face points at camera
-        depthTest: false,         // always draw over the device screen
-        depthWrite: false,
-        toneMapped: false,        // keep the menu colors bright/accurate
-      })
-      const mesh = new THREE.Mesh(geo, mat)
-      // Un-mirror: the flipped model is viewed from the plane's back side
-      if (mirror) mesh.scale.x = -1
-      // Orient the plane (default normal +z) to face the screen's normal axis
-      if (normalAxis === 'x') mesh.rotation.y = Math.PI / 2
-      else if (normalAxis === 'y') mesh.rotation.x = -Math.PI / 2
-      // position at the screen's local center, pushed out along its normal
-      mesh.position.copy(center)
-      if (normalAxis === 'x') mesh.position.x += offset
-      else if (normalAxis === 'y') mesh.position.y += offset
-      else mesh.position.z += offset
-      disposables.push(() => { geo.dispose(); mat.dispose() })
-      return mesh
-    }
+    const mat = mesh.material as THREE.MeshStandardMaterial
+    screenMat = mat
+    mat.map = screens.menu
+    mat.emissive = new THREE.Color(0xffffff)
+    mat.emissiveMap = screens.menu
+    mat.emissiveIntensity = 1.0
+    mat.needsUpdate = true
+  }
 
-    screenA = makePlane(screens.menu, 1, false, 10)
-    screenA.renderOrder = 10
-    screenB = makePlane(null, 0, true, 11)
-    screenB.renderOrder = 11
-
-    const parent = screenMesh ?? phoneGroup
-    parent.add(screenA, screenB)
+  function setScreen(key: ScreenKey): void {
+    if (!screenMat || !screens || key === currentKey) return
+    screenMat.map = screens[key]
+    screenMat.emissiveMap = screens[key]
+    screenMat.needsUpdate = true
+    currentKey = key
   }
 
   // The canvas is fixed at 100vw×100vh; clientWidth can read 0 before layout
@@ -253,8 +220,12 @@ export function createHeroPhone3D(): HeroPhone3D {
     phone = await loadPhone()
     scene.add(phone)
 
-    // Attach screen planes after phone is added
-    attachScreenPlanes(phone)
+    // Bind menu textures directly to the screen mesh (in-device rendering)
+    bindScreen(phone)
+
+    // Set initial hero pose immediately so phone starts parked on the right
+    // (no visible jump from center to right on first paint).
+    setPose({ x: 1.7, y: 0, rotX: 0, rotY: 0, scale: 1.0 })
 
     let lastTime = performance.now()
     const loop = (time: number) => {
@@ -280,28 +251,6 @@ export function createHeroPhone3D(): HeroPhone3D {
       if (renderActive && renderer && scene && camera) renderer.render(scene, camera)
     }
     loop(performance.now())
-  }
-
-  function crossfadeScreen(key: ScreenKey): void {
-    if (!screenA || !screenB || !screens || key === currentKey) return
-    const matB = screenB.material as THREE.MeshBasicMaterial
-    matB.map = screens[key]
-    matB.needsUpdate = true
-    gsap.killTweensOf(matB)
-    gsap.to(matB, {
-      opacity: 1,
-      duration: 0.5,
-      ease: 'power2.out',
-      onComplete: () => {
-        const matA = screenA!.material as THREE.MeshBasicMaterial
-        matA.map = screens![key]
-        matA.needsUpdate = true
-        matB.opacity = 0
-        matB.map = null
-        matB.needsUpdate = true
-      },
-    })
-    currentKey = key
   }
 
   function setPose(p: PhonePose): void {
@@ -350,11 +299,14 @@ export function createHeroPhone3D(): HeroPhone3D {
     scene = null
     camera = null
     phone = null
-    screenA = null
-    screenB = null
+    screenMat = null
     dracoLoader = null
     canvasEl = null
   }
 
-  return { init, resize, dispose, crossfadeScreen, setIdle, setPose, setRenderActive }
+  // Temporary alias for Task 4 callers in index.vue — Task 4 will replace these
+  // call-sites with setScreen() and remove this alias.
+  const crossfadeScreen = setScreen
+
+  return { init, resize, dispose, setScreen, crossfadeScreen, setIdle, setPose, setRenderActive }
 }
