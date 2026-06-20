@@ -788,26 +788,8 @@ onMounted(async () => {
           })
         })
 
-        // ── Media clip-path morph: inset rectangle opens on scroll ───
-        // Emil-design-eng: clip-path is GPU-accelerated, reveals with intent
-        gsap.fromTo(
-          '.how__media',
-          { clipPath: 'inset(14% 18% 14% 18% round 2rem)' },
-          {
-            clipPath: 'inset(0% 0% 0% 0% round 1.5rem)',
-            ease: 'none',
-            scrollTrigger: {
-              trigger: '.how',
-              start: 'top 65%',
-              end: 'center 45%',
-              scrub: 1.2,
-            },
-          }
-        )
       } else {
-        // Reduced-motion: instantly show steps and media at final state
-        gsap.set('.how__media', { clipPath: 'inset(0% 0% 0% 0% round 1.5rem)' })
-        // Step titles visible immediately — no SplitText so no split.revert needed
+        // Reduced-motion: step titles visible immediately — no SplitText so no split.revert needed
       }
 
       return () => {
@@ -1409,6 +1391,8 @@ onUnmounted(async () => {
   display: flex;
   flex-direction: column;
   gap: 0;
+  position: relative;
+  z-index: 3;
 }
 
 .features__steps-header {
@@ -1624,7 +1608,6 @@ onUnmounted(async () => {
   display: inline-block;
 }
 
-/* .how__media removed in Task 6 — media column replaced by phone slot */
 
 /* ─────────────────────────────────────────────────────────────────
    ROI CALCULATOR
@@ -1661,7 +1644,6 @@ onUnmounted(async () => {
   gap: 5rem;
   align-items: start;
   position: relative;
-  z-index: 1;
 }
 
 .roi__phone-slot {
@@ -1948,12 +1930,6 @@ onUnmounted(async () => {
   z-index: 1;
 }
 
-/* Reduced-motion: no clip-path animation on .how__media */
-@media (prefers-reduced-motion: reduce) {
-  .how__media {
-    clip-path: inset(0% 0% 0% 0% round 1.5rem) !important;
-  }
-}
 
 /* ───────────────────────────────────────────────────────────────
    SOCIAL PROOF
@@ -1962,13 +1938,6 @@ onUnmounted(async () => {
   min-height: 60vh;
   background: var(--bg-cream);
   padding-block: 7rem;
-}
-
-.social__grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 1.5rem;
-  margin-block-end: 4rem;
 }
 
 .testimonial {
