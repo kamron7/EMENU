@@ -1,6 +1,8 @@
 import * as THREE from 'three'
 import { gsap } from 'gsap'
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js'
+import { RoomEnvironment } from 'three/examples/jsm/environments/RoomEnvironment.js'
 import { buildAllScreens } from './phoneScreens'
 import type { ScreenKey } from './phoneScreens'
 
@@ -29,6 +31,7 @@ export function createHeroPhone3D(): HeroPhone3D {
   let phone: THREE.Group | null = null
   let raf = 0
   let canvasEl: HTMLCanvasElement | null = null
+  let dracoLoader: DRACOLoader | null = null
   const disposables: Array<() => void> = []
 
   // Screen planes
@@ -65,8 +68,14 @@ export function createHeroPhone3D(): HeroPhone3D {
   async function loadPhone(): Promise<THREE.Group> {
     try {
       const loader = new GLTFLoader()
-      const gltf = await loader.loadAsync('/models/phone.glb') /* swap: replace public/models/phone.glb with your model */
+      // Wire DRACOLoader so Draco-compressed meshes decode correctly
+      dracoLoader = new DRACOLoader()
+      dracoLoader.setDecoderPath('/draco/')
+      loader.setDRACOLoader(dracoLoader)
+
+      const gltf = await loader.loadAsync('/models/phone.glb')
       const root = gltf.scene
+
       // normalize: center + scale to ~2 units tall
       const box = new THREE.Box3().setFromObject(root)
       const size = new THREE.Vector3()
@@ -75,88 +84,118 @@ export function createHeroPhone3D(): HeroPhone3D {
       box.getCenter(center)
       root.position.sub(center)
       const s = 2 / (size.y || 1)
-      const wrap = new THREE.Group()
-      wrap.add(root)
-      wrap.scale.setScalar(s)
-      return wrap
-    } catch {
+
+      const modelGroup = new THREE.Group()
+      modelGroup.add(root)
+      modelGroup.scale.setScalar(s)
+      // This GLB's screen faces -z by default; flip so the screen (and the menu
+      // overlay parented to it) faces the camera at the neutral pose.
+      modelGroup.rotation.y = Math.PI
+
+      // Outer container: what gets returned as `phone`. The render loop writes
+      // basePose to this group; the inner modelGroup keeps the GLB's orientation.
+      const container = new THREE.Group()
+      container.add(modelGroup)
+      container.userData.isRealModel = true
+      return container
+    } catch (err) {
+      console.warn('[eMenu] loadPhone failed, using procedural fallback:', err)
       return buildProceduralPhone()
     }
   }
 
+  // Find the device's screen mesh: the emissive-textured mesh with the largest
+  // flat area. Real phone GLBs light their screen with an emissive wallpaper.
+  function findScreenMesh(rootObj: THREE.Object3D): THREE.Mesh | null {
+    let best: THREE.Mesh | null = null
+    let bestArea = 0
+    rootObj.traverse((o) => {
+      const m = o as THREE.Mesh
+      if (!m.isMesh) return
+      const mat = m.material as THREE.MeshStandardMaterial
+      if (!mat || !mat.emissiveMap) return
+      m.geometry.computeBoundingBox()
+      const bb = m.geometry.boundingBox!
+      const dims = [bb.max.x - bb.min.x, bb.max.y - bb.min.y, bb.max.z - bb.min.z].sort((a, b) => b - a)
+      const area = dims[0] * dims[1] // product of the two largest extents
+      if (area > bestArea) { bestArea = area; best = m }
+    })
+    return best
+  }
+
   function attachScreenPlanes(phoneGroup: THREE.Group): void {
-    // Find existing screen mesh or create one
-    let screenMesh = phoneGroup.getObjectByName('screen') as THREE.Mesh | undefined
-
-    // Determine plane dimensions from the screen mesh geometry or default
-    let planeW = 0.9
-    let planeH = 1.92
-    let planeZ = 0.062 // slightly in front of the body
-
-    if (screenMesh) {
-      // Use the screen mesh's geometry to size our planes
-      const geo = screenMesh.geometry
-      geo.computeBoundingBox()
-      const bb = geo.boundingBox!
-      planeW = bb.max.x - bb.min.x
-      planeH = bb.max.y - bb.min.y
-      planeZ = 0 // we'll be a child of the screen mesh, so local z = 0
-
-      // Replace the screen mesh material with a transparent one (our planes will show the content)
-      const mat = screenMesh.material as THREE.MeshBasicMaterial
-      mat.transparent = true
-      mat.opacity = 0
-      mat.needsUpdate = true
-    }
-
     // Build cached textures
     screens = buildAllScreens()
-    // Push texture disposal to disposables
     disposables.push(() => {
       if (screens) {
-        for (const key of Object.keys(screens) as ScreenKey[]) {
-          screens[key].dispose()
-        }
+        for (const key of Object.keys(screens) as ScreenKey[]) screens[key].dispose()
         screens = null
       }
     })
 
-    // Screen A: opaque, shows current
-    const geoA = new THREE.PlaneGeometry(planeW, planeH)
-    const matA = new THREE.MeshBasicMaterial({
-      map: screens.menu,
-      transparent: false,
-    })
-    screenA = new THREE.Mesh(geoA, matA)
-    screenA.renderOrder = 1
+    // The named 'screen' mesh exists on the procedural phone; on the real GLB we
+    // detect the emissive screen mesh and parent the planes to IT so they inherit
+    // its exact world orientation/position automatically.
+    const namedScreen = phoneGroup.getObjectByName('screen') as THREE.Mesh | undefined
+    const screenMesh = namedScreen ?? findScreenMesh(phoneGroup)
+    // The real model is flipped 180° about Y so its screen faces the camera;
+    // that makes us view the overlay plane from behind, so mirror it back.
+    const mirror = phoneGroup.userData.isRealModel === true
 
-    // Screen B: transparent overlay for crossfade (slightly in front)
-    const geoB = new THREE.PlaneGeometry(planeW, planeH)
-    const matB = new THREE.MeshBasicMaterial({
-      map: null,
-      transparent: true,
-      opacity: 0,
-    })
-    screenB = new THREE.Mesh(geoB, matB)
-    screenB.renderOrder = 2
-    screenB.position.z = 0.001 // keep tiny z offset as fallback
-
-    // Push geometry/material disposal
-    disposables.push(() => {
-      geoA.dispose(); matA.dispose()
-      geoB.dispose(); matB.dispose()
-    })
+    let planeW = 0.9
+    let planeH = 1.92
+    let normalAxis: 'x' | 'y' | 'z' = 'z'
+    let center = new THREE.Vector3(0, 0, 0)
+    let offset = 0.01
 
     if (screenMesh) {
-      // Attach as children of the screen mesh
-      screenA.position.set(0, 0, 0.001)
-      screenMesh.add(screenA, screenB)
-    } else {
-      // No screen mesh found: attach to the phone group at the right Z
-      screenA.position.set(0, 0, planeZ)
-      screenB.position.set(0, 0, planeZ + 0.001)
-      phoneGroup.add(screenA, screenB)
+      const geo = screenMesh.geometry
+      geo.computeBoundingBox()
+      const bb = geo.boundingBox!
+      const sx = bb.max.x - bb.min.x, sy = bb.max.y - bb.min.y, sz = bb.max.z - bb.min.z
+      bb.getCenter(center)
+      // Normal axis = the smallest extent (screen is a thin slab); the two larger
+      // extents are the screen width/height.
+      const minDim = Math.min(sx, sy, sz)
+      if (minDim === sx) { normalAxis = 'x'; planeW = sz; planeH = sy; offset = sx }
+      else if (minDim === sy) { normalAxis = 'y'; planeW = sx; planeH = sz; offset = sy }
+      else { normalAxis = 'z'; planeW = sx; planeH = sy; offset = sz }
+      offset = offset * 0.5 + Math.max(sx, sy, sz) * 0.002
     }
+
+    const makePlane = (map: THREE.Texture | null, opacity: number, transparent: boolean, order: number) => {
+      const geo = new THREE.PlaneGeometry(planeW, planeH)
+      const mat = new THREE.MeshBasicMaterial({
+        map,
+        transparent,
+        opacity,
+        side: THREE.DoubleSide,   // visible regardless of which face points at camera
+        depthTest: false,         // always draw over the device screen
+        depthWrite: false,
+        toneMapped: false,        // keep the menu colors bright/accurate
+      })
+      const mesh = new THREE.Mesh(geo, mat)
+      // Un-mirror: the flipped model is viewed from the plane's back side
+      if (mirror) mesh.scale.x = -1
+      // Orient the plane (default normal +z) to face the screen's normal axis
+      if (normalAxis === 'x') mesh.rotation.y = Math.PI / 2
+      else if (normalAxis === 'y') mesh.rotation.x = -Math.PI / 2
+      // position at the screen's local center, pushed out along its normal
+      mesh.position.copy(center)
+      if (normalAxis === 'x') mesh.position.x += offset
+      else if (normalAxis === 'y') mesh.position.y += offset
+      else mesh.position.z += offset
+      disposables.push(() => { geo.dispose(); mat.dispose() })
+      return mesh
+    }
+
+    screenA = makePlane(screens.menu, 1, false, 10)
+    screenA.renderOrder = 10
+    screenB = makePlane(null, 0, true, 11)
+    screenB.renderOrder = 11
+
+    const parent = screenMesh ?? phoneGroup
+    parent.add(screenA, screenB)
   }
 
   async function init(canvas: HTMLCanvasElement): Promise<void> {
@@ -164,20 +203,37 @@ export function createHeroPhone3D(): HeroPhone3D {
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
     renderer.setSize(canvas.clientWidth, canvas.clientHeight, false)
+    // Enable physically correct lighting for PBR materials
+    renderer.toneMapping = THREE.ACESFilmicToneMapping
+    renderer.toneMappingExposure = 1.2
 
     scene = new THREE.Scene()
     camera = new THREE.PerspectiveCamera(35, canvas.clientWidth / canvas.clientHeight, 0.1, 100)
     camera.position.set(0, 0, 6)
 
     // warm 3-point lighting
-    const key = new THREE.DirectionalLight(0xfff0d8, 2.2)
+    const key = new THREE.DirectionalLight(0xfff0d8, 3.5)
     key.position.set(3, 4, 5)
-    const fill = new THREE.DirectionalLight(0xffd9a8, 0.8)
+    const fill = new THREE.DirectionalLight(0xffd9a8, 1.5)
     fill.position.set(-4, 0, 2)
-    const rim = new THREE.DirectionalLight(0xffffff, 1.0)
+    const rim = new THREE.DirectionalLight(0xffffff, 1.8)
     rim.position.set(0, 2, -5)
-    const amb = new THREE.AmbientLight(0xfff3e2, 0.6)
+    const amb = new THREE.AmbientLight(0xfff3e2, 2.0)
     scene.add(key, fill, rim, amb)
+
+    // Build a warm procedural environment map so metallic surfaces
+    // show specular reflections (required for metalness:1 materials to be visible).
+    try {
+      const pmrem = new THREE.PMREMGenerator(renderer)
+      pmrem.compileEquirectangularShader()
+      const envTexture = pmrem.fromScene(new THREE.RoomEnvironment()).texture
+      scene.environment = envTexture
+      pmrem.dispose()
+      disposables.push(() => envTexture.dispose())
+    } catch (pmremErr) {
+      // PMREMGenerator failed (e.g. context not ready) — continue without env map
+      console.warn('[eMenu] PMREMGenerator failed, continuing without env map:', pmremErr)
+    }
 
     phone = await loadPhone()
     scene.add(phone)
@@ -274,12 +330,14 @@ export function createHeroPhone3D(): HeroPhone3D {
     })
     renderer?.dispose()
     renderer?.forceContextLoss?.()
+    dracoLoader?.dispose()
     renderer = null
     scene = null
     camera = null
     phone = null
     screenA = null
     screenB = null
+    dracoLoader = null
     canvasEl = null
   }
 

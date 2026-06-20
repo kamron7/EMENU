@@ -8,3 +8,8 @@ node_modules
 .env
 dist
 .DS_Store
+
+# stray browser screenshots / local agent state
+*.png
+.claude/
+!public/**/*.png
