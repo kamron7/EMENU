@@ -1,16 +1,27 @@
-Phone 3D Model — Asset Placeholder
-=====================================
+eMenu — 3D phone model
+=======================
 
-Status: No GLB asset present. The engine uses a procedural phone fallback.
+File: phone.glb  (loaded by composables/useHeroPhone3D.ts; /* swap */ point)
 
-To replace with a real CC0 model:
-1. Download a CC0-licensed phone GLB from poly.pizza (search "phone", filter CC0)
-   or from Khronos glTF sample models / Sketchfab CC0 collection.
-2. Place the file at public/models/phone.glb
-3. The GLTFLoader path in composables/useHeroPhone3D.ts (marked /* swap */)
-   will automatically use it on the next build.
-4. Update this file with:
-   - Model name
-   - Author
-   - Source URL
-   - License: CC0 1.0 Universal (https://creativecommons.org/publicdomain/zero/1.0/)
+Current model
+-------------
+Realistic iPhone-style smartphone (glTF-Binary, ~887 KB).
+Source: adrianhajdin/iphone (JS Mastery "Apple iPhone 15 Pro website" tutorial)
+        https://github.com/adrianhajdin/iphone  ->  public/models/scene.glb
+Downloaded: 2026-06-20
+
+License / attribution note
+--------------------------
+This model originates from a public educational/tutorial repository. The iPhone
+industrial design and trademarks are property of Apple Inc. It is used here as a
+PLACEHOLDER for development. Before any public/commercial launch, verify you have
+the right to use this exact asset, or replace it with a model you own or that is
+explicitly CC0 / licensed for your use.
+
+How to swap
+-----------
+Drop your own model at public/models/phone.glb (same filename). The engine
+auto-loads it, centers it, and scales it to ~2 units tall — no code change needed.
+If your model has a dedicated screen mesh named "screen", the menu texture maps
+onto it automatically; otherwise the engine projects the menu onto a plane at the
+model's front face.
