@@ -198,18 +198,33 @@ export function createHeroPhone3D(): HeroPhone3D {
     parent.add(screenA, screenB)
   }
 
+  // The canvas is fixed at 100vw×100vh; clientWidth can read 0 before layout
+  // settles, which leaves the renderer at Three's 300×150 default. Fall back to
+  // the window dimensions so the framebuffer + camera aspect are always correct.
+  function viewportSize(): { w: number; h: number } {
+    const w = canvasEl?.clientWidth || window.innerWidth
+    const h = canvasEl?.clientHeight || window.innerHeight
+    return { w, h }
+  }
+
   async function init(canvas: HTMLCanvasElement): Promise<void> {
     canvasEl = canvas
+    const { w, h } = viewportSize()
     renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true })
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    renderer.setSize(canvas.clientWidth, canvas.clientHeight, false)
+    renderer.setSize(w, h, false)
     // Enable physically correct lighting for PBR materials
     renderer.toneMapping = THREE.ACESFilmicToneMapping
     renderer.toneMappingExposure = 1.2
 
     scene = new THREE.Scene()
-    camera = new THREE.PerspectiveCamera(35, canvas.clientWidth / canvas.clientHeight, 0.1, 100)
+    camera = new THREE.PerspectiveCamera(35, w / h, 0.1, 100)
     camera.position.set(0, 0, 6)
+
+    // Backup to the ResizeObserver in index.vue: window resize always re-syncs.
+    const onWinResize = () => resize()
+    window.addEventListener('resize', onWinResize)
+    disposables.push(() => window.removeEventListener('resize', onWinResize))
 
     // warm 3-point lighting
     const key = new THREE.DirectionalLight(0xfff0d8, 3.5)
@@ -311,8 +326,8 @@ export function createHeroPhone3D(): HeroPhone3D {
 
   function resize(): void {
     if (!renderer || !camera || !canvasEl) return
-    const w = canvasEl.clientWidth
-    const h = canvasEl.clientHeight
+    const { w, h } = viewportSize()
+    if (w === 0 || h === 0) return
     renderer.setSize(w, h, false)
     camera.aspect = w / h
     camera.updateProjectionMatrix()
