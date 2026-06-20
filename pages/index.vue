@@ -54,6 +54,9 @@
       </div>
     </header>
 
+    <div id="smooth-wrapper">
+      <div id="smooth-content">
+
     <!-- ═══════════════════════════════════════════════
          HERO — asymmetric, appetising, typographic-led
          ════════════════════════════════════════════ -->
@@ -483,6 +486,9 @@
 
     </footer>
 
+      </div><!-- /#smooth-content -->
+    </div><!-- /#smooth-wrapper -->
+
   </div>
 </template>
 
@@ -643,6 +649,23 @@ onMounted(async () => {
   const { gsap } = await import('gsap')
   const { ScrollTrigger } = await import('gsap/ScrollTrigger')
   const { SplitText } = await import('gsap/SplitText')
+
+  // ── Task 2: ScrollSmoother — journey path only ────────────────
+  // Only created when the 3D engine is running AND the user has not
+  // requested reduced motion. When skipped, the wrapper divs act as
+  // normal block elements and native scroll is used.
+  const { ScrollSmoother } = await import('gsap/ScrollSmoother')
+  let smoother: InstanceType<typeof ScrollSmoother> | null = null
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (engine && !prefersReduced) {
+    smoother = ScrollSmoother.create({
+      wrapper: '#smooth-wrapper',
+      content: '#smooth-content',
+      smooth: 1.2,
+      effects: true,
+    })
+    cleanup.push(() => { smoother?.kill(); smoother = null })
+  }
 
   // ── Task 4: master scrubbed phone-pose timeline + footer render pause ──
   // Own matchMedia instance (mmPhone) — does not disturb mm/mm6/mm7.
@@ -995,6 +1018,12 @@ onUnmounted(async () => {
   min-height: 100dvh;
   display: flex;
   flex-direction: column;
+}
+
+/* ScrollSmoother requirement: wrapper must clip overflow so the
+   translateY on #smooth-content doesn't create a scrollbar ghost. */
+#smooth-wrapper {
+  overflow: hidden;
 }
 
 /* Fixed full-viewport canvas for the 3D phone journey (Tasks 2+).

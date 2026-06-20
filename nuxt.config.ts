@@ -10,6 +10,7 @@ export default defineNuxtConfig({
   vite: {
     resolve: {
       alias: {
+        'gsap/ScrollSmoother': `${gsapEsm}/ScrollSmoother.js`,
         'gsap/ScrollTrigger': `${gsapEsm}/ScrollTrigger.js`,
         'gsap/SplitText': `${gsapEsm}/SplitText.js`,
         'gsap': `${gsapEsm}/index.js`
