@@ -58,36 +58,53 @@
       <div id="smooth-content">
 
     <!-- ═══════════════════════════════════════════════
-         HERO — asymmetric, appetising, typographic-led
+         HERO — editorial left column, phone slot right
          ════════════════════════════════════════════ -->
     <section class="hero" id="hero" aria-label="Hero">
       <div class="container hero__layout">
+
+        <!-- LEFT column: editorial content -->
         <div class="hero__text">
-          <p class="hero__eyebrow">Digital menus that feel like hospitality</p>
+          <!-- Eyebrow with thin rule -->
+          <div class="hero__eyebrow-group">
+            <span class="hero__eyebrow-line" aria-hidden="true"></span>
+            <p class="hero__eyebrow">Digital menus</p>
+          </div>
+
           <h1 class="hero__headline">
             Your menu,<br />
             <em class="hero__accent">beautifully</em><br />
             delivered.
           </h1>
-          <p class="hero__body">
-            eMenu transforms paper menus into warm, scannable experiences — helping your guests decide, and helping you delight them every visit.
+
+          <p class="hero__subhead">
+            Warm, scannable QR menus — live in minutes, loved by guests.
           </p>
+
+          <!-- Dual CTA -->
           <div class="hero__actions">
             <a href="#" class="btn btn--primary btn--lg">Start free trial</a>
             <a href="#how" class="hero__learn-link">
               See how it works
-              <svg class="hero__learn-arrow" width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+              <svg class="hero__learn-arrow" width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
                 <path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
               </svg>
             </a>
           </div>
+
+          <!-- Thin metadata row -->
+          <p class="hero__meta" aria-label="Key facts">
+            <span>No app</span>
+            <span class="hero__meta-dot" aria-hidden="true">·</span>
+            <span>Instant QR</span>
+            <span class="hero__meta-dot" aria-hidden="true">·</span>
+            <span>12 languages</span>
+          </p>
         </div>
 
-        <!-- hero right column: 3D phone canvas occupies this visually via .phone-stage.
-             In no-journey mode (no WebGL / reduced-motion / engine error), the fallback
-             image is shown instead. Default display:none; activated by .no-journey on root. -->
+        <!-- RIGHT column: empty phone slot (3D canvas parks here).
+             In no-journey mode the fallback image shows instead. -->
         <div class="hero__visual-slot" aria-hidden="true">
-          <!-- src: swap this Unsplash placeholder for your final product screenshot -->
           <img
             class="hero__phone-fallback"
             src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=640&q=80"
@@ -97,6 +114,7 @@
             loading="eager"
           />
         </div>
+
       </div>
 
       <div class="hero__scroll-hint" aria-hidden="true">
@@ -105,66 +123,49 @@
     </section>
 
     <!-- ═══════════════════════════════════════════════
-         FEATURES — phone waypoint with stacked feature steps (Task 5)
+         FEATURES — phone slot left, content right
+         Three .feature-step blocks; is-active brightens the current one.
          ════════════════════════════════════════════ -->
     <section class="features" id="features" aria-labelledby="features-heading">
       <div class="container features__layout">
-        <!-- Left column: empty phone slot (3D phone canvas sits here via .phone-stage) -->
+
+        <!-- LEFT column: empty phone slot (3D canvas parks here) -->
         <div class="features__phone-slot" aria-hidden="true"></div>
 
-        <!-- Right column: stacked feature steps -->
+        <!-- RIGHT column: section header + stacked feature steps -->
         <div class="features__steps-col">
           <header class="features__steps-header">
-            <p class="section-eyebrow">What eMenu does</p>
-            <h2 id="features-heading" class="section-heading">Everything your menu needs to perform</h2>
+            <div class="features__eyebrow-group">
+              <span class="features__eyebrow-line" aria-hidden="true"></span>
+              <p class="section-eyebrow">What eMenu does</p>
+            </div>
+            <h2 id="features-heading" class="features__heading">Everything your menu<br/>needs to perform</h2>
           </header>
 
+          <!-- Step 01 — Instant Price Sync -->
           <div class="feature-step">
-            <div class="feature-step__icon" aria-hidden="true">
-              <!-- Lightning bolt: instant price sync -->
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                <path d="M16 4L8 16h7l-3 8 11-13h-7l3-7z" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <h3 class="feature-step__title">Instant Price Sync</h3>
-            <p class="feature-step__body">Change a price in your dashboard and it's live on every guest's phone within seconds — no reprinting, no confusion, no revenue left on the table.</p>
-            <div class="feature-step__stat">
-              <span class="feature-step__stat-num">2 s</span>
-              <span class="feature-step__stat-label">average update time</span>
+            <div class="feature-step__index" aria-hidden="true">01</div>
+            <div class="feature-step__content">
+              <h3 class="feature-step__title">Instant Price Sync</h3>
+              <p class="feature-step__body">Change a price in the dashboard and it's live on every guest's phone within seconds — no reprinting, no confusion.</p>
             </div>
           </div>
 
+          <!-- Step 02 — Allergen Tags -->
           <div class="feature-step">
-            <div class="feature-step__icon" aria-hidden="true">
-              <!-- Shield check: allergen safety -->
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                <path d="M14 4L5 9v7c0 5.5 4 10.5 9 12 5-1.5 9-6.5 9-12V9L14 4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/>
-                <path d="M10 14l3 3 5-5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <h3 class="feature-step__title">Allergen Tags</h3>
-            <p class="feature-step__body">Mark every dish with the allergens it contains. Guests with dietary needs browse confidently, your staff answer fewer questions, and you meet compliance requirements effortlessly.</p>
-            <div class="feature-step__stat">
-              <span class="feature-step__stat-num">14</span>
-              <span class="feature-step__stat-label">EU allergens supported</span>
+            <div class="feature-step__index" aria-hidden="true">02</div>
+            <div class="feature-step__content">
+              <h3 class="feature-step__title">Allergen Tags</h3>
+              <p class="feature-step__body">Every dish marked clearly. Guests browse confidently, staff answer fewer questions, and you meet EU compliance without effort.</p>
             </div>
           </div>
 
+          <!-- Step 03 — Multi-language -->
           <div class="feature-step">
-            <div class="feature-step__icon" aria-hidden="true">
-              <!-- Globe: multi-language -->
-              <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
-                <circle cx="14" cy="14" r="9" stroke="currentColor" stroke-width="1.6"/>
-                <path d="M14 5c-3 4-3 14 0 18M14 5c3 4 3 14 0 18" stroke="currentColor" stroke-width="1.6"/>
-                <path d="M5 14h18" stroke="currentColor" stroke-width="1.6"/>
-                <path d="M6.5 9.5h15M6.5 18.5h15" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 2"/>
-              </svg>
-            </div>
-            <h3 class="feature-step__title">Multi-language Support</h3>
-            <p class="feature-step__body">One menu, every language. eMenu translates your dishes and descriptions automatically so international guests feel at home the moment they scan — no bilingual staff required.</p>
-            <div class="feature-step__stat">
-              <span class="feature-step__stat-num">40+</span>
-              <span class="feature-step__stat-label">languages available</span>
+            <div class="feature-step__index" aria-hidden="true">03</div>
+            <div class="feature-step__content">
+              <h3 class="feature-step__title">Multi-language Support</h3>
+              <p class="feature-step__body">One menu, every language. International guests feel at home the moment they scan — no bilingual staff required.</p>
             </div>
           </div>
 
@@ -805,7 +806,7 @@ onMounted(async () => {
   )
   cleanup.push(() => mmPhone.revert())
 
-  // ── Task 4: Hero phone 3D expand + SplitText title ──────────────
+  // ── Task 5: Hero + Features refined reveals (SplitText lines + stagger) ──
   const mm4 = gsap.matchMedia()
   mm4.add(
     {
@@ -815,30 +816,94 @@ onMounted(async () => {
     (ctx) => {
       const { reduceMotion } = ctx.conditions as { motion: boolean; reduceMotion: boolean }
 
-      // ── SplitText char-stagger reveal on hero headline ────────────
+      // ── SplitText line-by-line reveal on hero headline ────────────
+      // Split by lines + words so mask clips each line independently.
       const split = new SplitText('.hero__headline', {
-        type: 'chars,words',
-        mask: 'chars',
-        charsClass: 'hero__headline-char',
+        type: 'lines,words',
+        mask: 'lines',
+        linesClass: 'hero__headline-line',
       })
 
       if (!reduceMotion) {
+        // Hero headline: lines slide up from below the mask (editorial reveal)
         gsap.fromTo(
-          split.chars,
-          { yPercent: 120, opacity: 0 },
+          split.lines,
+          { yPercent: 105, opacity: 0 },
           {
             yPercent: 0,
             opacity: 1,
-            stagger: 0.028,
-            duration: 0.72,
+            stagger: 0.11,
+            duration: 0.78,
             ease: 'power3.out',
-            delay: 0.1,
+            delay: 0.12,
+          }
+        )
+
+        // Hero supporting elements: eyebrow group → subhead → actions → meta
+        // Exponential-backoff stagger (motion-design skill: compress as count grows)
+        const heroSupportEls = [
+          '.hero__eyebrow-group',
+          '.hero__subhead',
+          '.hero__actions',
+          '.hero__meta',
+        ]
+        heroSupportEls.forEach((sel, i) => {
+          gsap.fromTo(
+            sel,
+            { opacity: 0, y: 16 },
+            {
+              opacity: 1,
+              y: 0,
+              duration: 0.55,
+              ease: 'power2.out',
+              // exponential backoff: 0, 60, 110, 150 ms
+              delay: 0.55 + Math.round(80 * Math.log(i + 1)) / 1000,
+            }
+          )
+        })
+
+        // Features steps: staggered ScrollTrigger batch reveal (y + opacity)
+        // Each step slides in from a small y offset when it enters the viewport.
+        const stepEls = (gsap.utils.toArray('.feature-step') as HTMLElement[])
+        stepEls.forEach((el: HTMLElement, i: number) => {
+          gsap.fromTo(
+            el,
+            { opacity: 0, y: 28 },
+            {
+              opacity: el.classList.contains('is-active') ? 1 : 0.25,
+              y: 0,
+              duration: 0.6,
+              ease: 'power2.out',
+              scrollTrigger: {
+                trigger: el,
+                start: 'top 82%',
+                once: true,
+              },
+              delay: i * 0.07,
+            }
+          )
+        })
+
+        // Features header: eyebrow + heading slide in when section enters
+        gsap.fromTo(
+          ['.features__eyebrow-group', '.features__heading'],
+          { opacity: 0, y: 20 },
+          {
+            opacity: 1,
+            y: 0,
+            duration: 0.6,
+            ease: 'power2.out',
+            stagger: 0.1,
+            scrollTrigger: {
+              trigger: '.features__steps-header',
+              start: 'top 85%',
+              once: true,
+            },
           }
         )
       }
 
-      // Single-source teardown: mm4.revert() (pushed to cleanup) calls this
-      // returned function, which reverts the SplitText exactly once.
+      // Single-source teardown: mm4.revert() (pushed to cleanup) reverts SplitText.
       return () => split.revert()
     }
   )
@@ -1383,12 +1448,12 @@ onUnmounted(async () => {
 }
 
 /* ───────────────────────────────────────────────────────────────
-   HERO
+   HERO — refined editorial, content LEFT, phone slot RIGHT
    ─────────────────────────────────────────────────────────────── */
 .hero {
   min-height: 100dvh;
   background: var(--bg-warm);
-  padding-block: calc(4.25rem + 5rem) 5rem;
+  padding-block: calc(4.25rem + 4rem) 4.5rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -1400,21 +1465,21 @@ onUnmounted(async () => {
   overflow: hidden;
 }
 
-/* Subtle warm radial background bloom */
+/* Restrained warm bloom — right half only, below canvas z-index */
 .hero::before {
   content: '';
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse 60% 50% at 72% 40%, color-mix(in srgb, var(--accent-orange) 8%, transparent) 0%, transparent 70%),
-    radial-gradient(ellipse 40% 35% at 20% 70%, color-mix(in srgb, var(--terracotta) 5%, transparent) 0%, transparent 65%);
+    radial-gradient(ellipse 55% 55% at 75% 38%, color-mix(in srgb, var(--accent-orange) 7%, transparent) 0%, transparent 70%),
+    radial-gradient(ellipse 35% 30% at 18% 72%, color-mix(in srgb, var(--terracotta) 4%, transparent) 0%, transparent 65%);
   pointer-events: none;
 }
 
 .hero__layout {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 5rem;
+  gap: 4rem;
   align-items: center;
   position: relative;
 }
@@ -1422,32 +1487,56 @@ onUnmounted(async () => {
 @media (max-width: 900px) {
   .hero__layout {
     grid-template-columns: 1fr;
-    gap: 3rem;
+    gap: 0;
   }
 }
 
-/* Hero text — z-index: 3 ensures it sits above the fixed .phone-stage canvas (z-index: 2) */
+/* Hero text column — z-index: 3 sits above the fixed canvas (z-index: 2) */
 .hero__text {
   position: relative;
   z-index: 3;
+  max-width: 46ch;
+}
+
+/* ── Eyebrow with thin rule ──────────────────────────────────── */
+.hero__eyebrow-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-block-end: 1.75rem;
+}
+
+.hero__eyebrow-line {
+  display: block;
+  width: 2rem;
+  height: 1px;
+  background: var(--terracotta);
+  flex-shrink: 0;
 }
 
 .hero__eyebrow {
-  font-size: 0.875rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   color: var(--terracotta);
+  /* inline — no bottom margin; spacing handled by eyebrow-group */
+}
+
+/* ── Headline ────────────────────────────────────────────────── */
+.hero__headline {
+  font-size: clamp(2rem, 4.5vw, 3.4rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+  color: var(--brown-deep);
   margin-block-end: 1.25rem;
 }
 
-.hero__headline {
-  font-size: clamp(2.75rem, 6.5vw, 4.5rem);
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  line-height: 1.08;
-  color: var(--brown-deep);
-  margin-block-end: 1.5rem;
+/* SplitText mask: each line is clipped, chars slide up from below */
+.hero__headline-line {
+  display: block;
+  overflow: clip;
 }
 
 .hero__accent {
@@ -1455,19 +1544,22 @@ onUnmounted(async () => {
   color: var(--accent-orange);
 }
 
-.hero__body {
-  font-size: 1.125rem;
-  line-height: 1.7;
+/* ── One-line subhead ────────────────────────────────────────── */
+.hero__subhead {
+  font-size: 1.0625rem;
+  line-height: 1.6;
   color: var(--text-soft);
-  max-width: 44ch;
-  margin-block-end: 2.25rem;
+  max-width: 40ch;
+  margin-block-end: 2rem;
 }
 
+/* ── Dual CTA ────────────────────────────────────────────────── */
 .hero__actions {
   display: flex;
   align-items: center;
-  gap: 1.5rem;
+  gap: 1.25rem;
   flex-wrap: wrap;
+  margin-block-end: 2rem;
 }
 
 .hero__learn-link {
@@ -1478,28 +1570,59 @@ onUnmounted(async () => {
   font-weight: 600;
   color: var(--text-soft);
   text-decoration: none;
-  transition: color 0.2s var(--ease-organic), gap 0.2s var(--ease-organic);
+  transition: color 0.22s var(--ease-organic), gap 0.22s var(--ease-organic);
 }
 
-.hero__learn-link:hover {
+.hero__learn-link:hover,
+.hero__learn-link:focus-visible {
   color: var(--brown-deep);
   gap: 0.625rem;
 }
 
+.hero__learn-link:focus-visible {
+  outline: 2px solid var(--accent-orange);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
 .hero__learn-arrow {
-  transition: transform 0.2s var(--ease-organic);
+  transition: transform 0.22s var(--ease-organic);
 }
 
 .hero__learn-link:hover .hero__learn-arrow {
   transform: translateX(3px);
 }
 
-/* Hero right column: empty grid slot for the future 3D phone canvas */
+/* ── Metadata row ────────────────────────────────────────────── */
+.hero__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  font-size: 0.8125rem;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: var(--text-soft);
+}
+
+.hero__meta-dot {
+  color: color-mix(in srgb, var(--terracotta) 45%, transparent);
+  font-size: 0.625rem;
+}
+
+/* ── Right phone slot ────────────────────────────────────────── */
 .hero__visual-slot {
   position: relative;
 }
 
-/* Scroll hint */
+/* Hide right slot on mobile so content fills width */
+@media (max-width: 900px) {
+  .hero__visual-slot {
+    display: none;
+  }
+}
+
+/* ── Scroll hint ─────────────────────────────────────────────── */
 .hero__scroll-hint {
   position: absolute;
   bottom: 2rem;
@@ -1513,19 +1636,19 @@ onUnmounted(async () => {
 .hero__scroll-line {
   display: block;
   width: 1px;
-  height: 3rem;
+  height: 2.5rem;
   background: linear-gradient(to bottom, var(--terracotta), transparent);
-  animation: scrollPulse 2s ease-in-out infinite;
+  animation: scrollPulse 2.2s ease-in-out infinite;
 }
 
 @keyframes scrollPulse {
-  0%, 100% { opacity: 0.3; transform: scaleY(1); }
-  50%       { opacity: 0.9; transform: scaleY(0.7); }
+  0%, 100% { opacity: 0.25; transform: scaleY(1); }
+  50%       { opacity: 0.75; transform: scaleY(0.65); }
 }
 
 /* ───────────────────────────────────────────────────────────────
-   FEATURES — phone waypoint layout (Task 5)
-   Two-column: left = empty phone slot; right = stacked feature steps.
+   FEATURES — refined, phone LEFT slot, content RIGHT
+   Three .feature-step items with numbered index + hairline dividers.
    ─────────────────────────────────────────────────────────────── */
 .features {
   background: var(--bg-vanilla);
@@ -1551,13 +1674,13 @@ onUnmounted(async () => {
   }
 }
 
-/* Left column: empty slot — 3D phone canvas occupies this visually */
+/* Left column: empty phone slot — 3D canvas occupies this visually */
 .features__phone-slot {
   min-height: 60vh;
   position: relative;
 }
 
-/* Right column: steps + header */
+/* Right column: header + stacked steps */
 .features__steps-col {
   display: flex;
   flex-direction: column;
@@ -1570,78 +1693,88 @@ onUnmounted(async () => {
   margin-block-end: 3rem;
 }
 
-/* ── Feature steps ───────────────────────────────────────────── */
+/* ── Eyebrow group (rule + label) ────────────────────────────── */
+.features__eyebrow-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-block-end: 1rem;
+}
+
+.features__eyebrow-line {
+  display: block;
+  width: 1.5rem;
+  height: 1px;
+  background: var(--terracotta);
+  flex-shrink: 0;
+}
+
+/* ── Section heading ─────────────────────────────────────────── */
+.features__heading {
+  font-size: clamp(1.625rem, 3.2vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--brown-deep);
+}
+
+/* ── Feature steps — refined numbered rows ───────────────────── */
 /*
-  Each step starts dimmed (opacity: 0.25) and brightens to 1 when
-  the matching ScrollTrigger fires (via GSAP in mmPhone MOTION branch).
-  Transition provides a smooth CSS fallback for reduced-motion users.
+  Each step starts dimmed (opacity: 0.25) and brightens to 1 when the
+  matching ScrollTrigger fires (mmPhone MOTION branch activateStep).
+  CSS transition provides smooth fallback; reduced-motion overrides below.
 */
 .feature-step {
   opacity: 0.25;
-  padding-block: 2.5rem;
-  border-block-start: 1px solid color-mix(in srgb, var(--terracotta) 12%, transparent);
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  padding-block: 2rem;
+  border-block-start: 1px solid color-mix(in srgb, var(--terracotta) 14%, transparent);
+  display: grid;
+  grid-template-columns: 2.75rem 1fr;
+  gap: 1.25rem;
+  align-items: start;
   transition: opacity 0.4s var(--ease-organic);
 }
 
 .feature-step:last-child {
-  border-block-end: 1px solid color-mix(in srgb, var(--terracotta) 12%, transparent);
+  border-block-end: 1px solid color-mix(in srgb, var(--terracotta) 14%, transparent);
 }
 
-/* When active (set by GSAP or .is-active class) */
+/* Active state: GSAP sets opacity:1 and adds .is-active */
 .feature-step.is-active {
   opacity: 1;
 }
 
-.feature-step__icon {
-  width: 48px;
-  height: 48px;
+/* Index numeral: tabular, small, terracotta */
+.feature-step__index {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--terracotta);
+  font-variant-numeric: tabular-nums;
+  padding-block-start: 0.2rem; /* align to title cap height */
+  opacity: 0.7;
+}
+
+/* Content group */
+.feature-step__content {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  background: color-mix(in srgb, var(--accent-orange) 10%, transparent);
-  border-radius: 0.875rem;
-  color: var(--accent-orange);
-  flex-shrink: 0;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .feature-step__title {
-  font-size: clamp(1.125rem, 2vw, 1.375rem);
+  font-size: clamp(1rem, 1.8vw, 1.1875rem);
   font-weight: 700;
-  letter-spacing: -0.025em;
+  letter-spacing: -0.02em;
   color: var(--brown-deep);
-  line-height: 1.2;
+  line-height: 1.25;
 }
 
 .feature-step__body {
-  font-size: 1rem;
-  line-height: 1.7;
+  font-size: 0.9375rem;
+  line-height: 1.65;
   color: var(--text-soft);
-}
-
-/* Stat callout */
-.feature-step__stat {
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  margin-block-start: 0.5rem;
-}
-
-.feature-step__stat-num {
-  font-size: 1.75rem;
-  font-weight: 800;
-  letter-spacing: -0.04em;
-  color: var(--accent-orange);
-  font-variant-numeric: tabular-nums;
-}
-
-.feature-step__stat-label {
-  font-size: 0.8125rem;
-  font-weight: 500;
-  color: var(--text-soft);
-  letter-spacing: 0.02em;
+  max-width: 38ch;
 }
 
 /* Reduced-motion: show all steps at full opacity immediately */
@@ -2468,9 +2601,9 @@ onUnmounted(async () => {
   }
 }
 
-/* SplitText mask: clip chars from below */
-.hero__headline-char {
-  display: inline-block;
+/* SplitText line mask wrappers — overflow clip applied by SplitText mask option */
+.hero__headline-line {
+  display: block;
 }
 
 /* ───────────────────────────────────────────────────────────────
