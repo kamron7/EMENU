@@ -2649,7 +2649,7 @@ onUnmounted(async () => {
 
 .foot__cta-sub {
   font-size: 0.8125rem;
-  color: color-mix(in srgb, var(--bg-warm) 55%, transparent);
+  color: color-mix(in srgb, var(--bg-warm) 70%, transparent);
   letter-spacing: 0.02em;
 }
 
@@ -2725,7 +2725,7 @@ onUnmounted(async () => {
 
 .foot__copy {
   font-size: 0.8125rem;
-  color: color-mix(in srgb, var(--bg-warm) 48%, transparent);
+  color: color-mix(in srgb, var(--bg-warm) 60%, transparent);
   margin-inline-start: auto;
   letter-spacing: 0.01em;
 }
