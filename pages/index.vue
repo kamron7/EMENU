@@ -870,7 +870,7 @@ onMounted(async () => {
             el,
             { opacity: 0, y: 28 },
             {
-              opacity: el.classList.contains('is-active') ? 1 : 0.25,
+              opacity: 0.25,
               y: 0,
               duration: 0.6,
               ease: 'power2.out',
@@ -880,6 +880,7 @@ onMounted(async () => {
                 once: true,
               },
               delay: i * 0.07,
+              onComplete: () => el.style.removeProperty('opacity'),
             }
           )
         })
@@ -2601,10 +2602,7 @@ onUnmounted(async () => {
   }
 }
 
-/* SplitText line mask wrappers — overflow clip applied by SplitText mask option */
-.hero__headline-line {
-  display: block;
-}
+/* .hero__headline-line intentionally defined above (line-mask rule with overflow: clip) */
 
 /* ───────────────────────────────────────────────────────────────
    ACCESSIBILITY: reduced motion
