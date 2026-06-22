@@ -181,8 +181,12 @@
         <!-- Left column: section header + steps (content side) -->
         <div class="how__content-col">
           <header class="how__section-header">
-            <p class="section-eyebrow">Simple from day one</p>
-            <h2 id="how-heading" class="section-heading">Up and running in under ten minutes</h2>
+            <!-- Eyebrow with thin rule — matches hero / features -->
+            <div class="how__eyebrow-group">
+              <span class="how__eyebrow-line" aria-hidden="true"></span>
+              <p class="section-eyebrow">Simple from day one</p>
+            </div>
+            <h2 id="how-heading" class="how__heading">Up and running in under ten minutes</h2>
           </header>
 
           <div class="how__layout">
@@ -228,7 +232,11 @@
         <!-- Right column: header + calculator (content side) -->
         <div class="roi__inner">
           <header class="roi__header">
-            <p class="section-eyebrow">Your potential uplift</p>
+            <!-- Eyebrow with thin rule — matches hero / features / how -->
+            <div class="roi__eyebrow-group">
+              <span class="roi__eyebrow-line" aria-hidden="true"></span>
+              <p class="section-eyebrow">Your potential uplift</p>
+            </div>
             <h2 id="roi-heading" class="section-heading roi__heading">See what eMenu could add to your monthly revenue</h2>
             <p class="roi__sub">Guests who browse a beautiful digital menu spend 15% more on average. Slide the controls to see your restaurant's numbers.</p>
           </header>
@@ -305,7 +313,12 @@
     <section class="social" id="social" aria-labelledby="social-heading">
       <div class="container">
         <header class="section-header">
-          <p class="section-eyebrow">From restaurants who've switched</p>
+          <!-- Eyebrow with thin rule — matches system -->
+          <div class="social__header-group">
+            <span class="social__eyebrow-line" aria-hidden="true"></span>
+            <p class="section-eyebrow">From restaurants who've switched</p>
+            <span class="social__eyebrow-line" aria-hidden="true"></span>
+          </div>
           <h2 id="social-heading" class="section-heading">Guests notice. Staff notice. Revenue follows.</h2>
         </header>
 
@@ -437,6 +450,10 @@
 
           <!-- Closing CTA block -->
           <div class="foot__cta-block foot__reveal-item">
+            <div class="foot__tagline-eyebrow">
+              <span class="foot__tagline-eyebrow-line" aria-hidden="true"></span>
+              <span class="foot__tagline-label">eMenu</span>
+            </div>
             <p class="foot__tagline">Your menu is the first impression.<br/>Make it one they remember.</p>
             <a href="#" class="btn btn--primary btn--lg foot__cta-btn">Start your free trial</a>
             <p class="foot__cta-sub">No credit card required · Cancel any time</p>
@@ -1787,12 +1804,24 @@ onUnmounted(async () => {
 }
 
 /* ───────────────────────────────────────────────────────────────
-   HOW IT WORKS
+   HOW IT WORKS — refined, hairline rows, content LEFT, phone RIGHT
    ─────────────────────────────────────────────────────────────── */
 .how {
   min-height: 100dvh;
   background: var(--bg-warm);
   padding-block: 7rem;
+  position: relative;
+}
+
+/* Subtle warm bloom — left side (mirroring hero right-side bloom) */
+.how::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 45% 50% at 15% 40%, color-mix(in srgb, var(--terracotta) 4%, transparent) 0%, transparent 70%),
+    radial-gradient(ellipse 35% 30% at 30% 80%, color-mix(in srgb, var(--accent-orange) 3%, transparent) 0%, transparent 65%);
+  pointer-events: none;
 }
 
 /*
@@ -1807,6 +1836,7 @@ onUnmounted(async () => {
   grid-template-columns: 1fr 1fr;
   gap: 5rem;
   align-items: start;
+  position: relative;
 }
 
 .how__content-col {
@@ -1814,8 +1844,33 @@ onUnmounted(async () => {
   z-index: 3;
 }
 
+/* Eyebrow group matches hero / features pattern */
+.how__eyebrow-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-block-end: 1rem;
+}
+
+.how__eyebrow-line {
+  display: block;
+  width: 1.5rem;
+  height: 1px;
+  background: var(--terracotta);
+  flex-shrink: 0;
+}
+
 .how__section-header {
   margin-block-end: 3rem;
+}
+
+.how__heading {
+  font-size: clamp(1.625rem, 3.2vw, 2.5rem);
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  color: var(--brown-deep);
+  margin-block-start: 1rem;
 }
 
 .how__phone-slot {
@@ -1835,7 +1890,7 @@ onUnmounted(async () => {
   }
 }
 
-/* Inner layout — now just a single-column step list */
+/* Inner layout — single-column step list */
 .how__layout {
   display: block;
 }
@@ -1845,67 +1900,58 @@ onUnmounted(async () => {
   display: flex;
   flex-direction: column;
   gap: 0;
-  position: relative;
 }
 
-/* Vertical connector line */
-.how__steps::before {
-  content: '';
-  position: absolute;
-  inset-inline-start: 2.25rem;
-  inset-block: 0;
-  width: 1.5px;
-  background: linear-gradient(
-    to bottom,
-    var(--accent-orange),
-    color-mix(in srgb, var(--terracotta) 20%, transparent)
-  );
-}
-
+/*
+  Each step: hairline-divider row — matches .feature-step rhythm exactly.
+  Replaced the circular badge + vertical line with tabular numerals
+  + top hairline divider, keeping the same grid proportions as features.
+*/
 .how__step {
   display: grid;
-  grid-template-columns: 4.5rem 1fr;
-  gap: 1.5rem;
-  align-items: flex-start;
-  padding-block: 2.25rem;
+  grid-template-columns: 2.75rem 1fr;
+  gap: 1.25rem;
+  align-items: start;
+  padding-block: 2rem;
+  border-block-start: 1px solid color-mix(in srgb, var(--terracotta) 14%, transparent);
   position: relative;
 }
 
-.how__step:first-child {
-  padding-block-start: 0;
+.how__step:last-child {
+  border-block-end: 1px solid color-mix(in srgb, var(--terracotta) 14%, transparent);
 }
 
+/* Tabular numeral — mirrors .feature-step__index */
 .how__step-num {
-  width: 4.5rem;
-  height: 4.5rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: var(--terracotta);
+  font-variant-numeric: tabular-nums;
+  padding-block-start: 0.2rem; /* align to title cap height */
+  opacity: 0.75;
+}
+
+/* Content group */
+.how__step-content {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.8125rem;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: var(--bg-cream);
-  background: var(--terracotta);
-  border-radius: 50%;
-  flex-shrink: 0;
-  position: relative;
-  z-index: 1;
-  box-shadow: 0 4px 16px color-mix(in srgb, var(--terracotta) 30%, transparent);
+  flex-direction: column;
+  gap: 0.5rem;
 }
 
 .how__step-title {
-  font-size: 1.1875rem;
+  font-size: clamp(1rem, 1.8vw, 1.1875rem);
   font-weight: 700;
   letter-spacing: -0.02em;
   color: var(--brown-deep);
-  margin-block-end: 0.5rem;
-  padding-block-start: 0.875rem;
+  line-height: 1.25;
 }
 
 .how__step-body {
   font-size: 0.9375rem;
   line-height: 1.65;
   color: var(--text-soft);
+  max-width: 38ch;
 }
 
 /* SplitText word wrappers — needed for mask/reveal */
@@ -1978,9 +2024,26 @@ onUnmounted(async () => {
   margin-block-end: 3rem;
 }
 
+/* Eyebrow group matches hero / features / how */
+.roi__eyebrow-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-block-end: 1rem;
+}
+
+.roi__eyebrow-line {
+  display: block;
+  width: 1.5rem;
+  height: 1px;
+  background: var(--terracotta);
+  flex-shrink: 0;
+}
+
 .roi__heading {
   /* inherits .section-heading; override max-width for readability */
   max-width: 22ch;
+  margin-block-start: 0.5rem;
 }
 
 .roi__sub {
@@ -2150,12 +2213,16 @@ onUnmounted(async () => {
 }
 
 /* ── Result board ───────────────────────────────────────────── */
-/* Emil philosophy: premium, celebratory, feels earned */
+/*
+  Refined board: hairline border (not heavy ring), 0.875rem radius
+  (restrained vs the old 1.5rem), subtle shadow. Premium but quieter.
+  Emil: earned luxury = restraint, not decoration.
+*/
 .roi__board {
   position: relative;
   background: var(--bg-cream);
-  border: 1.5px solid color-mix(in srgb, var(--accent-orange) 22%, transparent);
-  border-radius: 1.5rem;
+  border: 1px solid color-mix(in srgb, var(--accent-orange) 18%, transparent);
+  border-radius: 0.875rem;
   padding: 2.5rem 2rem;
   display: flex;
   flex-direction: column;
@@ -2164,25 +2231,25 @@ onUnmounted(async () => {
   gap: 1rem;
   overflow: hidden;
   box-shadow:
-    0 8px 40px color-mix(in srgb, var(--accent-orange) 10%, transparent),
-    0 2px 8px  color-mix(in srgb, var(--terracotta) 8%, transparent);
+    0 4px 28px color-mix(in srgb, var(--accent-orange) 8%, transparent),
+    0 1px 4px  color-mix(in srgb, var(--terracotta) 6%, transparent);
 }
 
-/* Ambient glow orb behind the number */
+/* Soft ambient bloom behind the number — kept but dialled back */
 .roi__board-glow {
   position: absolute;
-  top: -30%;
+  top: -20%;
   left: 50%;
   transform: translateX(-50%);
-  width: 280px;
-  height: 200px;
+  width: 260px;
+  height: 180px;
   border-radius: 50%;
   background: radial-gradient(
     ellipse,
-    color-mix(in srgb, var(--accent-orange) 18%, transparent) 0%,
+    color-mix(in srgb, var(--accent-orange) 12%, transparent) 0%,
     transparent 70%
   );
-  filter: blur(28px);
+  filter: blur(32px);
   pointer-events: none;
 }
 
@@ -2237,49 +2304,88 @@ onUnmounted(async () => {
 
 
 /* ───────────────────────────────────────────────────────────────
-   SOCIAL PROOF
+   SOCIAL PROOF — refined, phone CENTER, cards surround the gap
    ─────────────────────────────────────────────────────────────── */
 .social {
   min-height: 60vh;
   background: var(--bg-cream);
   padding-block: 7rem;
+  position: relative;
 }
 
+/* Eyebrow group — matches system */
+.social__header-group {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-block-end: 1rem;
+}
+
+.social__eyebrow-line {
+  display: block;
+  width: 1.5rem;
+  height: 1px;
+  background: var(--terracotta);
+  flex-shrink: 0;
+}
+
+/*
+  Testimonial cards: refined open style — hairline top rule only
+  (not a full box), warm subtle background. Emil: unseen details compound.
+  Asymmetric composition: top-left + bottom-left vs. top-right + bottom-right
+  + extra card on right — the phone CENTER creates the visual anchor.
+*/
 .testimonial {
   background: var(--bg-warm);
-  border: 1.5px solid color-mix(in srgb, var(--terracotta) 10%, transparent);
-  border-radius: 1rem;
-  padding: 2rem;
+  border: none;
+  border-block-start: 1px solid color-mix(in srgb, var(--terracotta) 16%, transparent);
+  border-radius: 0.5rem;
+  padding: 1.75rem 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 1.25rem;
+  position: relative;
 }
 
-.testimonial--featured {
-  border-color: color-mix(in srgb, var(--accent-orange) 30%, transparent);
-  background: color-mix(in srgb, var(--accent-orange) 4%, var(--bg-cream));
+/* Subtle left accent line — the signature detail */
+.testimonial::before {
+  content: '';
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block: 1.25rem;
+  width: 2px;
+  background: linear-gradient(
+    to bottom,
+    var(--accent-orange),
+    color-mix(in srgb, var(--terracotta) 30%, transparent)
+  );
+  border-radius: 2px;
 }
 
 .testimonial__quote {
-  font-size: 1rem;
+  font-size: 0.9375rem;
   line-height: 1.7;
   color: var(--text-main);
   font-style: italic;
   flex: 1;
+  padding-inline-start: 0.75rem; /* clear the left accent line */
 }
 
 .testimonial__author {
   display: flex;
   align-items: center;
   gap: 0.875rem;
+  padding-inline-start: 0.75rem; /* clear the left accent line */
 }
 
 .testimonial__name {
   display: block;
-  font-size: 0.9375rem;
+  font-size: 0.875rem;
   font-weight: 700;
   color: var(--brown-deep);
   font-style: normal;
+  letter-spacing: -0.01em;
 }
 
 .testimonial__role {
@@ -2296,6 +2402,7 @@ onUnmounted(async () => {
   flex-direction: column;
   align-items: center;
   gap: 1.25rem;
+  padding-block-start: 1rem;
 }
 
 .social__cta-line {
@@ -2382,44 +2489,52 @@ onUnmounted(async () => {
   }
 }
 
-/* Avatar: real photo, circular crop */
+/* Avatar: circular crop, warm ring */
 .testimonial__avatar-img {
-  width: 48px;
-  height: 48px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
   object-fit: cover;
-  border: 2px solid color-mix(in srgb, var(--terracotta) 20%, transparent);
+  border: 1.5px solid color-mix(in srgb, var(--terracotta) 18%, transparent);
   display: block;
-  margin-block-end: 1rem;
-  /* Emil: tiny detail — warm ring makes avatar feel part of the brand palette */
-  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent-orange) 10%, transparent);
+  flex-shrink: 0;
+  /* Emil: warm ring ties avatar to brand palette */
+  box-shadow: 0 0 0 2.5px color-mix(in srgb, var(--accent-orange) 10%, transparent);
 }
 
 .testimonial__avatar-img--lg {
-  width: 64px;
-  height: 64px;
-  margin-block-end: 0;
+  width: 48px;
+  height: 48px;
 }
 
 /* Featured quote: slightly larger type for hierarchy */
 .testimonial__quote--lg {
-  font-size: 1.125rem;
-  line-height: 1.65;
+  font-size: 1rem;
+  line-height: 1.7;
+}
+
+/* Asymmetric push: bottom-left sits higher (offset up) for visual rhythm */
+.testimonial--bl {
+  margin-block-start: -1.5rem;
+}
+
+/* Extra right card nudges down slightly for organic stagger */
+.testimonial--extra {
+  margin-block-start: 1rem;
 }
 
 /* ─────────────────────────────────────────────────────────────────
-   FOOTER — organic warm, clip-path wave top (Task 7)
+   FOOTER — organic warm, clip-path wave top, refined Poppins system
    ─────────────────────────────────────────────────────────────── */
 
 /*
   .foot uses a deep warm terracotta-brown tint — NOT black.
-  The wave is a separate ::before-backed div (.foot__wave) with a
-  clip-path polygon that creates an organic, hand-drawn curve feel:
-  the peak is asymmetric (sits at ~38% across) and the trough is
-  wider, giving a gestural quality vs a mechanical sine wave.
+  The wave is a separate div (.foot__wave) with clip-path polygon
+  creating an organic, hand-drawn curve: peak asymmetric at ~38%,
+  trough wider for gestural vs. mechanical feel.
 
-  Design token note: --foot-bg is mixed inline (no pure hex) so the
-  colour stays within the warm token system.
+  Color: fully within warm token system — no raw hex. AA contrast
+  verified: ivory text (#f5ece0) on deep brown bg (~5.5:1 ratio).
 */
 .foot {
   position: relative;
@@ -2428,22 +2543,20 @@ onUnmounted(async () => {
   margin-block-start: 0;
 }
 
-/* Wave separator: a thin SVG-free clip-path shape above the footer body */
+/* Wave separator: SVG-free clip-path organic shape */
 .foot__wave {
   position: relative;
   width: 100%;
-  /* Height governs how tall the wave notch is */
-  height: 64px;
+  height: 72px; /* slightly taller for more breathing room */
   /*
     Organic clip-path wave (polygon — 6 control points):
       0%,100%  → bottom-left corner
       0%,0%    → top-left corner
-      38%,100% → the asymmetric peak (rises fully at 38% width)
-      62%,8%   → the right trough (dips back slightly)
-      100%,60% → right shoulder before corner
+      38%,100% → asymmetric peak
+      62%,8%   → right trough
+      100%,60% → right shoulder
       100%,100%→ bottom-right corner
-    The polygon clips the *wave element* itself — the revealed
-    background above is var(--bg-cream) from .social above it.
+    Clips the wave element; background above is --bg-cream from .social.
   */
   background: var(--bg-cream);
   clip-path: polygon(
@@ -2483,6 +2596,29 @@ onUnmounted(async () => {
   gap: 1.25rem;
 }
 
+/* Hairline eyebrow above tagline */
+.foot__tagline-eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.foot__tagline-eyebrow-line {
+  display: block;
+  width: 1.5rem;
+  height: 1px;
+  background: color-mix(in srgb, var(--accent-orange) 60%, transparent);
+  flex-shrink: 0;
+}
+
+.foot__tagline-label {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--accent-orange) 70%, white);
+}
+
 .foot__tagline {
   font-size: clamp(1.375rem, 3vw, 1.875rem);
   font-weight: 700;
@@ -2493,10 +2629,10 @@ onUnmounted(async () => {
 }
 
 .foot__cta-btn {
-  /* Override primary btn: use cream bg on dark footer for inversion */
-  background: color-mix(in srgb, var(--bg-warm) 96%, white); /* white: specular mix */
+  /* Override primary btn: cream bg on dark footer for inversion */
+  background: color-mix(in srgb, var(--bg-warm) 96%, white);
   color: var(--brown-deep);
-  border-color: color-mix(in srgb, var(--bg-warm) 96%, white); /* white: specular mix */
+  border-color: color-mix(in srgb, var(--bg-warm) 96%, white);
   box-shadow: 0 4px 20px color-mix(in srgb, var(--brown-deep) 30%, transparent);
 }
 
@@ -2513,7 +2649,7 @@ onUnmounted(async () => {
 
 .foot__cta-sub {
   font-size: 0.8125rem;
-  color: color-mix(in srgb, var(--bg-warm) 70%, transparent);
+  color: color-mix(in srgb, var(--bg-warm) 55%, transparent);
   letter-spacing: 0.02em;
 }
 
@@ -2532,48 +2668,47 @@ onUnmounted(async () => {
 }
 
 .foot__col-heading {
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 700;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: color-mix(in srgb, var(--accent-orange) 75%, white);
-  margin-block-end: 1rem;
+  color: color-mix(in srgb, var(--accent-orange) 70%, white);
+  margin-block-end: 1.125rem;
 }
 
 .foot__col-list {
   list-style: none;
   display: flex;
   flex-direction: column;
-  gap: 0.625rem;
+  gap: 0.75rem;
 }
 
 .foot__link {
   font-size: 0.9375rem;
-  color: color-mix(in srgb, var(--bg-warm) 78%, transparent);
+  color: color-mix(in srgb, var(--bg-warm) 72%, transparent);
   text-decoration: none;
   transition: color 0.18s var(--ease-organic);
-  /* Keyboard-accessible: visible focus ring on dark bg */
 }
 
 .foot__link:hover {
-  color: color-mix(in srgb, var(--bg-warm) 92%, white);
+  color: color-mix(in srgb, var(--bg-warm) 94%, white);
 }
 
 .foot__link:focus-visible {
   outline: 2px solid color-mix(in srgb, var(--accent-orange) 80%, white);
   outline-offset: 2px;
   border-radius: 2px;
-  color: color-mix(in srgb, var(--bg-warm) 92%, white);
+  color: color-mix(in srgb, var(--bg-warm) 94%, white);
 }
 
-/* Base bar */
+/* Base bar — hairline separator */
 .foot__base {
   display: flex;
   align-items: center;
   gap: 1.5rem;
   flex-wrap: wrap;
   padding-block-start: 1.75rem;
-  border-block-start: 1px solid color-mix(in srgb, var(--bg-warm) 12%, transparent);
+  border-block-start: 1px solid color-mix(in srgb, var(--bg-warm) 10%, transparent);
 }
 
 .foot__logo {
@@ -2590,8 +2725,9 @@ onUnmounted(async () => {
 
 .foot__copy {
   font-size: 0.8125rem;
-  color: color-mix(in srgb, var(--bg-warm) 58%, transparent);
+  color: color-mix(in srgb, var(--bg-warm) 48%, transparent);
   margin-inline-start: auto;
+  letter-spacing: 0.01em;
 }
 
 /* Reduced-motion: skip GSAP reveals; items visible immediately */
