@@ -695,11 +695,11 @@ onMounted(async () => {
       type Pose = { x: number; y: number; rotX: number; rotY: number; scale: number }
       const NEUTRAL = { y: 0, rotX: 0, rotY: 0 }
       const POSES: Pose[] = [
-        { x: 1.7,  ...NEUTRAL, scale: 1.0 },   // 0 hero    RIGHT
-        { x: -1.7, ...NEUTRAL, scale: 1.0 },   // 1 features LEFT
-        { x: 1.7,  ...NEUTRAL, scale: 1.0 },   // 2 how     RIGHT
-        { x: -1.7, ...NEUTRAL, scale: 1.0 },   // 3 roi     LEFT
-        { x: 0,    ...NEUTRAL, scale: 1.15 },  // 4 social  CENTER
+        { x: 2.1,  ...NEUTRAL, scale: 1.5 },   // 0 hero    RIGHT
+        { x: -2.1, ...NEUTRAL, scale: 1.5 },   // 1 features LEFT
+        { x: 2.1,  ...NEUTRAL, scale: 1.5 },   // 2 how     RIGHT
+        { x: -2.1, ...NEUTRAL, scale: 1.5 },   // 3 roi     LEFT
+        { x: 0,    ...NEUTRAL, scale: 1.7 },   // 4 social  CENTER
       ]
       const SECT = ['#hero', '.features', '.how', '.roi', '.social']
       const SCREEN: ScreenKey[] = ['menu', 'priceSync', 'qrSteps', 'allergen', 'review']

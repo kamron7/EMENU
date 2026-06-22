@@ -215,7 +215,7 @@ export function createHeroPhone3D(): HeroPhone3D {
 
     // Set initial hero pose immediately so phone starts parked on the right
     // (no visible jump from center to right on first paint).
-    setPose({ x: 1.7, y: 0, rotX: 0, rotY: 0, scale: 1.0 })
+    setPose({ x: 2.1, y: 0, rotX: 0, rotY: 0, scale: 1.5 })
 
     let lastTime = performance.now()
     const loop = (time: number) => {
