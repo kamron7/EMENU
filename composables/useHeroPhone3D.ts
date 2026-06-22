@@ -19,8 +19,6 @@ export interface HeroPhone3D {
   resize(): void
   dispose(): void
   setScreen(key: ScreenKey): void
-  /** @deprecated Task 4 will remove this alias — use setScreen */
-  crossfadeScreen(key: ScreenKey): void
   setIdle(enabled: boolean): void
   setPose(p: PhonePose): void
   setRenderActive(active: boolean): void
@@ -294,9 +292,5 @@ export function createHeroPhone3D(): HeroPhone3D {
     canvasEl = null
   }
 
-  // Temporary alias for Task 4 callers in index.vue — Task 4 will replace these
-  // call-sites with setScreen() and remove this alias.
-  const crossfadeScreen = setScreen
-
-  return { init, resize, dispose, setScreen, crossfadeScreen, setIdle, setPose, setRenderActive }
+  return { init, resize, dispose, setScreen, setIdle, setPose, setRenderActive }
 }
