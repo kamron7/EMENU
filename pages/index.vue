@@ -699,7 +699,7 @@ onMounted(async () => {
         { x: -2.1, ...NEUTRAL, scale: 1.5 },   // 1 features LEFT
         { x: 2.1,  ...NEUTRAL, scale: 1.5 },   // 2 how     RIGHT
         { x: -2.1, ...NEUTRAL, scale: 1.5 },   // 3 roi     LEFT
-        { x: 0,    ...NEUTRAL, scale: 1.7 },   // 4 social  CENTER
+        { x: 0,    ...NEUTRAL, scale: 1.1 },   // 4 social  CENTER (smaller so it fits the last section)
       ]
       const SECT = ['#hero', '.features', '.how', '.roi', '.social']
       const SCREEN: ScreenKey[] = ['menu', 'priceSync', 'qrSteps', 'allergen', 'review']
@@ -707,7 +707,9 @@ onMounted(async () => {
       // Park at hero pose immediately; set initial screen
       engine.setPose(POSES[0])
       engine.setScreen('menu')
-      engine.setIdle(true)
+      // Idle off: the phone must stand level/straight while parked; the 360° spin
+      // between sections is the only motion (idle added a slight rotY wobble).
+      engine.setIdle(false)
 
       // Linear interpolation helper
       const lerp = (a: number, b: number, t: number) => a + (b - a) * t
